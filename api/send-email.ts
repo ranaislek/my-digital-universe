@@ -14,16 +14,11 @@ export default async function handler(req: any, res: any) {
         return res.status(500).json({ error: 'Missing RESEND_API_KEY environment variable' });
     }
 
-    // Log first few chars of key for debugging
-    console.log(`[Debug] Using Key: ${apiKey.substring(0, 8)}...`);
-
     try {
         const resend = new Resend(apiKey);
 
         // Vercel parses JSON body automatically
         const { name, email, message } = req.body;
-
-        console.log(`[Debug] Sending email from: ${email}`);
 
         const { data, error } = await resend.emails.send({
             from: 'My Digital Universe <onboarding@resend.dev>',
