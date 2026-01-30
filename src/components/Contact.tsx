@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Mail, Linkedin, Github, Youtube, MapPin, Heart, Send } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/lib/supabase";
 
 interface ContactProps {
   isTeaser?: boolean;
@@ -41,7 +42,11 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
     },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+
+
+  // ... inside component ...
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
@@ -52,12 +57,23 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
       return;
     }
 
-    // Simulate sending email
-    setTimeout(() => {
-      toast.success("Message sent successfully! (Simulation)");
+    try {
+      const { error } = await supabase
+        .from('messages')
+        .insert([
+          { name: formData.name, email: formData.email, message: formData.message }
+        ]);
+
+      if (error) throw error;
+
+      toast.success("Message sent successfully! I'll get back to you soon.");
       setFormData({ name: "", email: "", message: "" });
+    } catch (error) {
+      console.error('Error sending message:', error);
+      toast.error("Failed to send message. Please try again later.");
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (
