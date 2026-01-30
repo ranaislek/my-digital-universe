@@ -84,14 +84,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        style={{ y, opacity }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      >
-        <span className="text-xs text-muted-foreground">Scroll to discover</span>
-        <ArrowDown className="w-4 h-4 text-primary animate-bounce" />
-      </motion.div>
+
     </section>
   );
 };

@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
+import GlobalScrollIndicator from "./GlobalScrollIndicator";
 
 const Layout = () => {
   return (
@@ -10,6 +11,7 @@ const Layout = () => {
         <Outlet />
       </main>
       <Footer />
+      <GlobalScrollIndicator />
     </div>
   );
 };
