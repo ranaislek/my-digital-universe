@@ -58,13 +58,26 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
     }
 
     try {
-      const { error } = await supabase
+      // 1. Save to Database (Supabase)
+      const { error: dbError } = await supabase
         .from('messages')
         .insert([
           { name: formData.name, email: formData.email, message: formData.message }
         ]);
 
-      if (error) throw error;
+      if (dbError) throw dbError;
+
+      // 2. Send Email Notification (Level 99)
+      try {
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+      } catch (emailError) {
+        console.error('Email notification failed:', emailError);
+        // We don't block success if only email fails, database is what matters most
+      }
 
       toast.success("Message sent successfully! I'll get back to you soon.");
       setFormData({ name: "", email: "", message: "" });
