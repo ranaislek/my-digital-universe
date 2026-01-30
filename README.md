@@ -2,6 +2,8 @@
 
 A personal digital garden, portfolio, and content platform built to share stories, vlogs, and thoughts.
 
+[**View Live Site**](https://ranaislek.vercel.app)
+
 ![Project Preview](public/og-image.png)
 
 ## 🚀 About The Project

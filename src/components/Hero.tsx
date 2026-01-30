@@ -35,13 +35,13 @@ const Hero = () => {
         <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium mb-6 text-balance leading-tight">
           <span className="text-foreground">Hey, I'm</span>
           <br />
-          <span className="gradient-text">Rana İşlek</span>
+          <span className="gradient-text">Rana</span>
           <Heart className="inline-block w-8 h-8 md:w-12 md:h-12 text-primary ml-3 wiggle-animation" fill="currentColor" />
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
-          MSc graduate in Big Data & Analytics, exploring the world through data, 
-          dance, and documenting my Erasmus adventures across Europe. 
+          MSc graduate in Big Data & Analytics, exploring the world through data,
+          dance, and documenting my Erasmus adventures across Europe.
           <span className="text-primary font-medium"> Brussels → Barcelona → Padova</span> ✨
         </p>
 
