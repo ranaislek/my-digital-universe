@@ -1,14 +1,17 @@
 import { Resend } from 'resend';
 
-export default async function handler(request: Request) {
-    if (request.method !== 'POST') {
-        return new Response('Method not allowed', { status: 405 });
+export default async function handler(req: any, res: any) {
+    // Vercel Serverless Function (Node.js) usage
+    // req is VercelRequest (IncomingMessage + body), res is VercelResponse
+
+    if (req.method !== 'POST') {
+        return res.status(405).send('Method not allowed');
     }
 
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
         console.error('Missing Env Var: RESEND_API_KEY');
-        return new Response(JSON.stringify({ error: 'Missing RESEND_API_KEY environment variable' }), { status: 500 });
+        return res.status(500).json({ error: 'Missing RESEND_API_KEY environment variable' });
     }
 
     // Log first few chars of key for debugging
@@ -16,13 +19,15 @@ export default async function handler(request: Request) {
 
     try {
         const resend = new Resend(apiKey);
-        const { name, email, message } = await request.json();
+
+        // Vercel parses JSON body automatically
+        const { name, email, message } = req.body;
 
         console.log(`[Debug] Sending email from: ${email}`);
 
         const { data, error } = await resend.emails.send({
             from: 'My Digital Universe <onboarding@resend.dev>',
-            to: ['islekrana@gmail.com'], // Send to yourself
+            to: ['islekrana@gmail.com'],
             subject: `New Message from ${name} (${email})`,
             html: `
         <p><strong>Name:</strong> ${name}</p>
@@ -36,12 +41,12 @@ export default async function handler(request: Request) {
 
         if (error) {
             console.error('Resend API Error:', error);
-            return new Response(JSON.stringify({ error: error.message || error }), { status: 500 });
+            return res.status(500).json({ error: error.message || error });
         }
 
-        return new Response(JSON.stringify({ data }), { status: 200 });
+        return res.status(200).json({ data });
     } catch (error: any) {
         console.error('Internal Function Error:', error);
-        return new Response(JSON.stringify({ error: 'Failed to send email: ' + (error.message || 'Unknown error') }), { status: 500 });
+        return res.status(500).json({ error: 'Failed to send email: ' + (error.message || 'Unknown error') });
     }
 }
