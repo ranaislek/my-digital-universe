@@ -1,6 +1,11 @@
 import { ArrowDown, Sparkles, Heart, Star } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const Hero = () => {
+  const { scrollY } = useScroll();
+  const y = useTransform(scrollY, [0, 200], [0, 100]);
+  const opacity = useTransform(scrollY, [0, 200], [1, 0]);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Decorative Blobs */}
@@ -80,10 +85,13 @@ const Hero = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+      <motion.div
+        style={{ y, opacity }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+      >
         <span className="text-xs text-muted-foreground">Scroll to discover</span>
         <ArrowDown className="w-4 h-4 text-primary animate-bounce" />
-      </div>
+      </motion.div>
     </section>
   );
 };
