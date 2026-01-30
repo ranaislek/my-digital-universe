@@ -1,41 +1,61 @@
-import { ExternalLink, FileText, Award, GraduationCap } from "lucide-react";
+import { ExternalLink, FileText, Award, GraduationCap, Briefcase, Code, Sparkles } from "lucide-react";
 
-const portfolioItems = [
+const experiences = [
   {
-    category: "Publication",
-    title: "Research on Complex Systems",
-    description: "Published in Nature Communications exploring emergent behaviors in networked systems.",
-    tags: ["Peer Reviewed", "2024"],
+    category: "Current Role",
+    title: "Data & Analytics Specialist",
+    company: "NGN",
+    description: "Leading internal data foundation design, building C-level Power BI dashboards, and managing Salesforce reporting.",
+    tags: ["Power BI", "Salesforce", "ETL"],
+    icon: Briefcase,
+    highlight: true,
+  },
+  {
+    category: "Research",
+    title: "Machine Learning Research",
+    company: "University of Padua",
+    description: "Thesis on constrained molecular graph generation with discrete diffusion models. Achieved 100% constraint satisfaction.",
+    tags: ["PyTorch", "RDKit", "Deep Learning"],
+    icon: Code,
+  },
+  {
+    category: "Experience",
+    title: "Product Analyst Intern",
+    company: "Delivery Hero (Yemeksepeti)",
+    description: "Built C-level KPI dashboards on BigQuery + Looker Studio across multiple brands and markets.",
+    tags: ["BigQuery", "Looker", "SQL"],
     icon: FileText,
   },
   {
-    category: "Award",
-    title: "Excellence in Research",
-    description: "Recognized for outstanding contributions to interdisciplinary studies.",
-    tags: ["Academic", "2023"],
-    icon: Award,
+    category: "Startup",
+    title: "ScholarIA — Academic Paper Platform",
+    company: "UPC Barcelona",
+    description: "Built AI-powered research assistant with personalized recommendations. Selected #1 in master's cohort!",
+    tags: ["AI/ML", "Vercel", "LLM"],
+    icon: Sparkles,
+  },
+];
+
+const education = [
+  {
+    degree: "MSc Big Data Management & Analytics",
+    school: "Erasmus Mundus Joint Master's",
+    details: "Brussels → Barcelona → Padova",
+    year: "2023-2025",
   },
   {
-    category: "Education",
-    title: "Ph.D. in Progress",
-    description: "Doctoral research focusing on the intersection of technology and human behavior.",
-    tags: ["Ongoing", "Research"],
-    icon: GraduationCap,
-  },
-  {
-    category: "Publication",
-    title: "Machine Learning Applications",
-    description: "Co-authored paper on novel ML approaches for pattern recognition.",
-    tags: ["Conference", "2023"],
-    icon: FileText,
+    degree: "BSc Computer Science & Engineering",
+    school: "Sabancı University",
+    details: "Minor in Decision & Behavior • Exchange at Budapest",
+    year: "2019-2023",
   },
 ];
 
 const Portfolio = () => {
   return (
     <section id="portfolio" className="py-24 md:py-32 relative">
-      {/* Background Accent */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-muted/30 to-transparent" />
+      {/* Background decoration */}
+      <div className="absolute inset-0 pop-gradient opacity-50" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -43,29 +63,35 @@ const Portfolio = () => {
             Portfolio
           </span>
           <h2 className="font-serif text-4xl md:text-5xl font-medium mt-2 mb-6">
-            Academic <span className="gradient-text">Achievements</span>
+            Experience & <span className="gradient-text">Education</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            A curated collection of my research, publications, and academic milestones 
-            that mark my journey through the world of knowledge.
+            From analyzing user journeys to training neural networks — 
+            here's a peek into my professional adventures.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {portfolioItems.map((item, index) => (
+        {/* Experience Cards */}
+        <div className="grid md:grid-cols-2 gap-6 mb-16">
+          {experiences.map((item, index) => (
             <div
               key={index}
-              className="group card-glow"
+              className={`group card-hover ${item.highlight ? 'md:col-span-2' : ''}`}
             >
-              <div className="relative p-6 rounded-xl bg-card border border-border h-full hover:border-primary/30 transition-all duration-300">
+              <div className={`relative p-6 rounded-2xl bg-card border border-border h-full ${
+                item.highlight ? 'bg-gradient-to-r from-primary/5 via-transparent to-accent/5' : ''
+              }`}>
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-primary/10">
+                    <div className="p-2.5 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
                       <item.icon className="w-5 h-5 text-primary" />
                     </div>
-                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                      {item.category}
-                    </span>
+                    <div>
+                      <span className="text-xs font-medium text-primary uppercase tracking-wider">
+                        {item.category}
+                      </span>
+                      <p className="text-sm text-muted-foreground">{item.company}</p>
+                    </div>
                   </div>
                   <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                 </div>
@@ -75,11 +101,11 @@ const Portfolio = () => {
                 </h3>
                 <p className="text-muted-foreground mb-4">{item.description}</p>
 
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {item.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 text-xs rounded-full bg-muted text-muted-foreground"
+                      className="px-3 py-1 text-xs rounded-full bg-primary/10 text-primary font-medium"
                     >
                       {tag}
                     </span>
@@ -90,12 +116,44 @@ const Portfolio = () => {
           ))}
         </div>
 
+        {/* Education Section */}
+        <div className="max-w-2xl mx-auto">
+          <h3 className="font-serif text-2xl font-medium text-center mb-8">
+            <GraduationCap className="inline-block w-6 h-6 text-primary mr-2" />
+            Education Journey
+          </h3>
+          <div className="space-y-4">
+            {education.map((edu, index) => (
+              <div 
+                key={index}
+                className="flex items-start gap-4 p-4 rounded-2xl bg-card border border-border card-hover"
+              >
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xl">🎓</span>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-medium">{edu.degree}</h4>
+                      <p className="text-sm text-primary">{edu.school}</p>
+                    </div>
+                    <span className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded-full">
+                      {edu.year}
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-1">{edu.details}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="text-center mt-12">
           <a
             href="#"
-            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary/10 text-primary rounded-full font-medium hover:bg-primary/20 transition-colors"
           >
-            <span>View Full CV</span>
+            <span>Download Full CV</span>
             <ExternalLink className="w-4 h-4" />
           </a>
         </div>

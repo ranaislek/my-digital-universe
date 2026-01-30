@@ -51,10 +51,11 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        aurora: {
-          1: "hsl(var(--aurora-1))",
-          2: "hsl(var(--aurora-2))",
-          3: "hsl(var(--aurora-3))",
+        pop: {
+          1: "hsl(var(--pop-1))",
+          2: "hsl(var(--pop-2))",
+          3: "hsl(var(--pop-3))",
+          4: "hsl(var(--pop-4))",
         },
         glow: {
           primary: "hsl(var(--glow-primary))",
