@@ -69,14 +69,23 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
 
       // 2. Send Email Notification (Level 99)
       try {
-        await fetch('/api/send-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        });
+        // Create a timeout promise (5 seconds)
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Email request timed out')), 5000)
+        );
+
+        // Race the fetch against the timeout
+        await Promise.race([
+          fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+          }),
+          timeoutPromise
+        ]);
       } catch (emailError) {
-        console.error('Email notification failed:', emailError);
-        // We don't block success if only email fails, database is what matters most
+        console.error('Email notification failed (non-critical):', emailError);
+        // We continue because the critical part (Database Save) succeeded
       }
 
       toast.success("Message sent successfully! I'll get back to you soon.");
