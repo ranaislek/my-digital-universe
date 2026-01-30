@@ -75,7 +75,7 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
         );
 
         // Race the fetch against the timeout
-        await Promise.race([
+        const response: any = await Promise.race([
           fetch('/api/send-email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -83,9 +83,15 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
           }),
           timeoutPromise
         ]);
-      } catch (emailError) {
-        console.error('Email notification failed (non-critical):', emailError);
-        // We continue because the critical part (Database Save) succeeded
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Unknown email error');
+        }
+
+      } catch (emailError: any) {
+        console.error('Email notification failed:', emailError);
+        toast.error(`Message saved, but email failed: ${emailError.message}`);
       }
 
       toast.success("Message sent successfully! I'll get back to you soon.");
