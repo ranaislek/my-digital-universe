@@ -1,70 +1,88 @@
-import { ArrowDown, Sparkles } from "lucide-react";
+import { ArrowDown, Sparkles, Heart, Star } from "lucide-react";
 
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Aurora Background Effect */}
-      <div className="absolute inset-0 aurora-glow" />
-      
-      {/* Floating Orbs */}
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-primary/5 blur-3xl float-animation" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-accent/5 blur-3xl float-animation-delayed" />
-      <div className="absolute top-1/2 right-1/3 w-48 h-48 rounded-full bg-aurora-2/5 blur-3xl float-animation" />
+      {/* Decorative Blobs */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 blob-shape float-animation" />
+      <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 blob-shape-2 float-animation-delayed" />
+      <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-pop-2/15 blob-shape float-animation" />
+      <div className="absolute bottom-1/3 left-1/4 w-32 h-32 bg-pop-4/15 blob-shape-2 float-animation-delayed" />
 
-      {/* Stars */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(50)].map((_, i) => (
-          <div
+      {/* Scattered Stars */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <Star
             key={i}
-            className="absolute w-1 h-1 bg-foreground/20 rounded-full pulse-glow"
+            className="absolute text-primary/20 sparkle"
             style={{
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 4}s`,
+              width: `${12 + Math.random() * 12}px`,
+              animationDelay: `${Math.random() * 2}s`,
             }}
+            fill="currentColor"
           />
         ))}
       </div>
 
       <div className="container mx-auto px-6 text-center relative z-10">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 backdrop-blur-sm border border-border mb-8">
+        <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 mb-8">
           <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-sm text-muted-foreground">Welcome to my universe</span>
+          <span className="text-sm text-foreground/70 font-medium">Data Analyst & Content Creator</span>
         </div>
 
-        <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium mb-6 text-balance">
-          <span className="gradient-text">Explorer.</span>
+        <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium mb-6 text-balance leading-tight">
+          <span className="text-foreground">Hey, I'm</span>
           <br />
-          <span className="text-foreground">Creator.</span>
-          <br />
-          <span className="text-muted-foreground">Thinker.</span>
+          <span className="gradient-text">Rana İşlek</span>
+          <Heart className="inline-block w-8 h-8 md:w-12 md:h-12 text-primary ml-3 wiggle-animation" fill="currentColor" />
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
-          A space where academia meets creativity, where research intertwines with art, 
-          and where every thought becomes a constellation in my expanding universe.
+          MSc graduate in Big Data & Analytics, exploring the world through data, 
+          dance, and documenting my Erasmus adventures across Europe. 
+          <span className="text-primary font-medium"> Brussels → Barcelona → Padova</span> ✨
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <a
             href="#portfolio"
-            className="px-8 py-3 bg-primary text-primary-foreground rounded-full font-medium hover:opacity-90 transition-opacity"
+            className="px-8 py-3.5 bg-primary text-primary-foreground rounded-full font-medium hover:opacity-90 transition-all hover:scale-105 shadow-lg shadow-primary/25"
           >
             Explore My Work
           </a>
           <a
             href="#thoughts"
-            className="px-8 py-3 border border-border text-foreground rounded-full font-medium hover:bg-muted transition-colors"
+            className="px-8 py-3.5 border-2 border-primary/30 text-foreground rounded-full font-medium hover:bg-primary/10 transition-all hover:border-primary/50"
           >
-            Read My Thoughts
+            Watch My Vlogs
           </a>
+        </div>
+
+        {/* Social proof / quick stats */}
+        <div className="flex items-center justify-center gap-8 mt-16 text-sm text-muted-foreground">
+          <div className="text-center">
+            <div className="font-serif text-2xl text-foreground font-medium">5+</div>
+            <div>Countries</div>
+          </div>
+          <div className="w-px h-8 bg-border" />
+          <div className="text-center">
+            <div className="font-serif text-2xl text-foreground font-medium">3</div>
+            <div>Languages</div>
+          </div>
+          <div className="w-px h-8 bg-border" />
+          <div className="text-center">
+            <div className="font-serif text-2xl text-foreground font-medium">∞</div>
+            <div>Curiosity</div>
+          </div>
         </div>
       </div>
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-        <span className="text-xs text-muted-foreground">Scroll to explore</span>
-        <ArrowDown className="w-4 h-4 text-muted-foreground animate-bounce" />
+        <span className="text-xs text-muted-foreground">Scroll to discover</span>
+        <ArrowDown className="w-4 h-4 text-primary animate-bounce" />
       </div>
     </section>
   );
