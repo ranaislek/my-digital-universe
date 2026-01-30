@@ -1,13 +1,17 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export default async function handler(request: Request) {
     if (request.method !== 'POST') {
         return new Response('Method not allowed', { status: 405 });
     }
 
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+        return new Response(JSON.stringify({ error: 'Missing RESEND_API_KEY environment variable' }), { status: 500 });
+    }
+
     try {
+        const resend = new Resend(apiKey);
         const { name, email, message } = await request.json();
 
         const { data, error } = await resend.emails.send({
@@ -25,11 +29,13 @@ export default async function handler(request: Request) {
         });
 
         if (error) {
-            return new Response(JSON.stringify({ error }), { status: 500 });
+            console.error('Resend API Error:', error);
+            return new Response(JSON.stringify({ error: error.message || error }), { status: 500 });
         }
 
         return new Response(JSON.stringify({ data }), { status: 200 });
-    } catch (error) {
-        return new Response(JSON.stringify({ error: 'Failed to send email' }), { status: 500 });
+    } catch (error: any) {
+        console.error('Internal Function Error:', error);
+        return new Response(JSON.stringify({ error: 'Failed to send email: ' + (error.message || 'Unknown error') }), { status: 500 });
     }
 }

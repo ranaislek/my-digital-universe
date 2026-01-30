@@ -85,8 +85,15 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
         ]);
 
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Unknown email error');
+          let errorMessage = 'Unknown email error';
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.error || JSON.stringify(errorData);
+          } catch (parseError) {
+            const text = await response.text();
+            errorMessage = text || `HTTP Status ${response.status}`;
+          }
+          throw new Error(errorMessage);
         }
 
       } catch (emailError: any) {
