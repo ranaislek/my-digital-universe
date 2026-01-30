@@ -67,7 +67,9 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
             </p>
           </div>
           <a
-            href="#"
+            href="https://www.youtube.com/@ranaislek"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FF0000]/10 text-[#FF0000] rounded-full font-medium hover:bg-[#FF0000]/20 transition-colors group"
           >
             <Youtube className="w-5 h-5" />

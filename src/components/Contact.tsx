@@ -31,7 +31,7 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
     {
       icon: Youtube,
       label: "YouTube",
-      href: "#",
+      href: "https://www.youtube.com/@ranaislek",
       color: "hover:text-[#FF0000]",
     },
     {
