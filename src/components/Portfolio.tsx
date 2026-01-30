@@ -51,9 +51,18 @@ const education = [
   },
 ];
 
-const Portfolio = () => {
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+
+interface PortfolioProps {
+  isTeaser?: boolean;
+}
+
+const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
+  const displayedExperiences = isTeaser ? experiences.slice(0, 2) : experiences;
+
   return (
-    <section id="portfolio" className="py-24 md:py-32 relative">
+    <section id="portfolio" className={`relative ${isTeaser ? "py-24 md:py-32" : "pb-12"}`}>
       {/* Background decoration */}
       <div className="absolute inset-0 pop-gradient opacity-50" />
 
@@ -66,21 +75,20 @@ const Portfolio = () => {
             Experience & <span className="gradient-text">Education</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            From analyzing user journeys to training neural networks — 
+            From analyzing user journeys to training neural networks —
             here's a peek into my professional adventures.
           </p>
         </div>
 
         {/* Experience Cards */}
         <div className="grid md:grid-cols-2 gap-6 mb-16">
-          {experiences.map((item, index) => (
+          {displayedExperiences.map((item, index) => (
             <div
               key={index}
               className={`group card-hover ${item.highlight ? 'md:col-span-2' : ''}`}
             >
-              <div className={`relative p-6 rounded-2xl bg-card border border-border h-full ${
-                item.highlight ? 'bg-gradient-to-r from-primary/5 via-transparent to-accent/5' : ''
-              }`}>
+              <div className={`relative p-6 rounded-2xl bg-card border border-border h-full ${item.highlight ? 'bg-gradient-to-r from-primary/5 via-transparent to-accent/5' : ''
+                }`}>
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
@@ -116,47 +124,64 @@ const Portfolio = () => {
           ))}
         </div>
 
-        {/* Education Section */}
-        <div className="max-w-2xl mx-auto">
-          <h3 className="font-serif text-2xl font-medium text-center mb-8">
-            <GraduationCap className="inline-block w-6 h-6 text-primary mr-2" />
-            Education Journey
-          </h3>
-          <div className="space-y-4">
-            {education.map((edu, index) => (
-              <div 
-                key={index}
-                className="flex items-start gap-4 p-4 rounded-2xl bg-card border border-border card-hover"
-              >
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center flex-shrink-0">
-                  <span className="text-xl">🎓</span>
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h4 className="font-medium">{edu.degree}</h4>
-                      <p className="text-sm text-primary">{edu.school}</p>
-                    </div>
-                    <span className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded-full">
-                      {edu.year}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">{edu.details}</p>
-                </div>
-              </div>
-            ))}
+        {isTeaser && (
+          <div className="text-center mt-12">
+            <Link
+              to="/portfolio"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 transition-colors group"
+            >
+              <span>View Full Portfolio</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
-        </div>
+        )}
 
-        <div className="text-center mt-12">
-          <a
-            href="#"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary/10 text-primary rounded-full font-medium hover:bg-primary/20 transition-colors"
-          >
-            <span>Download Full CV</span>
-            <ExternalLink className="w-4 h-4" />
-          </a>
-        </div>
+        {!isTeaser && (
+          <>
+            {/* Education Section - Only show on full page */}
+            <div className="max-w-2xl mx-auto">
+              <h3 className="font-serif text-2xl font-medium text-center mb-8">
+                <GraduationCap className="inline-block w-6 h-6 text-primary mr-2" />
+                Education Journey
+              </h3>
+              <div className="space-y-4">
+                {education.map((edu, index) => (
+                  <div
+                    key={index}
+                    className="flex items-start gap-4 p-4 rounded-2xl bg-card border border-border card-hover"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center flex-shrink-0">
+                      <span className="text-xl">🎓</span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h4 className="font-medium">{edu.degree}</h4>
+                          <p className="text-sm text-primary">{edu.school}</p>
+                        </div>
+                        <span className="text-sm text-muted-foreground bg-muted px-2 py-1 rounded-full">
+                          {edu.year}
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">{edu.details}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <a
+              href="/RanaIslek_CV.pdf"
+              download="RanaIslek_CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary/10 text-primary rounded-full font-medium hover:bg-primary/20 transition-colors"
+            >
+              <span>Download Full CV</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </>
+        )}
       </div>
     </section>
   );

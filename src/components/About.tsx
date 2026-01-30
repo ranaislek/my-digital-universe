@@ -23,16 +23,27 @@ const interests = [
   },
 ];
 
-const About = () => {
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+
+interface AboutProps {
+  isTeaser?: boolean;
+}
+
+const About = ({ isTeaser = false }: AboutProps) => {
   return (
-    <section id="about" className="py-24 md:py-32 relative">
-      {/* Decorative elements */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-pop-2/10 blob-shape" />
-      <div className="absolute bottom-0 left-0 w-48 h-48 bg-pop-3/10 blob-shape-2" />
+    <section id="about" className={`relative ${isTeaser ? "py-24 md:py-32" : "pb-12"}`}>
+      {/* Decorative elements only on teaser or modified for full page */}
+      {isTeaser && (
+        <>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-pop-2/10 blob-shape" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-pop-3/10 blob-shape-2" />
+        </>
+      )}
 
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Image/Visual Side */}
+          {/* Image/Visual Side - Keep as is */}
           <div className="relative">
             <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-primary/20 via-accent/20 to-pop-2/20 relative">
               <div className="absolute inset-0 flex items-center justify-center">
@@ -49,8 +60,8 @@ const About = () => {
             {/* Journey badges */}
             <div className="absolute -bottom-4 -right-4 flex gap-2">
               {["🇧🇪", "🇪🇸", "🇮🇹", "🇭🇺", "🇹🇷"].map((flag, i) => (
-                <div 
-                  key={i} 
+                <div
+                  key={i}
                   className="w-10 h-10 rounded-full bg-card border-2 border-border flex items-center justify-center text-lg shadow-md"
                   style={{ animationDelay: `${i * 0.1}s` }}
                 >
@@ -71,21 +82,21 @@ const About = () => {
               <span className="gradient-text">My Journey</span>
             </h2>
             <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-              I'm a <span className="text-foreground font-medium">Data & Analytics Specialist</span> with 
-              an MSc in Big Data Management & Analytics (Erasmus Mundus). My journey has taken me from 
-              <span className="text-primary"> Istanbul</span> to 
-              <span className="text-primary"> Brussels</span>, 
-              <span className="text-primary"> Barcelona</span>, and 
+              I'm a <span className="text-foreground font-medium">Data & Analytics Specialist</span> with
+              an MSc in Big Data Management & Analytics (Erasmus Mundus). My journey has taken me from
+              <span className="text-primary"> Istanbul</span> to
+              <span className="text-primary"> Brussels</span>,
+              <span className="text-primary"> Barcelona</span>, and
               <span className="text-primary"> Padova</span>.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-10">
-              When I'm not building dashboards or training ML models, you'll find me creating YouTube content 
-              about student life abroad, leading dance clubs, or exploring new cities. I believe life is about 
+              When I'm not building dashboards or training ML models, you'll find me creating YouTube content
+              about student life abroad, leading dance clubs, or exploring new cities. I believe life is about
               collecting experiences, not just data points! 💃
             </p>
 
             {/* Interest Cards */}
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 gap-4 mb-8">
               {interests.map((interest) => (
                 <div
                   key={interest.title}
@@ -99,10 +110,20 @@ const About = () => {
                 </div>
               ))}
             </div>
+
+            {isTeaser && (
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 transition-colors group"
+              >
+                <span>Read Full Story</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            )}
           </div>
         </div>
       </div>
-    </section>
+    </section >
   );
 };
 

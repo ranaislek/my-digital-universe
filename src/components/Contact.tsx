@@ -1,6 +1,19 @@
-import { Mail, Linkedin, Github, Youtube, MapPin, Heart } from "lucide-react";
+import { useState } from "react";
+import { Mail, Linkedin, Github, Youtube, MapPin, Heart, Send } from "lucide-react";
+import { toast } from "sonner";
 
-const Contact = () => {
+interface ContactProps {
+  isTeaser?: boolean;
+}
+
+const Contact = ({ isTeaser = false }: ContactProps) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const socials = [
     {
       icon: Linkedin,
@@ -28,6 +41,25 @@ const Contact = () => {
     },
   ];
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    // Basic validation
+    if (!formData.name || !formData.email || !formData.message) {
+      toast.error("Please fill in all fields");
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Simulate sending email
+    setTimeout(() => {
+      toast.success("Message sent successfully! (Simulation)");
+      setFormData({ name: "", email: "", message: "" });
+      setIsSubmitting(false);
+    }, 1500);
+  };
+
   return (
     <section id="contact" className="py-24 md:py-32 relative">
       {/* Decorative blobs */}
@@ -35,53 +67,117 @@ const Contact = () => {
       <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-accent/10 blob-shape-2 opacity-50" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-2xl mx-auto text-center">
+        <div className="max-w-2xl mx-auto text-center mb-16">
           <span className="text-primary font-medium text-sm tracking-wider uppercase">
             Let's Connect
           </span>
           <h2 className="font-serif text-4xl md:text-5xl font-medium mt-2 mb-6">
-            Say <span className="gradient-text">Hello!</span> 
+            Say <span className="gradient-text">Hello!</span>
             <span className="inline-block ml-2">👋</span>
           </h2>
           <p className="text-muted-foreground text-lg mb-4">
-            Whether it's about data, Erasmus advice, dance, or just to chat — 
+            Whether it's about data, Erasmus advice, dance, or just to chat —
             I'd love to hear from you!
           </p>
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-10">
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
             <MapPin className="w-4 h-4 text-primary" />
             <span>Currently in Istanbul, Türkiye</span>
           </div>
+        </div>
 
-          {/* Email CTA */}
-          <a
-            href="mailto:islekrana@gmail.com"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-primary text-primary-foreground rounded-full font-medium hover:opacity-90 transition-all hover:scale-105 shadow-lg shadow-primary/25 mb-12"
-          >
-            <Mail className="w-5 h-5" />
-            <span>islekrana@gmail.com</span>
-          </a>
+        <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+          {/* Contact Info Side */}
+          <div className="space-y-8">
+            <h3 className="font-serif text-2xl font-medium mb-6">Get in Touch</h3>
 
-          {/* Social Links */}
-          <div className="flex items-center justify-center gap-4">
-            {socials.map((social) => (
+            {/* Social Links */}
+            <div className="flex flex-wrap gap-4">
+              {socials.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground ${social.color} transition-all hover:scale-110 hover:border-primary/30`}
+                  aria-label={social.label}
+                >
+                  <social.icon className="w-5 h-5" />
+                </a>
+              ))}
+            </div>
+
+            <div className="p-6 rounded-2xl bg-card border border-border mt-8">
+              <h4 className="font-medium mb-2">Direct Contact</h4>
               <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground ${social.color} transition-all hover:scale-110 hover:border-primary/30`}
-                aria-label={social.label}
+                href="mailto:islekrana@gmail.com"
+                className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
               >
-                <social.icon className="w-5 h-5" />
+                <Mail className="w-4 h-4" />
+                <span>islekrana@gmail.com</span>
               </a>
-            ))}
+            </div>
           </div>
 
-          {/* Fun message */}
-          <p className="mt-12 text-sm text-muted-foreground flex items-center justify-center gap-2">
-            Made with <Heart className="w-4 h-4 text-primary fill-primary" /> and lots of ☕
-          </p>
+          {/* Contact Form Side */}
+          <div className="bg-card p-8 rounded-3xl border border-border shadow-sm">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium mb-1.5 ml-1">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                  placeholder="Your Name"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium mb-1.5 ml-1">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                  placeholder="hello@example.com"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium mb-1.5 ml-1">Message</label>
+                <textarea
+                  id="message"
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all min-h-[120px]"
+                  placeholder="Write your message here..."
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? (
+                  <span>Sending...</span>
+                ) : (
+                  <>
+                    <span>Send Message</span>
+                    <Send className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
         </div>
+
+        {/* Fun message */}
+        <p className="mt-16 text-center text-sm text-muted-foreground flex items-center justify-center gap-2">
+          Made with <Heart className="w-4 h-4 text-primary fill-primary" /> and lots of ☕
+        </p>
       </div>
     </section>
   );
