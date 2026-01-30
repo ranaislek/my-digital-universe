@@ -96,13 +96,17 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
           throw new Error(errorMessage);
         }
 
+        // Only show full success if email also succeeded
+        toast.success("Message sent and email verification dispatched! 🚀");
+        setFormData({ name: "", email: "", message: "" });
+
       } catch (emailError: any) {
         console.error('Email notification failed:', emailError);
-        toast.error(`Message saved, but email failed: ${emailError.message}`);
+        // Distinct warning for DB-only success
+        toast.warning(`Saved to database, but email delivery skipped: ${emailError.message}`);
+        setFormData({ name: "", email: "", message: "" });
       }
 
-      toast.success("Message sent successfully! I'll get back to you soon.");
-      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error('Error sending message:', error);
       toast.error("Failed to send message. Please try again later.");
