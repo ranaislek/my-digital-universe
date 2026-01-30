@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X, Sparkles, Home } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 const Navigation = () => {
@@ -16,6 +16,7 @@ const Navigation = () => {
   }, []);
 
   const navLinks = [
+    { href: "/", label: "Home", icon: Home },
     { href: "/about", label: "About" },
     { href: "/portfolio", label: "Portfolio" },
     { href: "/thoughts", label: "Blog & Vlogs" },
@@ -27,8 +28,8 @@ const Navigation = () => {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-border"
-          : "bg-transparent"
+        ? "bg-background/80 backdrop-blur-md border-b border-border"
+        : "bg-transparent"
         }`}
     >
       <div className="container mx-auto px-6">
