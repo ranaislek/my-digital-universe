@@ -18,10 +18,8 @@ const Footer = () => {
             </span>
           </Link>
 
-          <p className="text-sm text-muted-foreground flex items-center gap-1">
-            © {currentYear} Rana İşlek • Made with
-            <Heart className="w-3 h-3 text-primary fill-primary mx-1" />
-            in Istanbul
+          <p className="text-sm text-muted-foreground">
+            © {currentYear} Rana İşlek
           </p>
 
           <div className="flex items-center gap-6 text-sm text-muted-foreground">

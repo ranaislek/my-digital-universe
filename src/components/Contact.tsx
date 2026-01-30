@@ -61,7 +61,7 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
   };
 
   return (
-    <section id="contact" className="py-24 md:py-32 relative">
+    <section id="contact" className="py-16 md:py-24 relative">
       {/* Decorative blobs */}
       <div className="absolute top-1/4 left-0 w-72 h-72 bg-primary/10 blob-shape opacity-50" />
       <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-accent/10 blob-shape-2 opacity-50" />
@@ -175,9 +175,7 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
         </div>
 
         {/* Fun message */}
-        <p className="mt-16 text-center text-sm text-muted-foreground flex items-center justify-center gap-2">
-          Made with <Heart className="w-4 h-4 text-primary fill-primary" /> and lots of ☕
-        </p>
+
       </div>
     </section>
   );
