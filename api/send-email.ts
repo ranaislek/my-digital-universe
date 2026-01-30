@@ -7,12 +7,18 @@ export default async function handler(request: Request) {
 
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
+        console.error('Missing Env Var: RESEND_API_KEY');
         return new Response(JSON.stringify({ error: 'Missing RESEND_API_KEY environment variable' }), { status: 500 });
     }
+
+    // Log first few chars of key for debugging
+    console.log(`[Debug] Using Key: ${apiKey.substring(0, 8)}...`);
 
     try {
         const resend = new Resend(apiKey);
         const { name, email, message } = await request.json();
+
+        console.log(`[Debug] Sending email from: ${email}`);
 
         const { data, error } = await resend.emails.send({
             from: 'My Digital Universe <onboarding@resend.dev>',
