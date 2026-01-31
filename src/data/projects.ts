@@ -20,6 +20,7 @@ export interface ProjectItem {
         demo?: string;
         repo?: string;
     };
+    status?: "draft" | "published";
 }
 
 export const projects: ProjectItem[] = [

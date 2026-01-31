@@ -1,5 +1,17 @@
-import { ExternalLink, FileText, Award, GraduationCap, Briefcase, Code, Sparkles } from "lucide-react";
-import { projects } from "../data/projects";
+import { ExternalLink, GraduationCap, Briefcase, Code, FileText, Sparkles, LucideIcon } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
+import { ContentItem } from "../data/content";
+import PostControls from "./admin/PostControls";
+
+const iconMap: Record<string, LucideIcon> = {
+  "Briefcase": Briefcase,
+  "Code": Code,
+  "FileText": FileText,
+  "Sparkles": Sparkles,
+};
 
 const education = [
   {
@@ -16,14 +28,45 @@ const education = [
   },
 ];
 
-import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-
 interface PortfolioProps {
   isTeaser?: boolean;
 }
 
 const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
+  const [projects, setProjects] = useState<ContentItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('posts')
+        .select('*')
+        .eq('type', 'project')
+        .eq('status', 'published') // Only show published
+        .order('featured', { ascending: false })
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Map snake_case to camelCase
+      const mappedProjects: ContentItem[] = (data || []).map(p => ({
+        ...p,
+        techStack: p.tech_stack,
+        projectLinks: p.project_links
+      }));
+
+      setProjects(mappedProjects);
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const displayedExperiences = isTeaser ? projects.slice(0, 2) : projects;
 
   return (
@@ -46,49 +89,68 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
         </div>
 
         {/* Experience Cards */}
-        <div className="grid md:grid-cols-2 gap-6 mb-16">
-          {displayedExperiences.map((project, index) => (
-            <Link
-              to={`/project/${project.slug}`}
-              key={index}
-              className={`group card-hover ${project.highlight ? 'md:col-span-2' : ''} block`}
-            >
-              <div className={`relative p-6 rounded-2xl bg-card border border-border h-full ${project.highlight ? 'bg-gradient-to-r from-primary/5 via-transparent to-accent/5' : ''
-                }`}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2.5 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                      <project.icon className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <span className="text-xs font-medium text-primary uppercase tracking-wider">
-                        {project.category}
-                      </span>
-                      <p className="text-sm text-muted-foreground">{project.company}</p>
-                    </div>
+        {isLoading ? (
+          <div className="text-center py-12">Loading projects...</div>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-6 mb-16">
+            {displayedExperiences.map((project, index) => {
+              const Icon = project.icon && iconMap[project.icon] ? iconMap[project.icon] : Briefcase;
+
+              return (
+                <div key={project.id} className={`group relative block ${project.featured ? 'md:col-span-2' : ''}`}>
+                  {/* Admin Controls Overlay */}
+                  <div className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <PostControls
+                      postId={project.id}
+                      isFeatured={project.featured}
+                      onUpdate={fetchProjects}
+                      onDelete={fetchProjects}
+                    />
                   </div>
-                  <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                </div>
 
-                <h3 className="font-serif text-xl font-medium mb-2 group-hover:text-primary transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-muted-foreground mb-4">{project.description}</p>
+                  <Link
+                    to={`/project/${project.id}`} // Use ID as slug
+                    className="block h-full"
+                  >
+                    <div className={`relative p-6 rounded-2xl bg-card border border-border h-full transition-all card-hover ${project.featured ? 'bg-gradient-to-r from-primary/5 via-transparent to-accent/5' : ''
+                      }`}>
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2.5 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                            <Icon className="w-5 h-5 text-primary" />
+                          </div>
+                          <div>
+                            <span className="text-xs font-medium text-primary uppercase tracking-wider">
+                              {project.category}
+                            </span>
+                            <p className="text-sm text-muted-foreground">{project.company}</p>
+                          </div>
+                        </div>
+                        <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      </div>
 
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 text-xs rounded-full bg-primary/10 text-primary font-medium"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                      <h3 className="font-serif text-xl font-medium mb-2 group-hover:text-primary transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-muted-foreground mb-4">{project.excerpt}</p>
+
+                      <div className="flex flex-wrap gap-2">
+                        {(project.tags || []).slice(0, 4).map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-3 py-1 text-xs rounded-full bg-primary/10 text-primary font-medium"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </Link>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+              );
+            })}
+          </div>
+        )}
 
         {isTeaser && (
           <div className="text-center mt-12">
@@ -141,7 +203,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
               download="RanaIslek_CV.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary/10 text-primary rounded-full font-medium hover:bg-primary/20 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary/10 text-primary rounded-full font-medium hover:bg-primary/20 transition-colors mt-12"
             >
               <span>Download Full CV</span>
               <ExternalLink className="w-4 h-4" />

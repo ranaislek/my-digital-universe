@@ -7,11 +7,26 @@ export interface ContentItem {
     date: string;
     duration?: string;
     readTime?: string;
+    read_time?: string; // from DB
     location?: string;
     link?: string; // External link for vlogs (YouTube)
     thumbnail?: string;
     content?: string; // HTML content for blogs
     status?: "draft" | "published";
+    featured?: boolean;
+    // Project specific fields
+    company?: string;
+    category?: string;
+    description?: string; // Short description (maps to excerpt)
+    tags?: string[];
+    techStack?: string[];
+    challenges?: string[];
+    features?: string[];
+    icon?: string; // Icon name string
+    projectLinks?: {
+        demo?: string;
+        repo?: string;
+    };
 }
 
 export const content: ContentItem[] = [
@@ -25,16 +40,7 @@ export const content: ContentItem[] = [
         link: "https://youtu.be/FaQnphOYFuM",
         thumbnail: "https://i.ytimg.com/vi/FaQnphOYFuM/maxresdefault.jpg",
     },
-    {
-        id: "susail-sailing",
-        type: "vlog",
-        title: "Sabancı Üniversitesi Yelken Gezisi ⛵︎ | SUSAIL | rislek vlog 7",
-        excerpt: "SUSAIL (Sabancı Üniversitesi Yelken Kulübü) ile çıktığımız harika yelken gezisinden anılar.",
-        date: "2023",
-        duration: "4:07",
-        link: "https://youtu.be/RUUvdtXiL7c",
-        thumbnail: "https://i.ytimg.com/vi/RUUvdtXiL7c/maxresdefault.jpg",
-    },
+
     {
         id: "padova-erasmus-life",
         type: "vlog",
@@ -54,6 +60,7 @@ export const content: ContentItem[] = [
         duration: "13:42",
         link: "https://youtu.be/P2kTKg1JQEI",
         thumbnail: "https://i.ytimg.com/vi/P2kTKg1JQEI/maxresdefault.jpg",
+        featured: true,
     },
     {
         id: "data-analyst-vs-scientist",
@@ -89,6 +96,18 @@ export const content: ContentItem[] = [
         duration: "7:15",
         link: "https://youtu.be/Iw-Jkqcz5jc",
         thumbnail: "https://i.ytimg.com/vi/Iw-Jkqcz5jc/maxresdefault.jpg",
+        featured: true,
+    },
+    {
+        id: "susail-sailing",
+        type: "vlog",
+        title: "Sabancı Üniversitesi Yelken Gezisi ⛵︎ | SUSAIL | rislek vlog 7",
+        excerpt: "SUSAIL (Sabancı Üniversitesi Yelken Kulübü) ile çıktığımız harika yelken gezisinden anılar.",
+        date: "2023",
+        duration: "4:07",
+        link: "https://youtu.be/RUUvdtXiL7c",
+        thumbnail: "https://i.ytimg.com/vi/RUUvdtXiL7c/maxresdefault.jpg",
+        featured: true,
     },
     {
         id: "dance-journey",

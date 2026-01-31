@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Calendar, Clock, Play, Youtube, MapPin } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { ContentItem } from "../data/content";
+import PostControls from "./admin/PostControls";
 
 const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
   const [activeTab, setActiveTab] = useState<"all" | "vlog" | "blog">("all");
@@ -19,7 +20,9 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
       const { data, error } = await supabase
         .from('posts')
         .select('*')
+        .in('type', ['blog', 'vlog']) // Only fetch blogs and vlogs
         .eq('status', 'published')
+        .order('featured', { ascending: false })
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -65,6 +68,12 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
             <p className="text-muted-foreground mt-4 max-w-lg">
               Sharing my Erasmus journey, study abroad tips, and random life musings.
             </p>
+            {isTeaser && (
+              <div className="mt-8 flex items-center gap-2">
+                <span className="h-px w-8 bg-primary/50"></span>
+                <span className="text-xs font-medium text-primary uppercase tracking-widest">Featured</span>
+              </div>
+            )}
           </div>
           <a
             href="https://www.youtube.com/@ranaislek"
@@ -95,7 +104,15 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
                 className="group cursor-pointer card-hover"
               >
                 {/* Thumbnail */}
-                <div className="aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 via-pop-3/20 to-pop-2/20 mb-4 relative">
+                <div className="aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 via-pop-3/20 to-pop-2/20 mb-4 relative group/thumb">
+                  <div className="absolute top-2 right-2 z-30 opacity-0 group-hover/thumb:opacity-100 transition-opacity">
+                    <PostControls
+                      postId={post.id}
+                      isFeatured={post.featured}
+                      onUpdate={fetchPosts}
+                      onDelete={fetchPosts}
+                    />
+                  </div>
                   {post.thumbnail ? (
                     <img
                       src={post.thumbnail}
