@@ -1,40 +1,5 @@
 import { ExternalLink, FileText, Award, GraduationCap, Briefcase, Code, Sparkles } from "lucide-react";
-
-const experiences = [
-  {
-    category: "Current Role",
-    title: "Data & Analytics Specialist",
-    company: "NGN",
-    description: "Leading internal data foundation design, building C-level Power BI dashboards, and managing Salesforce reporting.",
-    tags: ["Power BI", "Salesforce", "ETL"],
-    icon: Briefcase,
-    highlight: true,
-  },
-  {
-    category: "Research",
-    title: "Machine Learning Research",
-    company: "University of Padua",
-    description: "Thesis on constrained molecular graph generation with discrete diffusion models. Achieved 100% constraint satisfaction.",
-    tags: ["PyTorch", "RDKit", "Deep Learning"],
-    icon: Code,
-  },
-  {
-    category: "Experience",
-    title: "Product Analyst Intern",
-    company: "Delivery Hero (Yemeksepeti)",
-    description: "Built C-level KPI dashboards on BigQuery + Looker Studio across multiple brands and markets.",
-    tags: ["BigQuery", "Looker", "SQL"],
-    icon: FileText,
-  },
-  {
-    category: "Startup",
-    title: "ScholarIA — Academic Paper Platform",
-    company: "UPC Barcelona",
-    description: "Built AI-powered research assistant with personalized recommendations. Selected #1 in master's cohort!",
-    tags: ["AI/ML", "Vercel", "LLM"],
-    icon: Sparkles,
-  },
-];
+import { projects } from "../data/projects";
 
 const education = [
   {
@@ -59,7 +24,7 @@ interface PortfolioProps {
 }
 
 const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
-  const displayedExperiences = isTeaser ? experiences.slice(0, 2) : experiences;
+  const displayedExperiences = isTeaser ? projects.slice(0, 2) : projects;
 
   return (
     <section id="portfolio" className={`relative ${isTeaser ? "py-24 md:py-32" : "pb-12"}`}>
@@ -82,35 +47,36 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
 
         {/* Experience Cards */}
         <div className="grid md:grid-cols-2 gap-6 mb-16">
-          {displayedExperiences.map((item, index) => (
-            <div
+          {displayedExperiences.map((project, index) => (
+            <Link
+              to={`/project/${project.slug}`}
               key={index}
-              className={`group card-hover ${item.highlight ? 'md:col-span-2' : ''}`}
+              className={`group card-hover ${project.highlight ? 'md:col-span-2' : ''} block`}
             >
-              <div className={`relative p-6 rounded-2xl bg-card border border-border h-full ${item.highlight ? 'bg-gradient-to-r from-primary/5 via-transparent to-accent/5' : ''
+              <div className={`relative p-6 rounded-2xl bg-card border border-border h-full ${project.highlight ? 'bg-gradient-to-r from-primary/5 via-transparent to-accent/5' : ''
                 }`}>
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="p-2.5 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                      <item.icon className="w-5 h-5 text-primary" />
+                      <project.icon className="w-5 h-5 text-primary" />
                     </div>
                     <div>
                       <span className="text-xs font-medium text-primary uppercase tracking-wider">
-                        {item.category}
+                        {project.category}
                       </span>
-                      <p className="text-sm text-muted-foreground">{item.company}</p>
+                      <p className="text-sm text-muted-foreground">{project.company}</p>
                     </div>
                   </div>
                   <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                 </div>
 
                 <h3 className="font-serif text-xl font-medium mb-2 group-hover:text-primary transition-colors">
-                  {item.title}
+                  {project.title}
                 </h3>
-                <p className="text-muted-foreground mb-4">{item.description}</p>
+                <p className="text-muted-foreground mb-4">{project.description}</p>
 
                 <div className="flex flex-wrap gap-2">
-                  {item.tags.map((tag) => (
+                  {project.tags.map((tag) => (
                     <span
                       key={tag}
                       className="px-3 py-1 text-xs rounded-full bg-primary/10 text-primary font-medium"
@@ -120,7 +86,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
                   ))}
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 

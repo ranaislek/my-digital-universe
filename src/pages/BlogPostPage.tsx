@@ -4,6 +4,7 @@ import { ArrowLeft, Calendar, Clock, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../lib/supabase";
 import { ContentItem } from "../data/content";
+import PageTitle from "@/components/PageTitle";
 
 const BlogPostPage = () => {
     const { id } = useParams();
@@ -62,6 +63,7 @@ const BlogPostPage = () => {
 
     return (
         <article className="min-h-screen bg-background pb-20">
+            <PageTitle title={post.title} />
             {/* Header */}
             <div className="bg-muted/30 border-b border-border mb-12">
                 <div className="container mx-auto px-6 py-12 md:py-20">

@@ -4,9 +4,11 @@ import { Lock, Copy, Check, ArrowLeft, Database, Save, Upload } from "lucide-rea
 import { toast } from "sonner";
 import { ContentItem, content as localContent } from "../data/content";
 import { supabase } from "../lib/supabase";
+import PageTitle from "@/components/PageTitle";
 
 const AdminPage = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
@@ -16,7 +18,22 @@ const AdminPage = () => {
         status: "draft"
     });
 
-    const [dbPosts, setDbPosts] = useState<ContentItem[]>([]);
+    const [dbPosts, setDbPosts] = useState<(ContentItem & { read_time?: string })[]>([]);
+
+    useEffect(() => {
+        // Check active session
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setIsAuthenticated(!!session);
+        });
+
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange((_event, session) => {
+            setIsAuthenticated(!!session);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -38,14 +55,20 @@ const AdminPage = () => {
         }
     };
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (password === "rana123") {
-            setIsAuthenticated(true);
-            toast.success("Welcome back, Rana!");
+        setIsLoading(true);
+        const { error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+
+        if (error) {
+            toast.error(error.message);
         } else {
-            toast.error("Incorrect password");
+            toast.success("Welcome back!");
         }
+        setIsLoading(false);
     };
 
     const handleMigrate = async () => {
@@ -90,10 +113,8 @@ const AdminPage = () => {
 
         setIsLoading(true);
         try {
-            const slug = formData.id || formData.title
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, "-")
-                .replace(/(^-|-$)+/g, "");
+            if (!formData.id) return toast.error("Slug is required");
+            const slug = formData.id;
 
             const postData = {
                 id: slug,
@@ -139,21 +160,23 @@ const AdminPage = () => {
         }
     };
 
-    const loadPostForEdit = (post: ContentItem) => {
+    const loadPostForEdit = (post: ContentItem & { read_time?: string }) => {
         setFormData({
             ...post,
-            readTime: post.read_time // Map back to camelCase for form state if needed, though we can just use read_time in form too. 
-            // Actually let's just stick to what the form expects. 
-            // Wait, the form uses 'readTime'. The DB uses 'read_time'.
-            // I should handle this mapping.
-        } as any);
+            readTime: post.readTime || post.read_time
+        });
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
     };
 
     if (!isAuthenticated) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-background">
                 <div className="w-full max-w-md p-8 rounded-3xl border border-border bg-card shadow-sm">
+                    {/* ... (Lock Icon) */}
                     <div className="flex justify-center mb-6">
                         <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                             <Lock className="w-6 h-6" />
@@ -161,21 +184,31 @@ const AdminPage = () => {
                     </div>
                     <h1 className="text-2xl font-serif text-center mb-2">Admin Access</h1>
                     <p className="text-muted-foreground text-center mb-8">
-                        Please enter the password to manage content.
+                        Please sign in to manage content.
                     </p>
                     <form onSubmit={handleLogin} className="space-y-4">
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                            placeholder="Email"
+                            required
+                        />
                         <input
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full px-4 py-3 rounded-xl bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
                             placeholder="Password"
+                            required
                         />
                         <button
                             type="submit"
-                            className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition-colors"
+                            disabled={isLoading}
+                            className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
-                            Unlock
+                            {isLoading ? "Signing in..." : "Sign In"}
                         </button>
                     </form>
                     <div className="mt-6 text-center">
@@ -190,6 +223,7 @@ const AdminPage = () => {
 
     return (
         <div className="min-h-screen bg-background py-12 px-6">
+            <PageTitle title="Admin" />
             <div className="max-w-6xl mx-auto">
                 <div className="flex items-center justify-between mb-8">
                     <h1 className="text-3xl font-serif">Content Manager</h1>
@@ -203,7 +237,7 @@ const AdminPage = () => {
                             {isLoading ? "Migrating..." : "Migrate Local Data"}
                         </button>
                         <button
-                            onClick={() => setIsAuthenticated(false)}
+                            onClick={handleLogout}
                             className="text-sm text-muted-foreground hover:text-primary"
                         >
                             Logout
@@ -244,10 +278,33 @@ const AdminPage = () => {
                             <input
                                 type="text"
                                 value={formData.title || ""}
-                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                onChange={(e) => {
+                                    const title = e.target.value;
+                                    // Auto-generate slug if it's new or empty
+                                    const slug = !formData.id ? title
+                                        .toLowerCase()
+                                        .replace(/[^a-z0-9]+/g, "-")
+                                        .replace(/(^-|-$)+/g, "") : formData.id;
+
+                                    setFormData({ ...formData, title, id: slug })
+                                }}
                                 className="w-full px-4 py-2 rounded-xl bg-background border border-input outline-none focus:border-primary"
                                 placeholder="My New Article"
                             />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium mb-2">Slug (URL)</label>
+                            <div className="flex items-center gap-2">
+                                <span className="text-muted-foreground text-sm">/blog/</span>
+                                <input
+                                    type="text"
+                                    value={formData.id || ""}
+                                    onChange={(e) => setFormData({ ...formData, id: e.target.value })}
+                                    className="flex-1 px-4 py-2 rounded-xl bg-background border border-input outline-none focus:border-primary"
+                                    placeholder="my-new-article"
+                                />
+                            </div>
                         </div>
 
                         <div>
@@ -361,8 +418,8 @@ const AdminPage = () => {
                                         <div>
                                             <div className="flex items-center gap-2 mb-1">
                                                 <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full ${post.status === 'published'
-                                                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                                        : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                                                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                                    : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
                                                     }`}>
                                                     {post.status || 'draft'}
                                                 </span>

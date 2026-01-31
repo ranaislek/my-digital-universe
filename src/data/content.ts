@@ -11,6 +11,7 @@ export interface ContentItem {
     link?: string; // External link for vlogs (YouTube)
     thumbnail?: string;
     content?: string; // HTML content for blogs
+    status?: "draft" | "published";
 }
 
 export const content: ContentItem[] = [
