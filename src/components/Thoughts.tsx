@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Calendar, Clock, Play, Youtube, MapPin, Edit3 } from "lucide-react";
+import { ArrowRight, Calendar, Clock, Play, Youtube, MapPin, Edit3, PlusCircle } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { ContentItem } from "../data/content";
 import PostControls from "./admin/PostControls";
@@ -235,6 +235,18 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "drafts" ? "bg-orange-500 text-white" : "bg-orange-500/10 text-orange-500 hover:bg-orange-500/20"}`}
               >
                 Drafts ({drafts.length})
+              </button>
+            )}
+
+            {isAdmin && (
+              <button
+                onClick={() => {
+                  const slug = `draft-${Date.now()}`;
+                  window.location.href = `/blog/${slug}?edit=true&new=true`;
+                }}
+                className="px-4 py-2 rounded-full text-sm font-medium bg-green-500/10 text-green-500 hover:bg-green-500/20 transition-colors flex items-center gap-2 ml-auto"
+              >
+                <PlusCircle className="w-4 h-4" /> New Post
               </button>
             )}
           </div>
