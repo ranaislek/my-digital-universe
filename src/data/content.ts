@@ -14,6 +14,7 @@ export interface ContentItem {
     content?: string; // HTML content for blogs
     status?: "draft" | "published";
     featured?: boolean;
+    pinned?: boolean;
     // Project specific fields
     company?: string;
     category?: string;

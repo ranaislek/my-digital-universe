@@ -34,8 +34,13 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
         readTime: post.read_time
       }));
 
-      // Sort by DATE (Event Date) - Newest First
+      // Sort by PINNED (Hero preference), then DATE (Event Date) - Newest First
       allPosts.sort((a, b) => {
+        // Pinned posts come first
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+
+        // Then Sort by Date
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
         return dateB.getTime() - dateA.getTime();
@@ -88,17 +93,6 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
       >
         {/* Thumbnail */}
         <div className={`rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 via-pop-3/20 to-pop-2/20 relative group/thumb ${isHero ? 'aspect-video w-full' : 'aspect-video mb-4'}`}>
-          {isAdmin && !isHero && (
-            <div className="absolute top-2 right-2 z-30 opacity-0 group-hover/thumb:opacity-100 transition-opacity">
-              <PostControls
-                postId={post.id}
-                isFeatured={post.featured}
-                onUpdate={fetchPosts}
-                onDelete={fetchPosts}
-              />
-            </div>
-          )}
-
           {post.thumbnail ? (
             <img
               src={post.thumbnail}
@@ -108,6 +102,18 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="text-4xl">✍️</span>
+            </div>
+          )}
+
+          {isAdmin && (
+            <div className="absolute top-2 right-2 z-30 opacity-0 group-hover:opacity-100 transition-opacity">
+              <PostControls
+                postId={post.id}
+                isFeatured={post.featured}
+                isPinned={post.pinned}
+                onUpdate={fetchPosts}
+                onDelete={fetchPosts}
+              />
             </div>
           )}
 
@@ -175,7 +181,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
 
   return (
     <section id="thoughts" className={`relative ${isTeaser ? "py-24 md:py-32" : "pb-12"}`}>
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 md:px-12 lg:px-24">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
           <div>
             <span className="text-primary font-medium text-sm tracking-wider uppercase">
@@ -235,7 +241,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
                 <PostCard post={displayedContent[0]} isHero={true} />
               </div>
             )}
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-3 gap-6">
               {displayedContent.slice(1).map((post) => (
                 <PostCard key={post.id} post={post} />
               ))}

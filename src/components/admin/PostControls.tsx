@@ -1,4 +1,4 @@
-import { Edit2, Trash2, Star } from "lucide-react";
+import { Edit2, Trash2, Star, Pin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthProvider";
 import { supabase } from "@/lib/supabase";
@@ -8,16 +8,41 @@ import { Button } from "@/components/ui/button";
 interface PostControlsProps {
     postId: string;
     isFeatured?: boolean;
+    isPinned?: boolean;
     onDelete?: () => void;
     onUpdate?: () => void;
     className?: string;
 }
 
-const PostControls = ({ postId, isFeatured, onDelete, onUpdate, className = "" }: PostControlsProps) => {
+const PostControls = ({ postId, isFeatured, isPinned, onDelete, onUpdate, className = "" }: PostControlsProps) => {
     const { isAdmin } = useAuth();
     const navigate = useNavigate();
 
     if (!isAdmin) return null;
+
+    const handleTogglePin = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const newStatus = !isPinned;
+
+        // If we are pinning this post, unpin all others first to ensure only one hero
+        if (newStatus) {
+            await supabase.from('posts').update({ pinned: false }).eq('pinned', true);
+        }
+
+        const { error } = await supabase
+            .from('posts')
+            .update({ pinned: newStatus })
+            .eq('id', postId);
+
+        if (error) {
+            toast.error("Failed to update pinned status");
+        } else {
+            toast.success(newStatus ? "Pinned as Hero" : "Unpinned from Hero");
+            onUpdate?.();
+        }
+    };
 
     const handleToggleFeature = async (e: React.MouseEvent) => {
         e.preventDefault();
@@ -64,6 +89,16 @@ const PostControls = ({ postId, isFeatured, onDelete, onUpdate, className = "" }
 
     return (
         <div className={`flex items-center gap-1 ${className}`} onClick={(e) => e.stopPropagation()}>
+            <Button
+                variant={isPinned ? "default" : "secondary"}
+                size="icon"
+                className={`h-8 w-8 rounded-full shadow-sm ${isPinned ? "bg-purple-500 hover:bg-purple-600 text-white" : "bg-white/80 hover:bg-white"}`}
+                onClick={handleTogglePin}
+                title={isPinned ? "Unpin Method" : "Pin as Hero"}
+            >
+                <Pin className={`w-4 h-4 ${isPinned ? "fill-current" : ""}`} />
+            </Button>
+
             <Button
                 variant={isFeatured ? "default" : "secondary"}
                 size="icon"

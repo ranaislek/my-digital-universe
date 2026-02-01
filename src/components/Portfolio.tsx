@@ -57,8 +57,12 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
         projectLinks: p.project_links
       }));
 
-      // Sort by DATE (Event Date) - Newest First
+      // Sort by PINNED (Hero preference), then DATE (Event Date) - Newest First
       mappedProjects.sort((a, b) => {
+        // Pinned projects come first
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+
         // Handle various date formats (e.g., "Jan 2025", "2024", "YYYY-MM-DD")
         // If sorting is weird, we might need a more robust parser or ISO dates
         const dateA = new Date(a.date);
@@ -81,7 +85,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
       {/* Background decoration */}
       <div className="absolute inset-0 pop-gradient opacity-50" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto px-6 md:px-12 lg:px-24 relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="text-primary font-medium text-sm tracking-wider uppercase">
             Portfolio
@@ -114,6 +118,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
                     <PostControls
                       postId={project.id}
                       isFeatured={project.featured}
+                      isPinned={project.pinned}
                       onUpdate={fetchProjects}
                       onDelete={fetchProjects}
                     />
@@ -141,10 +146,10 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
                         <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                       </div>
 
-                      <h3 className={`font-serif font-medium mb-2 group-hover:text-primary transition-colors ${isHero ? 'text-2xl md:text-3xl' : 'text-xl'}`}>
+                      <h3 className={`font-serif font-medium mb-2 group-hover:text-primary transition-colors ${isHero ? 'text-xl md:text-2xl' : 'text-lg'}`}>
                         {project.title}
                       </h3>
-                      <p className={`text-muted-foreground mb-4 ${isHero ? 'text-base' : 'text-sm'}`}>{project.excerpt}</p>
+                      <p className={`text-muted-foreground mb-4 ${isHero ? 'text-sm' : 'text-xs'}`}>{project.excerpt}</p>
 
                       <div className="flex flex-wrap gap-2">
                         {(project.tags || []).slice(0, 4).map((tag) => (
