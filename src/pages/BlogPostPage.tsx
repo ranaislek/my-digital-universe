@@ -8,6 +8,7 @@ import { ContentItem } from "../data/content";
 import PageTitle from "@/components/PageTitle";
 import PostControls from "@/components/admin/PostControls";
 import { useAuth } from "@/components/AuthProvider";
+import BackgroundElements from "@/components/BackgroundElements";
 
 const BlogPostPage = () => {
     const { slug } = useParams();
@@ -157,6 +158,7 @@ const BlogPostPage = () => {
 
     return (
         <article className="min-h-screen bg-background pb-20">
+            <BackgroundElements />
             {/* Edit Mode Header */}
             {isEditing && (
                 <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border p-4 flex items-center justify-between animate-in slide-in-from-top-2">

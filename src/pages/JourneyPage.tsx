@@ -1,10 +1,12 @@
 import PageTitle from "@/components/PageTitle";
 import JourneyTimeline from "@/components/JourneyTimeline";
+import BackgroundElements from "@/components/BackgroundElements";
 
 const JourneyPage = () => {
     return (
-        <div className="min-h-screen bg-background">
-            <PageTitle title="My Journey" />
+        <div className="min-h-screen pt-20 pb-16">
+            <BackgroundElements showStars={true} />
+            <PageTitle title="Journey" />
 
             <div className="container mx-auto px-6 py-20">
                 <div className="text-center max-w-2xl mx-auto mb-16">

@@ -9,7 +9,7 @@ import PageTitle from "@/components/PageTitle";
 
 const Index = () => {
   return (
-    <div className="h-screen overflow-y-scroll snap-y snap-proximity scroll-smooth bg-background">
+    <div id="home-scroll-container" className="h-screen overflow-y-scroll snap-y snap-proximity scroll-smooth bg-background">
       <PageTitle title="Home" />
       <div className="snap-start">
         <Hero />
@@ -26,7 +26,9 @@ const Index = () => {
       <div className="snap-start">
         <Contact isTeaser={true} />
       </div>
-      <Footer />
+      <div className="snap-start">
+        <Footer />
+      </div>
     </div>
   );
 };

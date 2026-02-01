@@ -5,6 +5,7 @@ import { ArrowLeft, ExternalLink, Github, LayoutGrid, Award, CheckCircle2, Layer
 import { projects } from "../data/projects";
 import { Button } from "@/components/ui/button";
 import PageTitle from "@/components/PageTitle";
+import BackgroundElements from "@/components/BackgroundElements";
 
 const ProjectPage = () => {
     const { slug } = useParams();
@@ -29,6 +30,7 @@ const ProjectPage = () => {
 
     return (
         <div className="min-h-screen bg-background pb-20">
+            <BackgroundElements />
             <PageTitle title={project.title} />
             {/* Header / Hero */}
             <div className="bg-muted/30 border-b border-border">

@@ -26,6 +26,15 @@ const Navigation = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  const handleScrollTop = () => {
+    const homeContainer = document.getElementById("home-scroll-container");
+    if (homeContainer) {
+      homeContainer.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
@@ -36,11 +45,10 @@ const Navigation = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          {/* Logo */}
           <Link
             to="/"
             className="flex items-center gap-2 group"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={handleScrollTop}
           >
             <img src="/rana-frog-logo.png" alt="Rana" className="h-14 w-auto object-contain" />
           </Link>
@@ -53,7 +61,7 @@ const Navigation = () => {
                 to={link.href}
                 className={`text-sm font-medium transition-colors relative group ${isActive(link.href) ? "text-primary" : "text-muted-foreground hover:text-primary"
                   }`}
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                onClick={handleScrollTop}
               >
                 {link.label}
                 <span className={`absolute -bottom-1 left-0 h-0.5 bg-primary rounded-full transition-all ${isActive(link.href) ? "w-full" : "w-0 group-hover:w-full"
@@ -85,7 +93,7 @@ const Navigation = () => {
                     }`}
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    handleScrollTop();
                   }}
                 >
                   {link.label}

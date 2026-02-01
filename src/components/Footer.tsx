@@ -11,7 +11,14 @@ const Footer = () => {
           <Link
             to="/"
             className="flex items-center gap-2 group"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => {
+              const homeContainer = document.getElementById("home-scroll-container");
+              if (homeContainer) {
+                homeContainer.scrollTo({ top: 0, behavior: "smooth" });
+              } else {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
           >
             <img src="/rana-frog-logo.png" alt="Rana" className="h-12 w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
           </Link>
