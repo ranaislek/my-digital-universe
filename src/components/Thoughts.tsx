@@ -89,10 +89,10 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
       // @ts-ignore
       <Component
         {...props}
-        className={`group cursor-pointer card-hover ${isDraft ? 'opacity-80 hover:opacity-100' : ''} ${isHero ? 'md:grid md:grid-cols-2 md:gap-8 items-center bg-card/50 p-6 rounded-3xl border border-border/50' : ''}`}
+        className={`group cursor-pointer card-hover ${isDraft ? 'opacity-80 hover:opacity-100' : ''} ${isHero ? 'md:grid md:grid-cols-2 md:gap-6 items-center bg-card/50 p-4 md:p-5 rounded-3xl border border-border/50' : ''}`}
       >
         {/* Thumbnail */}
-        <div className={`rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 via-pop-3/20 to-pop-2/20 relative group/thumb ${isHero ? 'aspect-video w-full' : 'aspect-video mb-4'}`}>
+        <div className={`rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 via-pop-3/20 to-pop-2/20 relative group/thumb ${isHero ? 'aspect-video w-full' : 'aspect-video mb-3'}`}>
           {post.thumbnail ? (
             <img
               src={post.thumbnail}
@@ -119,20 +119,20 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
 
           {post.type === "vlog" && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors">
-              <div className="w-14 h-14 rounded-full bg-card/90 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                <Play className="w-6 h-6 text-primary fill-primary" />
+              <div className="w-12 h-12 rounded-full bg-card/90 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                <Play className="w-5 h-5 text-primary fill-primary" />
               </div>
             </div>
           )}
           {isDraft && (
             <div className="absolute top-2 left-2 z-20">
-              <span className="px-2 py-1 bg-orange-500 text-white text-xs font-bold rounded-md shadow-sm uppercase tracking-wider">
+              <span className="px-2 py-1 bg-orange-500 text-white text-[10px] font-bold rounded-md shadow-sm uppercase tracking-wider">
                 Draft
               </span>
             </div>
           )}
           {post.location && (
-            <div className="absolute bottom-3 left-3 flex items-center gap-1 px-2 py-1 bg-card/80 backdrop-blur-sm rounded-full text-xs z-10">
+            <div className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 bg-card/80 backdrop-blur-sm rounded-full text-[10px] z-10">
               <MapPin className="w-3 h-3 text-primary" />
               {post.location}
             </div>
@@ -140,8 +140,8 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
         </div>
 
         {/* Content */}
-        <div className={isHero ? "mt-6 md:mt-0" : ""}>
-          <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
+        <div className={isHero ? "mt-4 md:mt-0" : ""}>
+          <div className="flex items-center gap-3 text-[10px] text-muted-foreground mb-2">
             <span className="flex items-center gap-1">
               <Calendar className="w-3 h-3" />
               {post.date}
@@ -153,7 +153,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
               </span>
             )}
             <span
-              className={`px-3 py-1 text-xs rounded-full font-medium ${post.type === "vlog"
+              className={`px-2 py-0.5 text-[10px] rounded-full font-medium ${post.type === "vlog"
                 ? "bg-[#FF0000]/10 text-[#FF0000]"
                 : "bg-primary/10 text-primary"
                 }`}
@@ -162,16 +162,16 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
             </span>
           </div>
 
-          <h3 className={`font-serif font-medium mb-3 group-hover:text-primary transition-colors ${isHero ? "text-3xl md:text-4xl" : "text-lg line-clamp-2"}`}>
+          <h3 className={`font-serif font-medium mb-2 group-hover:text-primary transition-colors ${isHero ? "text-2xl md:text-3xl" : "text-base line-clamp-2"}`}>
             {post.title}
           </h3>
-          <p className={`text-muted-foreground text-sm ${isHero ? "line-clamp-4 text-base" : "line-clamp-2"}`}>
+          <p className={`text-muted-foreground text-xs ${isHero ? "line-clamp-3 text-sm" : "line-clamp-2"}`}>
             {post.excerpt}
           </p>
 
           {isHero && (
-            <div className="mt-6 flex items-center text-primary font-medium text-sm group/link">
-              Read Story <ArrowRight className="w-4 h-4 ml-2 group-hover/link:translate-x-1 transition-transform" />
+            <div className="mt-4 flex items-center text-primary font-medium text-xs group/link">
+              Read Story <ArrowRight className="w-3 h-3 ml-2 group-hover/link:translate-x-1 transition-transform" />
             </div>
           )}
         </div>
@@ -180,69 +180,42 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
   };
 
   return (
-    <section id="thoughts" className={`relative ${isTeaser ? "py-24 md:py-32" : "pb-12"}`}>
+    <section id="thoughts" className={`relative ${isTeaser ? "min-h-screen flex flex-col justify-center py-20 md:py-24" : "pb-12"}`}>
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+        <div className={`flex flex-col md:flex-row md:items-end md:justify-between gap-4 ${isTeaser ? "mb-8" : "mb-16"}`}>
           <div>
-            <span className="text-primary font-medium text-sm tracking-wider uppercase">
+            <span className="text-primary font-medium text-xs tracking-wider uppercase">
               Blog & Vlogs
             </span>
-            <h2 className="font-serif text-4xl md:text-5xl font-medium mt-2">
+            <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1">
               Stories & <span className="gradient-text">Adventures</span>
             </h2>
-            <p className="text-muted-foreground mt-4 max-w-lg">
+            <p className={`text-muted-foreground mt-2 max-w-lg ${isTeaser ? "text-sm" : ""}`}>
               Sharing my Erasmus journey, study abroad tips, and random life musings.
             </p>
-            {isTeaser && (
-              <div className="mt-8 flex items-center gap-2">
-                <span className="h-px w-8 bg-primary/50"></span>
-                <span className="text-xs font-medium text-primary uppercase tracking-widest">Featured Stories</span>
-              </div>
-            )}
           </div>
           <a
             href="https://www.youtube.com/@ranaislek"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FF0000]/10 text-[#FF0000] rounded-full font-medium hover:bg-[#FF0000]/20 transition-colors group"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#FF0000]/10 text-[#FF0000] rounded-full text-sm font-medium hover:bg-[#FF0000]/20 transition-colors group"
           >
-            <Youtube className="w-5 h-5" />
+            <Youtube className="w-4 h-4" />
             <span>Subscribe on YouTube</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
           </a>
         </div>
 
-        {/* DRAFTS SECTION */}
-        {isAdmin && drafts.length > 0 && !isTeaser && (
-          <div className="mb-16">
-            <div className="flex items-center gap-4 mb-6">
-              <h3 className="text-2xl font-serif text-orange-500 flex items-center gap-2">
-                <Edit3 className="w-6 h-6" /> Your Drafts
-              </h3>
-              <span className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-xs font-bold">{drafts.length}</span>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 border-2 border-dashed border-orange-200 rounded-3xl bg-orange-50/30">
-              {drafts.map(post => (
-                <PostCard key={post.id} post={post} isDraft={true} />
-              ))}
-            </div>
-            <div className="my-12 h-px bg-border/50" />
-          </div>
-        )}
-
         {/* PUBLISHED CONTENT */}
-        {/* HOMEPAGE LAYOUT: All 2 cols (as requested: "two for the first row and then two per row") */}
-        {/* PUBLISHED CONTENT */}
-        {/* HOMEPAGE LAYOUT: 1 Hero + 2 cols (Same as Portfolio) */}
         {isTeaser ? (
-          <div className="space-y-8">
+          <div className="space-y-4">
             {displayedContent.length > 0 && (
               <div className="col-span-full">
                 <PostCard post={displayedContent[0]} isHero={true} />
               </div>
             )}
-            <div className="grid md:grid-cols-3 gap-6">
-              {displayedContent.slice(1).map((post) => (
+            <div className="grid md:grid-cols-3 gap-4">
+              {displayedContent.slice(1, 4).map((post) => (
                 <PostCard key={post.id} post={post} />
               ))}
             </div>
@@ -257,10 +230,10 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
         )}
 
         {isTeaser && (
-          <div className="text-center mt-12">
+          <div className="text-center mt-8">
             <Link
               to="/thoughts"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 transition-colors group"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-medium hover:bg-primary/90 transition-colors group"
             >
               <span>Read More Stories</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

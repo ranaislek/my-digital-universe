@@ -8,13 +8,23 @@ import PageTitle from "@/components/PageTitle";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen overflow-y-scroll snap-y snap-proximity scroll-smooth bg-background">
       <PageTitle title="Home" />
-      <Hero />
-      <About isTeaser={true} />
-      <Portfolio isTeaser={true} />
-      <Thoughts isTeaser={true} />
-      <Contact isTeaser={true} />
+      <div className="snap-start">
+        <Hero />
+      </div>
+      <div className="snap-start">
+        <About isTeaser={true} />
+      </div>
+      <div className="snap-start">
+        <Portfolio isTeaser={true} />
+      </div>
+      <div className="snap-start">
+        <Thoughts isTeaser={true} />
+      </div>
+      <div className="snap-start">
+        <Contact isTeaser={true} />
+      </div>
     </div>
   );
 };

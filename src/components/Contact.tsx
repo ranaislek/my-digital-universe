@@ -116,97 +116,97 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
   };
 
   return (
-    <section id="contact" className="py-16 md:py-24 relative">
+    <section id="contact" className={`relative ${isTeaser ? "min-h-screen flex flex-col justify-center py-20 md:py-24" : "py-16 md:py-24"}`}>
       {/* Decorative blobs */}
       <div className="absolute top-1/4 left-0 w-72 h-72 bg-primary/10 blob-shape opacity-50" />
       <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-accent/10 blob-shape-2 opacity-50" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-2xl mx-auto text-center mb-16">
-          <span className="text-primary font-medium text-sm tracking-wider uppercase">
+        <div className={`max-w-2xl mx-auto text-center ${isTeaser ? "mb-8 lg:mb-12" : "mb-16"}`}>
+          <span className="text-primary font-medium text-xs tracking-wider uppercase">
             Let's Connect
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl font-medium mt-2 mb-6">
+          <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1 mb-3">
             Say <span className="gradient-text">Hello!</span>
             <span className="inline-block ml-2">👋</span>
           </h2>
-          <p className="text-muted-foreground text-lg mb-4">
+          <p className="text-muted-foreground text-sm md:text-base mb-2">
             Whether it's about data, Erasmus advice, dance, or just to chat —
             I'd love to hear from you!
           </p>
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <MapPin className="w-4 h-4 text-primary" />
+          <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+            <MapPin className="w-3 h-3 text-primary" />
             <span>Currently in Istanbul, Türkiye</span>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-center">
           {/* Contact Info Side */}
-          <div className="space-y-8">
-            <h3 className="font-serif text-2xl font-medium mb-6">Get in Touch</h3>
+          <div className="space-y-6">
+            <h3 className="font-serif text-xl font-medium mb-4">Get in Touch</h3>
 
             {/* Social Links */}
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3">
               {socials.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground ${social.color} transition-all hover:scale-110 hover:border-primary/30`}
+                  className={`w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground ${social.color} transition-all hover:scale-110 hover:border-primary/30`}
                   aria-label={social.label}
                 >
-                  <social.icon className="w-5 h-5" />
+                  <social.icon className="w-4 h-4" />
                 </a>
               ))}
             </div>
 
-            <div className="p-6 rounded-2xl bg-card border border-border mt-8">
-              <h4 className="font-medium mb-2">Direct Contact</h4>
+            <div className={`p-4 rounded-2xl bg-card border border-border ${isTeaser ? "mt-6" : "mt-8"}`}>
+              <h4 className="font-medium text-sm mb-1">Direct Contact</h4>
               <a
                 href="mailto:islekrana@gmail.com"
-                className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
               >
-                <Mail className="w-4 h-4" />
+                <Mail className="w-3 h-3" />
                 <span>islekrana@gmail.com</span>
               </a>
             </div>
           </div>
 
           {/* Contact Form Side */}
-          <div className="bg-card p-8 rounded-3xl border border-border shadow-sm">
-            <form onSubmit={handleSubmit} className="space-y-4">
+          <div className={`bg-card rounded-3xl border border-border shadow-sm ${isTeaser ? "p-6" : "p-8"}`}>
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-1.5 ml-1">Name</label>
+                <label htmlFor="name" className="block text-xs font-medium mb-1 ml-1">Name</label>
                 <input
                   type="text"
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                  className="w-full px-3 py-2 rounded-lg bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm"
                   placeholder="Your Name"
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-1.5 ml-1">Email</label>
+                <label htmlFor="email" className="block text-xs font-medium mb-1 ml-1">Email</label>
                 <input
                   type="email"
                   id="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"
+                  className="w-full px-3 py-2 rounded-lg bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm"
                   placeholder="hello@example.com"
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-1.5 ml-1">Message</label>
+                <label htmlFor="message" className="block text-xs font-medium mb-1 ml-1">Message</label>
                 <textarea
                   id="message"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all min-h-[120px]"
+                  className={`w-full px-3 py-2 rounded-lg bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm ${isTeaser ? "min-h-[80px]" : "min-h-[120px]"}`}
                   placeholder="Write your message here..."
                 />
               </div>
@@ -214,14 +214,14 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <span>Sending...</span>
                 ) : (
                   <>
                     <span>Send Message</span>
-                    <Send className="w-4 h-4" />
+                    <Send className="w-3 h-3" />
                   </>
                 )}
               </button>

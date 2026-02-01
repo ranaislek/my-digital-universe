@@ -81,19 +81,19 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
   const displayedExperiences = isTeaser ? projects.slice(0, 3) : projects;
 
   return (
-    <section id="portfolio" className={`relative ${isTeaser ? "py-24 md:py-32" : "pb-12"}`}>
+    <section id="portfolio" className={`relative ${isTeaser ? "min-h-screen flex flex-col justify-center py-20 md:py-24" : "pb-12"}`}>
       {/* Background decoration */}
       <div className="absolute inset-0 pop-gradient opacity-50" />
 
       <div className="container mx-auto px-6 md:px-12 lg:px-24 relative z-10">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <span className="text-primary font-medium text-sm tracking-wider uppercase">
+        <div className={`text-center max-w-2xl mx-auto ${isTeaser ? "mb-8 lg:mb-12" : "mb-16"}`}>
+          <span className="text-primary font-medium text-xs tracking-wider uppercase">
             Portfolio
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl font-medium mt-2 mb-6">
+          <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1 mb-3">
             Experience & <span className="gradient-text">Education</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-sm md:text-base">
             From analyzing user journeys to training neural networks —
             here's a peek into my professional adventures.
           </p>
@@ -103,59 +103,46 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
         {isLoading ? (
           <div className="text-center py-12">Loading projects...</div>
         ) : (
-          <div className="grid md:grid-cols-2 gap-6 mb-16">
+          <div className={`grid md:grid-cols-2 gap-4 ${isTeaser ? "mb-8" : "mb-16"}`}>
             {displayedExperiences.map((project, index) => {
               const Icon = project.icon && iconMap[project.icon] ? iconMap[project.icon] : Briefcase;
               // Teaser Logic: First item is Hero (col-span-2) IF it is a teaser. 
-              // Otherwise (or if standard page), use standard grid. 
-              // User asked: "on homepage... first row one post and then two posts per row for portfolio"
               const isHero = isTeaser && index === 0;
 
               return (
                 <div key={project.id} className={`group relative block ${isHero ? 'md:col-span-2' : ''}`}>
-                  {/* Admin Controls Overlay */}
-                  <div className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <PostControls
-                      postId={project.id}
-                      isFeatured={project.featured}
-                      isPinned={project.pinned}
-                      onUpdate={fetchProjects}
-                      onDelete={fetchProjects}
-                    />
-                  </div>
-
                   <Link
                     to={`/project/${project.id}`} // Use ID as slug
                     className="block h-full"
                   >
-                    <div className={`relative p-6 rounded-2xl bg-card border border-border h-full transition-all card-hover ${isHero ? 'bg-gradient-to-r from-primary/5 via-transparent to-accent/5' : ''
+                    <div className={`relative p-5 rounded-2xl bg-card border border-border h-full transition-all card-hover ${isHero ? 'bg-gradient-to-r from-primary/5 via-transparent to-accent/5' : ''
                       }`}>
 
-                      <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
-                          <div className="p-2.5 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                            <Icon className="w-5 h-5 text-primary" />
+                          <div className="p-2 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                            <Icon className="w-4 h-4 text-primary" />
                           </div>
                           <div>
                             <span className="text-xs font-medium text-primary uppercase tracking-wider">
                               {project.category}
                             </span>
-                            <p className="text-sm text-muted-foreground">{project.company}</p>
+                            <p className="text-xs text-muted-foreground">{project.company}</p>
                           </div>
                         </div>
-                        <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                        <ExternalLink className="w-3 h-3 text-muted-foreground group-hover:text-primary transition-colors" />
                       </div>
 
-                      <h3 className={`font-serif font-medium mb-2 group-hover:text-primary transition-colors ${isHero ? 'text-xl md:text-2xl' : 'text-lg'}`}>
+                      <h3 className={`font-serif font-medium mb-1 group-hover:text-primary transition-colors ${isHero ? 'text-lg md:text-xl' : 'text-base'}`}>
                         {project.title}
                       </h3>
-                      <p className={`text-muted-foreground mb-4 ${isHero ? 'text-sm' : 'text-xs'}`}>{project.excerpt}</p>
+                      <p className={`text-muted-foreground mb-3 ${isHero ? 'text-sm line-clamp-2' : 'text-xs line-clamp-2'}`}>{project.excerpt}</p>
 
                       <div className="flex flex-wrap gap-2">
-                        {(project.tags || []).slice(0, 4).map((tag) => (
+                        {(project.tags || []).slice(0, 3).map((tag) => (
                           <span
                             key={tag}
-                            className="px-3 py-1 text-xs rounded-full bg-primary/10 text-primary font-medium"
+                            className="px-2 py-0.5 text-[10px] rounded-full bg-primary/10 text-primary font-medium"
                           >
                             {tag}
                           </span>
@@ -170,10 +157,10 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
         )}
 
         {isTeaser && (
-          <div className="text-center mt-12">
+          <div className="text-center">
             <Link
               to="/portfolio"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 transition-colors group"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-medium hover:bg-primary/90 transition-colors group"
             >
               <span>View Full Portfolio</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
