@@ -20,6 +20,7 @@ const Navigation = () => {
     { href: "/about", label: "About" },
     { href: "/portfolio", label: "Portfolio" },
     { href: "/thoughts", label: "Blog & Vlogs" },
+    { href: "/journey", label: "Journey" },
     { href: "/contact", label: "Say Hi" },
   ];
 

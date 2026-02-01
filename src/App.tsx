@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import AboutPage from "./pages/AboutPage";
 import PortfolioPage from "./pages/PortfolioPage";
 import ThoughtsPage from "./pages/ThoughtsPage";
+import JourneyPage from "./pages/JourneyPage";
 import ContactPage from "./pages/ContactPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import AdminPage from "./pages/AdminPage";
@@ -34,6 +35,7 @@ const App = () => (
               <Route path="/portfolio" element={<PortfolioPage />} />
               <Route path="/project/:slug" element={<ProjectPage />} />
               <Route path="/thoughts" element={<ThoughtsPage />} />
+              <Route path="/journey" element={<JourneyPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/blog/:slug" element={<BlogPostPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
