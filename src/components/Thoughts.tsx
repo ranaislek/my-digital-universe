@@ -188,9 +188,11 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
         <div className={`flex flex-col md:flex-row md:items-end md:justify-between gap-4 ${isTeaser ? "mb-8" : "mb-16"}`}>
           <div>
-            <span className="text-primary font-medium text-xs tracking-wider uppercase">
-              Blogs & Vlogs
-            </span>
+            {!isTeaser && (
+              <span className="text-primary font-medium text-xs tracking-wider uppercase">
+                Blogs & Vlogs
+              </span>
+            )}
             <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1">
               Stories & <span className="gradient-text">Adventures</span>
             </h2>

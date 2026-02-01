@@ -90,11 +90,15 @@ const About = ({ isTeaser = false }: AboutProps) => {
           </div>
 
 
+
           {/* Content Side */}
           <div>
-            <span className="text-primary font-medium text-xs tracking-wider uppercase">
-              Nice to meet you!
-            </span>
+            {!isTeaser && (
+              <span className="text-primary font-medium text-xs tracking-wider uppercase">
+                Nice to meet you!
+              </span>
+            )}
+
             <h2 className="font-serif text-3xl md:text-5xl font-medium mt-1 mb-6">
               A Little About
               <br />

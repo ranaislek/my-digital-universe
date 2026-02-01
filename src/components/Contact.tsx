@@ -129,9 +129,11 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className={`max-w-2xl mx-auto text-center ${isTeaser ? "mb-8 lg:mb-12" : "mb-16"}`}>
-          <span className="text-primary font-medium text-xs tracking-wider uppercase">
-            Let's Connect
-          </span>
+          {!isTeaser && (
+            <span className="text-primary font-medium text-xs tracking-wider uppercase">
+              Let's Connect
+            </span>
+          )}
           <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1 mb-3">
             Say <span className="gradient-text">Hello!</span>
             <span className="inline-block ml-2">👋</span>
