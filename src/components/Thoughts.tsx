@@ -15,17 +15,14 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
 
   useEffect(() => {
     fetchPosts();
-  }, [isAdmin]); // Re-fetch if auth state changes
+  }, [isAdmin]);
 
   const fetchPosts = async () => {
     try {
-      // Fetch ALL blog/vlog posts
       const { data, error } = await supabase
         .from('posts')
         .select('*')
-        .in('type', ['blog', 'vlog'])
-        .order('featured', { ascending: false })
-        .order('created_at', { ascending: false });
+        .in('type', ['blog', 'vlog']);
 
       if (error) {
         throw error;
@@ -36,6 +33,13 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
         ...post,
         readTime: post.read_time
       }));
+
+      // Sort by DATE (Event Date) - Newest First
+      allPosts.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB.getTime() - dateA.getTime();
+      });
 
       // Separate drafts and published
       const publishedPosts = allPosts.filter(p => p.status === 'published');
@@ -56,16 +60,20 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
     ? posts
     : posts.filter((item) => item.type === activeTab);
 
-  const displayedContent = isTeaser ? filteredContent.slice(0, 3) : filteredContent;
+  // Layout Logic
+  // Homepage (Teaser): Show only FEATURED posts. 1 Hero + Grid (2 cols)
+  // Blog Page: Show ALL posts. Grid (3 cols)
+  const displayedContent = isTeaser
+    ? filteredContent.filter(p => p.featured) // Only featured on homepage
+    : filteredContent;
 
   if (isLoading) {
     return <div className="py-24 text-center">Loading content...</div>;
   }
 
   // Helper to render a post card
-  const PostCard = ({ post, isDraft = false }: { post: ContentItem, isDraft?: boolean }) => {
+  const PostCard = ({ post, isDraft = false, isHero = false }: { post: ContentItem, isDraft?: boolean, isHero?: boolean }) => {
     const isExternal = post.type === "vlog";
-    // For drafts, always go to internal view to preview/edit
     const href = (isExternal && !isDraft) ? post.link : `/blog/${post.id}`;
     const Component = (isExternal && !isDraft) ? "a" : Link;
     const props = (isExternal && !isDraft)
@@ -76,11 +84,11 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
       // @ts-ignore
       <Component
         {...props}
-        className={`group cursor-pointer card-hover ${isDraft ? 'opacity-80 hover:opacity-100' : ''}`}
+        className={`group cursor-pointer card-hover ${isDraft ? 'opacity-80 hover:opacity-100' : ''} ${isHero ? 'md:grid md:grid-cols-2 md:gap-8 items-center bg-card/50 p-6 rounded-3xl border border-border/50' : ''}`}
       >
         {/* Thumbnail */}
-        <div className="aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 via-pop-3/20 to-pop-2/20 mb-4 relative group/thumb">
-          {isAdmin && (
+        <div className={`rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 via-pop-3/20 to-pop-2/20 relative group/thumb ${isHero ? 'aspect-video w-full' : 'aspect-video mb-4'}`}>
+          {isAdmin && !isHero && (
             <div className="absolute top-2 right-2 z-30 opacity-0 group-hover/thumb:opacity-100 transition-opacity">
               <PostControls
                 postId={post.id}
@@ -126,34 +134,41 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
         </div>
 
         {/* Content */}
-        <div className="flex items-center gap-4 text-xs text-muted-foreground mb-2">
-          <span className="flex items-center gap-1">
-            <Calendar className="w-3 h-3" />
-            {post.date}
-          </span>
-          {(post.duration || post.readTime) && (
+        <div className={isHero ? "mt-6 md:mt-0" : ""}>
+          <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
             <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
-              {post.type === "vlog" ? post.duration : post.readTime}
+              <Calendar className="w-3 h-3" />
+              {post.date}
             </span>
+            {(post.duration || post.readTime) && (
+              <span className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                {post.type === "vlog" ? post.duration : post.readTime}
+              </span>
+            )}
+            <span
+              className={`px-3 py-1 text-xs rounded-full font-medium ${post.type === "vlog"
+                ? "bg-[#FF0000]/10 text-[#FF0000]"
+                : "bg-primary/10 text-primary"
+                }`}
+            >
+              {post.type === "vlog" ? "📹 Vlog" : "📝 Blog"}
+            </span>
+          </div>
+
+          <h3 className={`font-serif font-medium mb-3 group-hover:text-primary transition-colors ${isHero ? "text-3xl md:text-4xl" : "text-lg line-clamp-2"}`}>
+            {post.title}
+          </h3>
+          <p className={`text-muted-foreground text-sm ${isHero ? "line-clamp-4 text-base" : "line-clamp-2"}`}>
+            {post.excerpt}
+          </p>
+
+          {isHero && (
+            <div className="mt-6 flex items-center text-primary font-medium text-sm group/link">
+              Read Story <ArrowRight className="w-4 h-4 ml-2 group-hover/link:translate-x-1 transition-transform" />
+            </div>
           )}
         </div>
-
-        <h3 className="font-serif text-lg font-medium mb-2 group-hover:text-primary transition-colors line-clamp-2">
-          {post.title}
-        </h3>
-        <p className="text-muted-foreground text-sm line-clamp-2">
-          {post.excerpt}
-        </p>
-
-        <span
-          className={`inline-block mt-3 px-3 py-1 text-xs rounded-full font-medium ${post.type === "vlog"
-            ? "bg-[#FF0000]/10 text-[#FF0000]"
-            : "bg-primary/10 text-primary"
-            }`}
-        >
-          {post.type === "vlog" ? "📹 Vlog" : "📝 Blog"}
-        </span>
       </Component>
     );
   };
@@ -175,7 +190,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
             {isTeaser && (
               <div className="mt-8 flex items-center gap-2">
                 <span className="h-px w-8 bg-primary/50"></span>
-                <span className="text-xs font-medium text-primary uppercase tracking-widest">Featured</span>
+                <span className="text-xs font-medium text-primary uppercase tracking-widest">Featured Stories</span>
               </div>
             )}
           </div>
@@ -210,11 +225,30 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
         )}
 
         {/* PUBLISHED CONTENT */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayedContent.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </div>
+        {/* HOMEPAGE LAYOUT: All 2 cols (as requested: "two for the first row and then two per row") */}
+        {/* PUBLISHED CONTENT */}
+        {/* HOMEPAGE LAYOUT: 1 Hero + 2 cols (Same as Portfolio) */}
+        {isTeaser ? (
+          <div className="space-y-8">
+            {displayedContent.length > 0 && (
+              <div className="col-span-full">
+                <PostCard post={displayedContent[0]} isHero={true} />
+              </div>
+            )}
+            <div className="grid md:grid-cols-2 gap-8">
+              {displayedContent.slice(1).map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
+          </div>
+        ) : (
+          /* BLOG PAGE LAYOUT: 3 cols */
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {displayedContent.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
 
         {isTeaser && (
           <div className="text-center mt-12">

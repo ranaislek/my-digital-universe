@@ -46,9 +46,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
         .from('posts')
         .select('*')
         .eq('type', 'project')
-        .eq('status', 'published') // Only show published
-        .order('featured', { ascending: false })
-        .order('created_at', { ascending: false });
+        .eq('status', 'published'); // Only show published
 
       if (error) throw error;
 
@@ -59,6 +57,15 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
         projectLinks: p.project_links
       }));
 
+      // Sort by DATE (Event Date) - Newest First
+      mappedProjects.sort((a, b) => {
+        // Handle various date formats (e.g., "Jan 2025", "2024", "YYYY-MM-DD")
+        // If sorting is weird, we might need a more robust parser or ISO dates
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB.getTime() - dateA.getTime();
+      });
+
       setProjects(mappedProjects);
     } catch (error) {
       console.error("Error fetching projects:", error);
@@ -67,7 +74,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
     }
   };
 
-  const displayedExperiences = isTeaser ? projects.slice(0, 2) : projects;
+  const displayedExperiences = isTeaser ? projects.slice(0, 3) : projects;
 
   return (
     <section id="portfolio" className={`relative ${isTeaser ? "py-24 md:py-32" : "pb-12"}`}>
@@ -95,9 +102,13 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
           <div className="grid md:grid-cols-2 gap-6 mb-16">
             {displayedExperiences.map((project, index) => {
               const Icon = project.icon && iconMap[project.icon] ? iconMap[project.icon] : Briefcase;
+              // Teaser Logic: First item is Hero (col-span-2) IF it is a teaser. 
+              // Otherwise (or if standard page), use standard grid. 
+              // User asked: "on homepage... first row one post and then two posts per row for portfolio"
+              const isHero = isTeaser && index === 0;
 
               return (
-                <div key={project.id} className={`group relative block ${project.featured ? 'md:col-span-2' : ''}`}>
+                <div key={project.id} className={`group relative block ${isHero ? 'md:col-span-2' : ''}`}>
                   {/* Admin Controls Overlay */}
                   <div className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
                     <PostControls
@@ -112,8 +123,9 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
                     to={`/project/${project.id}`} // Use ID as slug
                     className="block h-full"
                   >
-                    <div className={`relative p-6 rounded-2xl bg-card border border-border h-full transition-all card-hover ${project.featured ? 'bg-gradient-to-r from-primary/5 via-transparent to-accent/5' : ''
+                    <div className={`relative p-6 rounded-2xl bg-card border border-border h-full transition-all card-hover ${isHero ? 'bg-gradient-to-r from-primary/5 via-transparent to-accent/5' : ''
                       }`}>
+
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
                           <div className="p-2.5 rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
@@ -129,10 +141,10 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
                         <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                       </div>
 
-                      <h3 className="font-serif text-xl font-medium mb-2 group-hover:text-primary transition-colors">
+                      <h3 className={`font-serif font-medium mb-2 group-hover:text-primary transition-colors ${isHero ? 'text-2xl md:text-3xl' : 'text-xl'}`}>
                         {project.title}
                       </h3>
-                      <p className="text-muted-foreground mb-4">{project.excerpt}</p>
+                      <p className={`text-muted-foreground mb-4 ${isHero ? 'text-base' : 'text-sm'}`}>{project.excerpt}</p>
 
                       <div className="flex flex-wrap gap-2">
                         {(project.tags || []).slice(0, 4).map((tag) => (

@@ -15,10 +15,9 @@ const JourneyPage = () => {
                         A Decade of <span className="gradient-text">Adventure</span>
                     </h1>
                     <p className="text-xl text-muted-foreground">
-                        From high school halls in Izmir to AI research in Padova, and everything in between.
+                        From high school halls in Izmir to AI research in Padova,  and everything in between.
                     </p>
                 </div>
-
                 <JourneyTimeline />
             </div>
         </div>
