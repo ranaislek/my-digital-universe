@@ -45,31 +45,50 @@ const About = ({ isTeaser = false }: AboutProps) => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Image/Visual Side */}
           <div className="relative w-full max-w-sm lg:max-w-md mx-auto">
-            <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-primary/20 via-accent/20 to-pop-2/20 relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center p-6">
-                  <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-4 shadow-lg shadow-primary/30">
-                    <span className="text-4xl">✨</span>
+            {/* Photo & Flags Wrapper */}
+            <div className="relative mb-6">
+              {/* Photo Box */}
+              <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-primary/20 via-accent/20 to-pop-2/20 relative shadow-inner">
+                <img
+                  src="/about-me1.jpg"
+                  alt="Rana Islek"
+                  className="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+
+              {/* Journey badges - Anchored to Image */}
+              <div className="absolute -bottom-4 -right-4 flex gap-2 z-10">
+                {[
+                  { code: "tr", label: "Turkey" },
+                  { code: "hu", label: "Hungary" },
+                  { code: "be", label: "Belgium" },
+                  { code: "es", label: "Spain" },
+                  { code: "it", label: "Italy" }
+                ].map((country, i) => (
+                  <div
+                    key={country.code}
+                    className="w-8 h-8 rounded-full bg-card border-2 border-border flex items-center justify-center overflow-hidden shadow-md group relative hover:scale-110 transition-transform"
+                    style={{ animationDelay: `${i * 0.1}s` }}
+                    title={country.label}
+                  >
+                    <img
+                      src={`https://flagcdn.com/w80/${country.code}.png`}
+                      alt={country.label}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <p className="font-serif text-lg text-foreground/80 italic">
-                    "Data tells stories,<br />I make them beautiful."
-                  </p>
-                </div>
+                ))}
               </div>
             </div>
-            {/* Journey badges */}
-            <div className="absolute -bottom-4 -right-4 flex gap-2">
-              {["🇧🇪", "🇪🇸", "🇮🇹", "🇭🇺", "🇹🇷"].map((flag, i) => (
-                <div
-                  key={i}
-                  className="w-8 h-8 rounded-full bg-card border-2 border-border flex items-center justify-center text-sm shadow-md"
-                  style={{ animationDelay: `${i * 0.1}s` }}
-                >
-                  {flag}
-                </div>
-              ))}
+
+            {/* Quote - Moved Below */}
+            <div className="text-center">
+              <p className="font-serif text-lg text-foreground/80 italic">
+                "Data tells stories, I make them beautiful."
+              </p>
             </div>
           </div>
+
 
           {/* Content Side */}
           <div>
@@ -123,7 +142,7 @@ const About = ({ isTeaser = false }: AboutProps) => {
           </div>
         </div>
       </div>
-    </section >
+    </section>
   );
 };
 
