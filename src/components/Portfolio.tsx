@@ -104,7 +104,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
   };
 
   const displayedExperiences = isTeaser
-    ? projects.filter(p => p.status === 'published').slice(0, 3)
+    ? projects.filter(p => p.status === 'published' && p.featured).slice(0, 3)
     : projects.filter(p => {
       if (activeTab === "All") return true;
       return p.category === activeTab; // Exact match (case sensitive? usually stored as capitalized)
@@ -119,7 +119,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
     return projects.filter(p => p.category?.toLowerCase().includes(tab.toLowerCase()) || p.category === tab);
   };
 
-  const finalDisplay = isTeaser ? projects.slice(0, 3) : filterProjects(activeTab);
+  const finalDisplay = isTeaser ? displayedExperiences : filterProjects(activeTab);
 
 
   return (

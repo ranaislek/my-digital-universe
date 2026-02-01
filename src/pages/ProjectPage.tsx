@@ -317,7 +317,7 @@ const ProjectPage = () => {
                                     type="text"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    placeholder="Experience Title"
+                                    placeholder="Title"
                                     className="w-full font-serif text-4xl md:text-5xl lg:text-6xl font-medium mb-6 bg-transparent border-none outline-none placeholder:opacity-30"
                                 />
                             ) : (
