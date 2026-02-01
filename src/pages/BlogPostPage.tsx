@@ -44,15 +44,15 @@ const BlogPostPage = () => {
             const newPost: ContentItem = {
                 id: id,
                 type: "blog" as const,
-                title: "Untitled Story",
-                excerpt: "Write a short summary...",
+                title: "", // Empty for placeholder
+                excerpt: "", // Empty for placeholder
                 date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
                 content: "",
                 status: "draft"
             };
             setPost(newPost);
-            setTitle(newPost.title);
-            setExcerpt(newPost.excerpt || "");
+            setTitle("");
+            setExcerpt("");
             setContent("");
             setThumbnail("");
             setIsLoading(false);
@@ -95,11 +95,15 @@ const BlogPostPage = () => {
         if (!id) return;
         setIsSaving(true);
         try {
+            // Validate title before saving
+            const finalTitle = title.trim() || "Untitled Story";
+            const finalExcerpt = excerpt.trim() || "No summary provided.";
+
             const dbPayload = {
                 id: id,
                 type: post?.type || "blog",
-                title: title,
-                excerpt: excerpt,
+                title: finalTitle,
+                excerpt: finalExcerpt,
                 content: content,
                 thumbnail: thumbnail,
                 link: post?.link || null, // VLOG LINK
@@ -127,6 +131,11 @@ const BlogPostPage = () => {
                 ...dbPayload,
                 readTime: dbPayload.read_time
             } as ContentItem));
+
+            // Update form display if it was empty (optional, keeping it empty allows further editing without deleting default)
+            // But if we saved "Untitled Story", maybe we should show it? 
+            // Let's keep it bound to state. If they didn't type anything, state is empty. 
+            // dbPayload used defaults. 
 
         } catch (error: any) {
             console.error("Save failed:", error);
@@ -254,7 +263,7 @@ const BlogPostPage = () => {
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                placeholder="Title"
+                                placeholder="Untitled Story"
                                 className="w-full text-center font-serif text-4xl md:text-5xl lg:text-6xl font-medium mb-6 bg-transparent border-none outline-none placeholder:text-muted-foreground/30"
                             />
                         ) : (
@@ -278,7 +287,7 @@ const BlogPostPage = () => {
                             <textarea
                                 value={excerpt}
                                 onChange={(e) => setExcerpt(e.target.value)}
-                                placeholder="Write a short subtitle/excerpt..."
+                                placeholder="Write a short summary..."
                                 className="w-full text-center text-xl text-muted-foreground bg-transparent border-none outline-none resize-none h-24 placeholder:text-muted-foreground/30"
                             />
                         )}
