@@ -5,17 +5,15 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="py-8 border-t border-border bg-muted/30">
+    <footer className="py-8 border-t border-border bg-background">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <Sparkles className="w-3 h-3 text-white" />
-            </div>
-            <span className="font-serif text-lg">
-              <span className="text-foreground">rana</span>
-              <span className="text-primary">.</span>
-            </span>
+          <Link
+            to="/"
+            className="flex items-center gap-2 group"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            <img src="/rana-frog-logo.png" alt="Rana" className="h-12 w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
           </Link>
 
           <p className="text-sm text-muted-foreground">
@@ -23,13 +21,25 @@ const Footer = () => {
           </p>
 
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <Link to="/about" className="hover:text-primary transition-colors">
+            <Link
+              to="/about"
+              className="hover:text-primary transition-colors"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               About
             </Link>
-            <Link to="/portfolio" className="hover:text-primary transition-colors">
+            <Link
+              to="/portfolio"
+              className="hover:text-primary transition-colors"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               Portfolio
             </Link>
-            <Link to="/thoughts" className="hover:text-primary transition-colors">
+            <Link
+              to="/thoughts"
+              className="hover:text-primary transition-colors"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               Vlogs
             </Link>
           </div>

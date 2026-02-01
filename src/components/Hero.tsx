@@ -1,10 +1,55 @@
 import { ArrowDown, Sparkles, Heart, Star } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useState, useEffect } from "react";
 
 const Hero = () => {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 200], [0, 100]);
   const opacity = useTransform(scrollY, [0, 200], [1, 0]);
+
+  // Typewriter Logic
+  const phrases = ["Hey, I'm Rana", "Merhaba, ben Rana", "Hola, soy Rana", "Ciao, sono Rana", "Salut, je suis Rana"];
+  const [text, setText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(150);
+
+  useEffect(() => {
+    const handleType = () => {
+      const i = loopNum % phrases.length;
+      const fullText = phrases[i];
+
+      setText(isDeleting
+        ? fullText.substring(0, text.length - 1)
+        : fullText.substring(0, text.length + 1)
+      );
+
+      // Typing Speed Randomization
+      setTypingSpeed(isDeleting ? 50 : 150 - Math.random() * 50);
+
+      if (!isDeleting && text === fullText) {
+        // Finished typing word
+        setTimeout(() => setIsDeleting(true), 2000); // Pause at end
+      } else if (isDeleting && text === "") {
+        // Finished deleting word
+        setIsDeleting(false);
+        setLoopNum(loopNum + 1);
+      }
+    };
+
+    const timer = setTimeout(handleType, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [text, isDeleting, loopNum, phrases, typingSpeed]);
+
+  // Stable Stars Generation
+  const [stars] = useState(() =>
+    [...Array(20)].map(() => ({
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      size: `${12 + Math.random() * 12}px`,
+      delay: `${Math.random() * 2}s`
+    }))
+  );
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -16,15 +61,16 @@ const Hero = () => {
 
       {/* Scattered Stars */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {stars.map((star, i) => (
           <Star
             key={i}
-            className="absolute text-primary/20 sparkle"
+            className="absolute text-primary/20"
             style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              width: `${12 + Math.random() * 12}px`,
-              animationDelay: `${Math.random() * 2}s`,
+              top: star.top,
+              left: star.left,
+              width: star.size,
+              // Animation removed currently, but delay is preserved if we re-enable
+              animationDelay: star.delay,
             }}
             fill="currentColor"
           />
@@ -38,9 +84,15 @@ const Hero = () => {
         </div>
 
         <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium mb-6 text-balance leading-tight">
-          <span className="text-foreground">Hey, I'm</span>
-          <br />
-          <span className="gradient-text">Rana</span>
+          <span className="min-h-[1.2em] inline-block">
+            <span className="gradient-text">{text.split(' ')[0]}</span>
+            <span className="text-foreground">{text.substring(text.split(' ')[0].length)}</span>
+            <motion.span
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{ repeat: Infinity, duration: 0.8 }}
+              className="inline-block ml-1 w-1 h-[0.8em] bg-primary align-middle"
+            />
+          </span>
           <Heart className="inline-block w-8 h-8 md:w-12 md:h-12 text-primary ml-3 wiggle-animation" fill="currentColor" />
         </h1>
 

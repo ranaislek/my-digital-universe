@@ -36,12 +36,13 @@ const Navigation = () => {
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <img src="/frog-queen-logo.png" alt="Frog" className="w-12 h-12 object-contain" />
-            <span className="font-serif text-xl font-medium">
-              <span className="text-foreground">rana</span>
-              <span className="text-primary">.</span>
-            </span>
+          {/* Logo */}
+          <Link
+            to="/"
+            className="flex items-center gap-2 group"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            <img src="/rana-frog-logo.png" alt="Rana" className="h-14 w-auto object-contain" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -52,6 +53,7 @@ const Navigation = () => {
                 to={link.href}
                 className={`text-sm font-medium transition-colors relative group ${isActive(link.href) ? "text-primary" : "text-muted-foreground hover:text-primary"
                   }`}
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               >
                 {link.label}
                 <span className={`absolute -bottom-1 left-0 h-0.5 bg-primary rounded-full transition-all ${isActive(link.href) ? "w-full" : "w-0 group-hover:w-full"
@@ -81,7 +83,10 @@ const Navigation = () => {
                   to={link.href}
                   className={`text-lg font-medium transition-colors py-2 ${isActive(link.href) ? "text-primary" : "text-foreground hover:text-primary"
                     }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
                 >
                   {link.label}
                 </Link>
