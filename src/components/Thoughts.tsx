@@ -35,12 +35,8 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
       }));
 
       // Sort by PINNED (Hero preference), then DATE (Event Date) - Newest First
+      // Sort by DATE only - Newest First
       allPosts.sort((a, b) => {
-        // Pinned posts come first
-        if (a.pinned && !b.pinned) return -1;
-        if (!a.pinned && b.pinned) return 1;
-
-        // Then Sort by Date
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
         return dateB.getTime() - dateA.getTime();
@@ -71,7 +67,13 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
   // Homepage (Teaser): Show only FEATURED posts. 1 Hero + Grid (2 cols)
   // Blog Page: Show ALL posts. Grid (3 cols)
   const displayedContent = isTeaser
-    ? filteredContent.filter(p => p.featured) // Only featured on homepage
+    ? filteredContent
+      .filter(p => p.featured || p.pinned)
+      .sort((a, b) => {
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+        return 0; // Already sorted by date in fetchPosts
+      })
     : filteredContent;
 
   if (isLoading) {
@@ -187,7 +189,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
         <div className={`flex flex-col md:flex-row md:items-end md:justify-between gap-4 ${isTeaser ? "mb-8" : "mb-16"}`}>
           <div>
             <span className="text-primary font-medium text-xs tracking-wider uppercase">
-              Blog & Vlogs
+              Blogs & Vlogs
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1">
               Stories & <span className="gradient-text">Adventures</span>

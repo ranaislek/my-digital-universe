@@ -70,11 +70,8 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
         type: "project" // Hardcode type for frontend consistency
       }));
 
-      // Sort by PINNED, then DATE
+      // Sort by DATE only - Newest First
       mappedProjects.sort((a, b) => {
-        if (a.pinned && !b.pinned) return -1;
-        if (!a.pinned && b.pinned) return 1;
-
         // Parse date string (e.g., "Oct 2025 – Present" or "Jun 2022")
         const parseDate = (dateStr: string) => {
           if (!dateStr) return new Date(0).getTime();
@@ -104,7 +101,14 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
   };
 
   const displayedExperiences = isTeaser
-    ? projects.filter(p => p.status === 'published' && p.featured).slice(0, 3)
+    ? projects
+      .filter(p => p.status === 'published' && (p.featured || p.pinned))
+      .sort((a, b) => {
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+        return 0; // Already sorted by date in fetchProjects
+      })
+      .slice(0, 3)
     : projects.filter(p => {
       if (activeTab === "All") return true;
       return p.category === activeTab; // Exact match (case sensitive? usually stored as capitalized)

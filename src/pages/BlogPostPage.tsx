@@ -9,6 +9,7 @@ import PageTitle from "@/components/PageTitle";
 import PostControls from "@/components/admin/PostControls";
 import { useAuth } from "@/components/AuthProvider";
 import BackgroundElements from "@/components/BackgroundElements";
+import { useRef } from "react";
 
 const BlogPostPage = () => {
     const { slug } = useParams();
@@ -22,6 +23,8 @@ const BlogPostPage = () => {
     const [post, setPost] = useState<ContentItem | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Form state for editing
     const [title, setTitle] = useState("");
@@ -150,6 +153,49 @@ const BlogPostPage = () => {
         toast.success("Link copied to clipboard!");
     };
 
+    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            toast.error('Please select an image file');
+            return;
+        }
+
+        setIsUploading(true);
+        try {
+            const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '')}`;
+            const { error: uploadError } = await supabase.storage
+                .from('blog-images')
+                .upload(filename, file, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('blog-images')
+                .getPublicUrl(filename);
+
+            setThumbnail(publicUrl);
+            // If editing existing post, update state immediately properly
+            if (post) {
+                setPost(prev => ({ ...prev!, thumbnail: publicUrl }));
+            }
+            toast.success("Image uploaded!");
+
+        } catch (error: any) {
+            console.error('Upload error:', error);
+            toast.error(`Upload failed: ${error.message}`);
+        } finally {
+            setIsUploading(false);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+        }
+    };
+
     if (isLoading) {
         return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
     }
@@ -184,14 +230,14 @@ const BlogPostPage = () => {
                     <div className="flex gap-2">
                         <button
                             onClick={() => handleSave("draft")}
-                            disabled={isSaving}
+                            disabled={isSaving || isUploading}
                             className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                         >
                             Save Draft
                         </button>
                         <button
                             onClick={() => handleSave("published")}
-                            disabled={isSaving}
+                            disabled={isSaving || isUploading}
                             className="px-6 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
                         >
                             {isSaving ? "Publishing..." : "Publish"}
@@ -199,6 +245,15 @@ const BlogPostPage = () => {
                     </div>
                 </div>
             )}
+
+            {/* Hidden File Input */}
+            <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleImageUpload}
+                accept="image/*"
+            />
 
             {!isEditing && <PageTitle title={post!.title} />}
 
@@ -321,20 +376,26 @@ const BlogPostPage = () => {
             {/* Editor / Content */}
             <div className="container mx-auto px-6">
                 <div className="max-w-3xl mx-auto">
+                    {/* Cover Photo - Available for both Blog and Vlog */}
                     {(post?.thumbnail || isEditing) && (
-                        <div className="rounded-3xl overflow-hidden mb-12 shadow-lg group relative">
+                        <div className={`rounded-3xl overflow-hidden mb-12 shadow-lg group relative ${!post?.thumbnail && isEditing ? 'bg-muted h-64 flex items-center justify-center border-2 border-dashed border-muted-foreground/20' : ''}`}>
                             {isEditing && (
                                 <button
-                                    onClick={() => {
-                                        const url = prompt("Enter image URL:");
-                                        if (url) setThumbnail(url);
-                                    }}
-                                    className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 text-white font-medium"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    disabled={isUploading}
+                                    className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 text-white font-medium gap-2"
                                 >
-                                    Change Cover Image
+                                    <div className="bg-background/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 hover:bg-background/40 transition-colors">
+                                        {isUploading ? "Uploading..." : (thumbnail || post?.thumbnail ? "Change Cover Image" : "Add Cover Image")}
+                                    </div>
                                 </button>
                             )}
-                            {(thumbnail || post?.thumbnail) && <img src={isEditing ? thumbnail : post?.thumbnail} alt={title} className="w-full object-cover min-h-[300px] bg-muted" />}
+
+                            {(thumbnail || post?.thumbnail) ? (
+                                <img src={thumbnail || post?.thumbnail} alt={title} className="w-full object-cover min-h-[300px] bg-muted" />
+                            ) : (
+                                isEditing && <span className="text-muted-foreground">Add a Cover Photo</span>
+                            )}
                         </div>
                     )}
 
