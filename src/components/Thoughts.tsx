@@ -7,7 +7,7 @@ import PostControls from "./admin/PostControls";
 import { useAuth } from "./AuthProvider";
 
 const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
-  const [activeTab, setActiveTab] = useState<"all" | "vlog" | "blog">("all");
+  const [activeTab, setActiveTab] = useState<"all" | "vlog" | "blog" | "drafts">("all");
   const [posts, setPosts] = useState<ContentItem[]>([]);
   const [drafts, setDrafts] = useState<ContentItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,7 +63,9 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
 
   const filteredContent = activeTab === "all"
     ? posts
-    : posts.filter((item) => item.type === activeTab);
+    : activeTab === "drafts"
+      ? drafts
+      : posts.filter((item) => item.type === activeTab);
 
   // Layout Logic
   // Homepage (Teaser): Show only FEATURED posts. 1 Hero + Grid (2 cols)
@@ -206,6 +208,38 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
           </a>
         </div>
 
+        {/* FILTERS */}
+        {!isTeaser && (
+          <div className="flex flex-wrap gap-2 mb-8">
+            <button
+              onClick={() => setActiveTab("all")}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "all" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+            >
+              All
+            </button>
+            <button
+              onClick={() => setActiveTab("blog")}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "blog" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+            >
+              Blogs
+            </button>
+            <button
+              onClick={() => setActiveTab("vlog")}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "vlog" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+            >
+              Vlogs
+            </button>
+            {isAdmin && (
+              <button
+                onClick={() => setActiveTab("drafts" as any)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "drafts" ? "bg-orange-500 text-white" : "bg-orange-500/10 text-orange-500 hover:bg-orange-500/20"}`}
+              >
+                Drafts ({drafts.length})
+              </button>
+            )}
+          </div>
+        )}
+
         {/* PUBLISHED CONTENT */}
         {isTeaser ? (
           <div className="space-y-4">
@@ -222,11 +256,42 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
           </div>
         ) : (
           /* BLOG PAGE LAYOUT: 3 cols */
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {displayedContent.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
+          <>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {displayedContent.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+              {displayedContent.length === 0 && (
+                <div className="col-span-full py-12 text-center text-muted-foreground">
+                  No content found for this category.
+                </div>
+              )}
+            </div>
+
+            {/* RESTORED DRAFTS SECTION (Below main content) */}
+            {isAdmin && activeTab !== "drafts" && (() => {
+              // Filter drafts based on the active tab
+              const visibleDrafts = activeTab === "all"
+                ? drafts
+                : drafts.filter(d => d.type === activeTab);
+
+              if (visibleDrafts.length === 0) return null;
+
+              return (
+                <div className="mt-16 pt-8 border-t border-border">
+                  <h3 className="text-xl font-serif font-medium mb-6 flex items-center gap-2 text-orange-500">
+                    <span className="w-2 h-2 rounded-full bg-orange-500" />
+                    {activeTab === "all" ? "Drafts" : `${activeTab === "blog" ? "Blog" : "Vlog"} Drafts`}
+                  </h3>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {visibleDrafts.map((post) => (
+                      <PostCard key={post.id} post={post} isDraft={true} />
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+          </>
         )}
 
         {isTeaser && (
