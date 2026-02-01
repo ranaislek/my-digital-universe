@@ -1,10 +1,11 @@
-import { ExternalLink, GraduationCap, Briefcase, Code, FileText, Sparkles, LucideIcon } from "lucide-react";
+import { ExternalLink, GraduationCap, Briefcase, Code, FileText, Sparkles, LucideIcon, PlusCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { ContentItem } from "../data/content";
 import PostControls from "./admin/PostControls";
+import { useAuth } from "./AuthProvider";
 
 const iconMap: Record<string, LucideIcon> = {
   "Briefcase": Briefcase,
@@ -35,39 +36,63 @@ interface PortfolioProps {
 const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
   const [projects, setProjects] = useState<ContentItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { isAdmin } = useAuth();
+  const [activeTab, setActiveTab] = useState<"All" | "Work" | "Project" | "Startup" | "Research">("All");
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [isAdmin]); // Re-fetch when admin status changes
 
   const fetchProjects = async () => {
     try {
-      const { data, error } = await supabase
-        .from('posts')
-        .select('*')
-        .eq('type', 'project')
-        .eq('status', 'published'); // Only show published
+      let query = supabase
+        .from('experiences')
+        .select('*');
+
+      // Only filter by published if NOT admin
+      if (!isAdmin) {
+        query = query.eq('status', 'published');
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
 
-      // Map snake_case to camelCase
+      // Map DB columns to ContentItem interface
       const mappedProjects: ContentItem[] = (data || []).map(p => ({
         ...p,
-        techStack: p.tech_stack,
-        projectLinks: p.project_links
+        // Ensure arrays are arrays (Supabase usually returns them as arrays if defined as text[])
+        techStack: p.tech_stack || [],
+        projectLinks: {
+          demo: p.demo_link,
+          repo: p.repo_link
+        },
+        type: "project" // Hardcode type for frontend consistency
       }));
 
-      // Sort by PINNED (Hero preference), then DATE (Event Date) - Newest First
+      // Sort by PINNED, then DATE
       mappedProjects.sort((a, b) => {
-        // Pinned projects come first
         if (a.pinned && !b.pinned) return -1;
         if (!a.pinned && b.pinned) return 1;
 
-        // Handle various date formats (e.g., "Jan 2025", "2024", "YYYY-MM-DD")
-        // If sorting is weird, we might need a more robust parser or ISO dates
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return dateB.getTime() - dateA.getTime();
+        // Parse date string (e.g., "Oct 2025 – Present" or "Jun 2022")
+        const parseDate = (dateStr: string) => {
+          if (!dateStr) return new Date(0).getTime();
+          // Split by en-dash or hyphen to get end date
+          const parts = dateStr.split(/[–-]/);
+          const endDate = parts[parts.length - 1].trim();
+
+          if (endDate.toLowerCase().includes('present')) {
+            return new Date().getTime(); // Present is always newest
+          }
+          const parsed = new Date(endDate).getTime();
+          return isNaN(parsed) ? 0 : parsed;
+        };
+
+        const timeA = parseDate(a.date);
+        const timeB = parseDate(b.date);
+
+        return timeB - timeA;
       });
 
       setProjects(mappedProjects);
@@ -78,7 +103,24 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
     }
   };
 
-  const displayedExperiences = isTeaser ? projects.slice(0, 3) : projects;
+  const displayedExperiences = isTeaser
+    ? projects.filter(p => p.status === 'published').slice(0, 3)
+    : projects.filter(p => {
+      if (activeTab === "All") return true;
+      return p.category === activeTab; // Exact match (case sensitive? usually stored as capitalized)
+      // Or cleaner: p.category?.toLowerCase() === activeTab.toLowerCase()
+      // Let's stick to Exact Match assuming consistent data, or normalize in filter:
+      // return p.category?.toLowerCase() === activeTab.toLowerCase();
+    }).filter(p => isAdmin || p.status === 'published'); // Ensure only admins see drafts even after filter
+
+  // Helper for normalizing category comparison
+  const filterProjects = (tab: string) => {
+    if (tab === "All") return projects;
+    return projects.filter(p => p.category?.toLowerCase().includes(tab.toLowerCase()) || p.category === tab);
+  };
+
+  const finalDisplay = isTeaser ? projects.slice(0, 3) : filterProjects(activeTab);
+
 
   return (
     <section id="portfolio" className={`relative ${isTeaser ? "min-h-screen flex flex-col justify-center py-20 md:py-24" : "pb-12"}`}>
@@ -99,24 +141,79 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
           </p>
         </div>
 
+        {/* Filters & Admin Actions */}
+        {!isTeaser && (
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
+            {["All", "Work", "Project", "Startup", "Research"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab as any)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeTab === tab
+                  ? "bg-primary text-primary-foreground shadow-lg scale-105"
+                  : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+              >
+                {tab}
+                {tab === "All" && <span className="ml-2 text-xs opacity-60">{projects.length}</span>}
+              </button>
+            ))}
+
+            {isAdmin && (
+              <button
+                onClick={() => {
+                  const slug = `project-${Date.now()}`;
+                  window.location.href = `/project/${slug}?edit=true&new=true`;
+                }}
+                className="px-4 py-2 rounded-full text-sm font-medium bg-green-500/10 text-green-500 hover:bg-green-500/20 transition-colors flex items-center gap-2 ml-4"
+              >
+                <PlusCircle className="w-4 h-4" /> New Experience
+              </button>
+            )}
+          </div>
+        )}
+
         {/* Experience Cards */}
         {isLoading ? (
           <div className="text-center py-12">Loading projects...</div>
         ) : (
           <div className={`grid md:grid-cols-2 gap-4 ${isTeaser ? "mb-8" : "mb-16"}`}>
-            {displayedExperiences.map((project, index) => {
+            {finalDisplay.map((project, index) => {
               const Icon = project.icon && iconMap[project.icon] ? iconMap[project.icon] : Briefcase;
               // Teaser Logic: First item is Hero (col-span-2) IF it is a teaser. 
               const isHero = isTeaser && index === 0;
 
               return (
                 <div key={project.id} className={`group relative block ${isHero ? 'md:col-span-2' : ''}`}>
+                  {/* Admin Controls Overlay */}
+                  {isAdmin && (
+                    <div className="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <PostControls
+                        postId={project.id}
+                        isFeatured={project.featured}
+                        isPinned={project.pinned}
+                        onUpdate={fetchProjects}
+                        onDelete={fetchProjects}
+                        editPath={`/project/${project.id}`}
+                        tableName="experiences"
+                      />
+                    </div>
+                  )}
+
                   <Link
                     to={`/project/${project.id}`} // Use ID as slug
                     className="block h-full"
                   >
                     <div className={`relative p-5 rounded-2xl bg-card border border-border h-full transition-all card-hover ${isHero ? 'bg-gradient-to-r from-primary/5 via-transparent to-accent/5' : ''
                       }`}>
+
+                      {/* Draft Badge */}
+                      {project.status === 'draft' && (
+                        <div className="absolute top-2 left-2 z-20">
+                          <span className="px-2 py-1 bg-orange-500 text-white text-[10px] font-bold rounded-md shadow-sm uppercase tracking-wider">
+                            Draft
+                          </span>
+                        </div>
+                      )}
 
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-3">
@@ -137,6 +234,13 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
                         {project.title}
                       </h3>
                       <p className={`text-muted-foreground mb-3 ${isHero ? 'text-sm line-clamp-2' : 'text-xs line-clamp-2'}`}>{project.excerpt}</p>
+
+                      {/* Date / Time Interval */}
+                      <div className="text-xs text-muted-foreground mb-3 flex items-center gap-2">
+                        <span className="bg-muted px-2 py-0.5 rounded-sm">
+                          {project.date}
+                        </span>
+                      </div>
 
                       <div className="flex flex-wrap gap-2">
                         {(project.tags || []).slice(0, 3).map((tag) => (

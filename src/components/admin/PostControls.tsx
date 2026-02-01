@@ -12,9 +12,11 @@ interface PostControlsProps {
     onDelete?: () => void;
     onUpdate?: () => void;
     className?: string;
+    editPath?: string; // Optional custom edit path (default to /blog/:id)
+    tableName?: string; // Optional custom table name (default to 'posts')
 }
 
-const PostControls = ({ postId, isFeatured, isPinned, onDelete, onUpdate, className = "" }: PostControlsProps) => {
+const PostControls = ({ postId, isFeatured, isPinned, onDelete, onUpdate, className = "", editPath, tableName = 'posts' }: PostControlsProps) => {
     const { isAdmin } = useAuth();
     const navigate = useNavigate();
 
@@ -28,11 +30,11 @@ const PostControls = ({ postId, isFeatured, isPinned, onDelete, onUpdate, classN
 
         // If we are pinning this post, unpin all others first to ensure only one hero
         if (newStatus) {
-            await supabase.from('posts').update({ pinned: false }).eq('pinned', true);
+            await supabase.from(tableName).update({ pinned: false }).eq('pinned', true);
         }
 
         const { error } = await supabase
-            .from('posts')
+            .from(tableName)
             .update({ pinned: newStatus })
             .eq('id', postId);
 
@@ -49,7 +51,7 @@ const PostControls = ({ postId, isFeatured, isPinned, onDelete, onUpdate, classN
         e.stopPropagation();
 
         const { error } = await supabase
-            .from('posts')
+            .from(tableName)
             .update({ featured: !isFeatured })
             .eq('id', postId);
 
@@ -68,7 +70,7 @@ const PostControls = ({ postId, isFeatured, isPinned, onDelete, onUpdate, classN
         if (!confirm("Are you sure you want to delete this post?")) return;
 
         const { error } = await supabase
-            .from('posts')
+            .from(tableName)
             .delete()
             .eq('id', postId);
 
@@ -83,8 +85,12 @@ const PostControls = ({ postId, isFeatured, isPinned, onDelete, onUpdate, classN
     const handleEdit = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        // Force full reload to ensure clean state if needed, or just navigate
-        window.location.href = `/blog/${postId}?edit=true`;
+        // Use custom path if provided, otherwise default to blog
+        if (editPath) {
+            window.location.href = `${editPath}?edit=true`;
+        } else {
+            window.location.href = `/blog/${postId}?edit=true`;
+        }
     };
 
     return (

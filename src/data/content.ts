@@ -1,7 +1,7 @@
 
 export interface ContentItem {
     id: string;
-    type: "vlog" | "blog";
+    type: "vlog" | "blog" | "project";
     title: string;
     excerpt: string;
     date: string;
@@ -23,6 +23,7 @@ export interface ContentItem {
     techStack?: string[];
     challenges?: string[];
     features?: string[];
+    screenshots?: string[]; // Array of image URLs
     icon?: string; // Icon name string
     projectLinks?: {
         demo?: string;
