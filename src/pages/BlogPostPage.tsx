@@ -63,7 +63,7 @@ const BlogPostPage = () => {
 
     const fetchPost = async (slug: string) => {
         try {
-            console.log("Fetching post:", slug);
+
             const { data, error } = await supabase
                 .from('posts')
                 .select('*')
