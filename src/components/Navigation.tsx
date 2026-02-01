@@ -37,9 +37,7 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-white" />
-            </div>
+            <img src="/frog-queen-logo.png" alt="Frog" className="w-12 h-12 object-contain" />
             <span className="font-serif text-xl font-medium">
               <span className="text-foreground">rana</span>
               <span className="text-primary">.</span>

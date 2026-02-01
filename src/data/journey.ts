@@ -5,7 +5,9 @@ export interface JourneyEvent {
     title: string;
     location: string;
     description: string;
-    image?: string; // We'll use placeholders for now
+    image?: string;
+    imageFit?: "cover" | "contain"; // Optional: default is cover
+    imagePosition?: "center" | "top" | "bottom"; // Optional: default is center
     type: "education" | "work" | "travel" | "milestone";
 }
 
@@ -17,7 +19,7 @@ export const journeyEvents: JourneyEvent[] = [
         location: "Izmir, Turkey 🇹🇷",
         description: "Graduated from Private Çakabey Schools, where my educational journey began.",
         type: "education",
-        image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop"
+        image: "/cakabeyokullari_cover.jpg"
     },
     {
         id: "sabanci-start",
@@ -26,7 +28,7 @@ export const journeyEvents: JourneyEvent[] = [
         location: "Istanbul, Turkey 🇹🇷",
         description: "Began my undergraduate studies in Computer Science & Engineering.",
         type: "education",
-        image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop"
+        image: "/sabanci-genel.jpg"
     },
     {
         id: "budapest-erasmus",
@@ -35,7 +37,7 @@ export const journeyEvents: JourneyEvent[] = [
         location: "Budapest, Hungary 🇭🇺",
         description: "A semester of exploration, new cultures, and academic growth in the heart of Europe.",
         type: "travel",
-        image: "https://images.unsplash.com/photo-1565426873118-a17ed65d7429?q=80&w=2070&auto=format&fit=crop"
+        image: "/bme-budapest.jpg"
     },
     {
         id: "sabanci-grad",
@@ -44,7 +46,8 @@ export const journeyEvents: JourneyEvent[] = [
         location: "Istanbul, Turkey 🇹🇷",
         description: "Completed my Bachelor's degree with a focus on Software Engineering.",
         type: "education",
-        image: "https://images.unsplash.com/photo-1635350736475-c8cef4b21906?q=80&w=2070&auto=format&fit=crop"
+        image: "/sabanci-mezun.jpg",
+        imagePosition: "top"
     },
     {
         id: "erasmus-mundus-brussels",
@@ -53,7 +56,7 @@ export const journeyEvents: JourneyEvent[] = [
         location: "Brussels, Belgium 🇧🇪",
         description: "Started my Joint Master Degree. First semester adventure in the capital of Europe.",
         type: "education",
-        image: "https://images.unsplash.com/photo-1559410545-0284937d5786?q=80&w=2070&auto=format&fit=crop"
+        image: "/brussels.jpg"
     },
     {
         id: "barcelona",
@@ -62,7 +65,7 @@ export const journeyEvents: JourneyEvent[] = [
         location: "Barcelona, Spain 🇪🇸",
         description: "Living and studying in the vibrant city of Barcelona.",
         type: "travel",
-        image: "https://images.unsplash.com/photo-1583422409516-2895a77efded?q=80&w=2070&auto=format&fit=crop"
+        image: "/barcelona.jpg"
     },
     {
         id: "padova",
@@ -71,7 +74,7 @@ export const journeyEvents: JourneyEvent[] = [
         location: "Padova, Italy 🇮🇹",
         description: "Specializing in Deep Learning & AI at the University of Padua while writing my Master's Thesis.",
         type: "education",
-        image: "https://images.unsplash.com/photo-1520175480921-4edfa2983e0f?q=80&w=2067&auto=format&fit=crop"
+        image: "/padova.jpg"
     },
     {
         id: "ngn-work",
@@ -80,7 +83,7 @@ export const journeyEvents: JourneyEvent[] = [
         location: "Turkey 🇹🇷",
         description: "Returned to Turkey and started my professional career working full-time at NGN.",
         type: "work",
-        image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop"
+        image: "/ngn-start.jpg"
     },
     {
         id: "masters-grad",
@@ -89,7 +92,8 @@ export const journeyEvents: JourneyEvent[] = [
         location: "Europe 🇪🇺",
         description: "Officially graduating from the Erasmus Mundus Joint Master Program.",
         type: "milestone",
-        image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop"
+        image: "/masters-grad.jpg",
+        imagePosition: "top"
     },
     {
         id: "now",
@@ -98,6 +102,6 @@ export const journeyEvents: JourneyEvent[] = [
         location: "Digital Universe 🌐",
         description: "Currently building, learning, and sharing my experiences with the world.",
         type: "milestone",
-        image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
+        image: "/frog-cartoon.jpg"
     }
 ];

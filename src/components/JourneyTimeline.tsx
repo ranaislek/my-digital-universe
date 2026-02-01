@@ -28,46 +28,51 @@ const JourneyTimeline = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className={`relative flex flex-col md:flex-row gap-8 mb-24 md:mb-32 ${isEven ? 'md:flex-row-reverse' : ''}`}
+                        className={`relative flex flex-col md:flex-row gap-8 mb-12 ${isEven ? 'md:flex-row-reverse' : ''}`}
                     >
                         {/* Date Bubble (Mobile: Top Left, Desktop: Center) */}
-                        <div className="absolute left-0 md:left-1/2 -translate-x-1/2 md:-translate-x-1/2 flex items-center justify-center w-16 h-16 rounded-full bg-background border-4 border-muted z-10 shadow-xl">
-                            <span className="text-xs font-bold text-center leading-tight px-1">
+                        <div className="absolute left-0 md:left-1/2 -translate-x-1/2 md:-translate-x-1/2 flex items-center justify-center w-12 h-12 rounded-full bg-background border-4 border-muted z-10 shadow-xl">
+                            <span className="text-[10px] font-bold text-center leading-tight px-1">
                                 {event.year}
                             </span>
                         </div>
 
                         {/* Content Card */}
-                        <div className={`w-full md:w-[calc(50%-40px)] pl-20 md:pl-0 ${isEven ? 'md:pr-12 md:text-right' : 'md:pl-12 md:text-left'}`}>
-                            <div className="group relative bg-card/50 hover:bg-card border border-border/50 hover:border-border p-6 rounded-2xl transition-all hover:shadow-lg hover:-translate-y-1">
+                        <div className={`w-full md:w-[calc(50%-40px)] pl-16 md:pl-0 ${isEven ? 'md:pr-8' : 'md:pl-8'}`}>
+                            <div className="group relative bg-card/50 hover:bg-card border border-border/50 hover:border-border p-4 rounded-xl transition-all hover:shadow-lg hover:-translate-y-1">
 
-                                {/* Image (Optional) */}
-                                {event.image && (
-                                    <div className="w-full h-48 mb-4 overflow-hidden rounded-xl">
-                                        <img
-                                            src={event.image}
-                                            alt={event.title}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                        />
+                                <div className={`flex flex-col sm:flex-row gap-4 items-center ${isEven ? '' : 'sm:flex-row-reverse'}`}>
+                                    {/* Image (Optional) */}
+                                    {event.image && (
+                                        <div className="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 overflow-hidden rounded-lg">
+                                            <img
+                                                src={event.image}
+                                                alt={event.title}
+                                                className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${event.imagePosition === 'top' ? 'object-top' :
+                                                        event.imagePosition === 'bottom' ? 'object-bottom' :
+                                                            'object-center'
+                                                    }`}
+                                            />
+                                        </div>
+                                    )}
+
+                                    <div className={`flex flex-col gap-1 flex-grow ${isEven ? 'text-left' : 'text-left sm:text-right'}`}>
+                                        <div className={`flex items-center gap-2 text-primary text-xs font-medium uppercase tracking-wider ${isEven ? '' : 'sm:flex-row-reverse'}`}>
+                                            {getIcon()}
+                                            <span>{event.type}</span>
+                                        </div>
+
+                                        <h3 className="font-serif text-lg font-bold leading-tight">{event.title}</h3>
+
+                                        <div className={`flex items-center gap-1 text-muted-foreground text-xs ${isEven ? '' : 'sm:flex-row-reverse'}`}>
+                                            <MapPin className="w-3 h-3" />
+                                            {event.location}
+                                        </div>
+
+                                        <p className="text-muted-foreground mt-2 text-sm leading-relaxed line-clamp-3">
+                                            {event.description}
+                                        </p>
                                     </div>
-                                )}
-
-                                <div className={`flex flex-col gap-2 ${isEven ? 'md:items-end' : 'md:items-start'}`}>
-                                    <div className="flex items-center gap-2 text-primary text-sm font-medium uppercase tracking-wider">
-                                        {getIcon()}
-                                        <span>{event.type}</span>
-                                    </div>
-
-                                    <h3 className="font-serif text-2xl font-bold">{event.title}</h3>
-
-                                    <div className="flex items-center gap-1 text-muted-foreground text-sm">
-                                        <MapPin className="w-3 h-3" />
-                                        {event.location}
-                                    </div>
-
-                                    <p className="text-muted-foreground mt-2 leading-relaxed">
-                                        {event.description}
-                                    </p>
                                 </div>
                             </div>
                         </div>
