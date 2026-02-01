@@ -68,7 +68,7 @@ const Hero = () => {
         {/* Social proof / quick stats */}
         <div className="flex items-center justify-center gap-8 mt-16 text-sm text-muted-foreground">
           <div className="text-center">
-            <div className="font-serif text-2xl text-foreground font-medium">5+</div>
+            <div className="font-serif text-2xl text-foreground font-medium">25+</div>
             <div>Countries</div>
           </div>
           <div className="w-px h-8 bg-border" />

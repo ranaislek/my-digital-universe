@@ -1,10 +1,12 @@
 import { useEditor, EditorContent } from '@tiptap/react';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
-import { Bold, Italic, List, Image as ImageIcon, Link as LinkIcon, Heading1, Heading2, Quote, Undo, Redo, Code } from 'lucide-react';
+import { Bold, Italic, List, Image as ImageIcon, Link as LinkIcon, Heading1, Heading2, Quote, Undo, Redo, Code, Loader2 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { toast } from 'sonner';
 
 interface RichTextEditorProps {
     content: string;
@@ -12,18 +14,11 @@ interface RichTextEditorProps {
     editable?: boolean;
 }
 
-const Toolbar = ({ editor }: { editor: any }) => {
+const Toolbar = ({ editor, onImageUpload, isUploading }: { editor: any, onImageUpload: () => void, isUploading: boolean }) => {
     if (!editor) return null;
 
     const btnClass = (isActive: boolean) =>
         `p-2 rounded hover:bg-muted transition-colors ${isActive ? 'bg-primary/20 text-primary' : 'text-muted-foreground'}`;
-
-    const addImage = () => {
-        const url = window.prompt('URL');
-        if (url) {
-            editor.chain().focus().setImage({ src: url }).run();
-        }
-    };
 
     const setLink = () => {
         const previousUrl = editor.getAttributes('link').href;
@@ -56,7 +51,9 @@ const Toolbar = ({ editor }: { editor: any }) => {
             <div className="w-px h-4 bg-border mx-1" />
 
             <button onClick={setLink} className={btnClass(editor.isActive('link'))} title="Link"><LinkIcon className="w-4 h-4" /></button>
-            <button onClick={addImage} className={btnClass(false)} title="Image"><ImageIcon className="w-4 h-4" /></button>
+            <button onClick={onImageUpload} className={btnClass(false)} title="Image" disabled={isUploading}>
+                {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />}
+            </button>
 
             <div className="ml-auto flex gap-1">
                 <button onClick={() => editor.chain().focus().undo().run()} className={btnClass(false)} title="Undo"><Undo className="w-4 h-4" /></button>
@@ -67,6 +64,9 @@ const Toolbar = ({ editor }: { editor: any }) => {
 };
 
 const RichTextEditor = ({ content, onChange, editable = true }: RichTextEditorProps) => {
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isUploading, setIsUploading] = useState(false);
+
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -96,9 +96,63 @@ const RichTextEditor = ({ content, onChange, editable = true }: RichTextEditorPr
         }
     }, [content, editor]);
 
+    const handleImageClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            toast.error('Please select an image file');
+            return;
+        }
+
+        setIsUploading(true);
+        try {
+            // unique filename
+            const filename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '')}`;
+
+            const { data, error } = await supabase
+                .storage
+                .from('blog-images')
+                .upload(filename, file, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            if (error) throw error;
+
+            const { data: { publicUrl } } = supabase
+                .storage
+                .from('blog-images')
+                .getPublicUrl(filename);
+
+            editor?.chain().focus().setImage({ src: publicUrl }).run();
+            toast.success('Image uploaded successfully');
+
+        } catch (error: any) {
+            console.error('Upload error:', error);
+            toast.error(`Upload failed: ${error.message}`);
+        } finally {
+            setIsUploading(false);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+        }
+    };
+
     return (
         <div className="relative border border-border rounded-lg overflow-hidden focus-within:ring-2 ring-primary/20 transition-all bg-card shadow-sm">
-            {editable && <Toolbar editor={editor} />}
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                className="hidden"
+                accept="image/*"
+            />
+            {editable && <Toolbar editor={editor} onImageUpload={handleImageClick} isUploading={isUploading} />}
             <EditorContent editor={editor} />
         </div>
     );

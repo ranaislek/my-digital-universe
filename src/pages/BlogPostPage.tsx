@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useSearchParams, useNavigate } from "react-router-dom";
 import RichTextEditor from "@/components/admin/RichTextEditor";
-import { ArrowLeft, Calendar, Clock, Share2, ExternalLink } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Share2, ExternalLink, Edit } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../lib/supabase";
 import { ContentItem } from "../data/content";
 import PageTitle from "@/components/PageTitle";
 import PostControls from "@/components/admin/PostControls";
+import { useAuth } from "@/components/AuthProvider";
 
 const BlogPostPage = () => {
     const { slug } = useParams();
@@ -15,6 +16,7 @@ const BlogPostPage = () => {
     const navigate = useNavigate();
     const isEditing = searchParams.get("edit") === "true";
     const isNew = searchParams.get("new") === "true";
+    const { isAdmin } = useAuth(); // Check for admin status
 
     const [post, setPost] = useState<ContentItem | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -111,7 +113,12 @@ const BlogPostPage = () => {
 
             if (error) throw error;
 
-            toast.success(`Post ${status === 'published' ? 'published' : 'saved'} successfully!`);
+            if (status === 'published') {
+                toast.success("Post published successfully! 🚀");
+                navigate(`/blog/${id}`); // Exit edit mode
+            } else {
+                toast.success("Post saved as draft! 💾");
+            }
 
             // Update local state
             setPost(prev => ({
@@ -120,9 +127,6 @@ const BlogPostPage = () => {
                 readTime: dbPayload.read_time
             } as ContentItem));
 
-            if (status === 'published') {
-                navigate(`/blog/${id}`); // Exit edit mode
-            }
         } catch (error: any) {
             console.error("Save failed:", error);
             toast.error(`Save failed: ${error.message}`);
@@ -189,14 +193,15 @@ const BlogPostPage = () => {
 
             {/* Main Content Area */}
             <div className={isEditing ? "" : "bg-muted/30 border-b border-border mb-12 relative"}>
-                {!isEditing && post && (
-                    <div className="absolute top-6 right-6 z-10">
-                        <PostControls
-                            postId={post.id}
-                            isFeatured={post.featured}
-                            onUpdate={() => fetchPost(post.id)}
-                            onDelete={() => window.location.href = '/thoughts'}
-                        />
+                {/* Admin Controls */}
+                {!isEditing && post && isAdmin && (
+                    <div className="absolute top-6 right-6 z-10 flex gap-2">
+                        <button
+                            onClick={() => navigate(`/blog/${post.id}?edit=true`)}
+                            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium shadow-lg hover:bg-primary/90 transition-all"
+                        >
+                            <Edit className="w-4 h-4" /> Edit Post
+                        </button>
                     </div>
                 )}
 
@@ -212,6 +217,15 @@ const BlogPostPage = () => {
                     )}
 
                     <div className="max-w-3xl mx-auto text-center">
+                        {/* Draft Badge using isDraft status from DB post */}
+                        {!isEditing && post?.status === 'draft' && (
+                            <div className="mb-6">
+                                <span className="px-3 py-1 bg-orange-500 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+                                    Draft Preview
+                                </span>
+                            </div>
+                        )}
+
                         {!isEditing ? (
                             <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium mb-6">
                                 {post?.type === "blog" ? "📝 Blog Post" : "📹 Vlog"}
