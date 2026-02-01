@@ -3,6 +3,7 @@ import About from "@/components/About";
 import Portfolio from "@/components/Portfolio";
 import Thoughts from "@/components/Thoughts";
 import Contact from "@/components/Contact";
+import Footer from "@/components/Footer";
 import PageTitle from "@/components/PageTitle";
 
 
@@ -25,6 +26,7 @@ const Index = () => {
       <div className="snap-start">
         <Contact isTeaser={true} />
       </div>
+      <Footer />
     </div>
   );
 };

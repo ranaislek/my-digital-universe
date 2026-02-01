@@ -1,4 +1,4 @@
-import { Heart, Sparkles } from "lucide-react";
+import { Heart, Sparkles, Linkedin, Github, Youtube, Instagram, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -20,28 +20,22 @@ const Footer = () => {
             © {currentYear} Rana İşlek
           </p>
 
-          <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <Link
-              to="/about"
-              className="hover:text-primary transition-colors"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              About
-            </Link>
-            <Link
-              to="/portfolio"
-              className="hover:text-primary transition-colors"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              Portfolio
-            </Link>
-            <Link
-              to="/thoughts"
-              className="hover:text-primary transition-colors"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              Vlogs
-            </Link>
+          <div className="flex items-center gap-4 text-muted-foreground">
+            <a href="https://linkedin.com/in/ranaislek" target="_blank" rel="noopener noreferrer" className="hover:text-[#0077B5] transition-colors" aria-label="LinkedIn">
+              <Linkedin className="w-5 h-5" />
+            </a>
+            <a href="https://github.com/ranaislek" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors" aria-label="GitHub">
+              <Github className="w-5 h-5" />
+            </a>
+            <a href="https://www.youtube.com/@ranaislek" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF0000] transition-colors" aria-label="YouTube">
+              <Youtube className="w-5 h-5" />
+            </a>
+            <a href="https://instagram.com/ranaislek" target="_blank" rel="noopener noreferrer" className="hover:text-[#E1306C] transition-colors" aria-label="Instagram">
+              <Instagram className="w-5 h-5" />
+            </a>
+            <a href="mailto:islekrana@gmail.com" className="hover:text-primary transition-colors" aria-label="Email">
+              <Mail className="w-5 h-5" />
+            </a>
           </div>
         </div>
       </div>

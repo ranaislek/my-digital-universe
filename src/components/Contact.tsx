@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Linkedin, Github, Youtube, MapPin, Heart, Send } from "lucide-react";
+import { Mail, Linkedin, Github, Youtube, MapPin, Heart, Send, Instagram } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 
@@ -33,6 +33,12 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
       label: "YouTube",
       href: "https://www.youtube.com/@ranaislek",
       color: "hover:text-[#FF0000]",
+    },
+    {
+      icon: Instagram,
+      label: "Instagram",
+      href: "https://instagram.com/ranaislek",
+      color: "hover:text-[#E1306C]",
     },
     {
       icon: Mail,
