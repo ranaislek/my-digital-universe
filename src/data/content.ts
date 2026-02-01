@@ -23,7 +23,7 @@ export interface ContentItem {
     techStack?: string[];
     challenges?: string[];
     features?: string[];
-    screenshots?: string[]; // Array of image URLs
+    screenshots?: (string | { url: string; caption: string })[]; // Array of image URLs or objects
     icon?: string; // Icon name string
     projectLinks?: {
         demo?: string;

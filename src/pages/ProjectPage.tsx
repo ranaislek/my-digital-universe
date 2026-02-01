@@ -543,24 +543,134 @@ const ProjectPage = () => {
                             </section>
                         )}
 
-                        {/* Screenshots Placeholder - No edit support for now */}
-                        <section>
-                            <h2 className="font-serif text-2xl mb-6 flex items-center gap-2">
-                                <LayoutGrid className="w-6 h-6 text-primary" />
-                                Gallery
-                            </h2>
-                            {project?.screenshots ? (
-                                <div className="grid gap-6">
-                                    {project.screenshots.map((shot, idx) => (
-                                        <img key={idx} src={shot} alt="Screenshot" className="rounded-xl border border-border shadow-sm w-full" />
+                        {/* Gallery Section */}
+                        {(isEditing || (project?.screenshots && project.screenshots.length > 0)) && (
+                            <section>
+                                <h2 className="font-serif text-2xl mb-6 flex items-center gap-2">
+                                    <LayoutGrid className="w-6 h-6 text-primary" />
+                                    Gallery
+                                </h2>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    {project?.screenshots?.map((shot, idx) => (
+                                        <div key={idx} className="relative group rounded-xl overflow-hidden border border-border shadow-sm bg-muted/20 min-h-[300px] flex flex-col">
+                                            <img
+                                                src={typeof shot === 'string' ? shot : shot.url}
+                                                alt={`Screenshot ${idx + 1}`}
+                                                className="w-full h-auto object-cover"
+                                                onError={(e) => {
+                                                    // Fallback if image fails
+                                                    e.currentTarget.style.display = 'none';
+                                                    e.currentTarget.parentElement?.classList.add('flex', 'items-center', 'justify-center');
+                                                }}
+                                            />
+                                            {/* Fallback Text for Broken Images */}
+                                            <div className="hidden group-has-[img[style*='none']]:block absolute inset-0 flex items-center justify-center text-muted-foreground p-4 text-center">
+                                                <span>Image not available</span>
+                                            </div>
+
+                                            {/* Caption Display */}
+                                            {typeof shot !== 'string' && shot.caption && !isEditing && (
+                                                <div className="bg-background/80 backdrop-blur-sm p-4 border-t border-border mt-auto">
+                                                    <p className="text-sm text-foreground/80 italic text-center">
+                                                        {shot.caption}
+                                                    </p>
+                                                </div>
+                                            )}
+
+                                            {/* Edit Controls - Always visible if image breaks or on hover */}
+                                            {isEditing && (
+                                                <div className="absolute inset-x-0 bottom-0 p-4 bg-black/60 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity flex flex-col gap-2 z-20">
+                                                    <input
+                                                        type="text"
+                                                        value={typeof shot === 'string' ? '' : shot.caption || ''}
+                                                        onChange={(e) => {
+                                                            const newScreenshots = [...(project.screenshots || [])];
+                                                            const currentShot = newScreenshots[idx];
+
+                                                            // Normalize to object if it's currently a string
+                                                            const shotObj = typeof currentShot === 'string'
+                                                                ? { url: currentShot, caption: '' }
+                                                                : { ...currentShot };
+
+                                                            shotObj.caption = e.target.value;
+                                                            newScreenshots[idx] = shotObj;
+                                                            setProject({ ...project, screenshots: newScreenshots });
+                                                        }}
+                                                        placeholder="Add a caption..."
+                                                        className="w-full bg-white/10 border border-white/20 rounded px-3 py-1.5 text-sm text-white placeholder:text-white/50 focus:outline-none focus:border-primary/50"
+                                                    />
+                                                    <Button
+                                                        variant="destructive"
+                                                        size="sm"
+                                                        className="self-end hover:bg-red-600"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation(); // Prevent bubbling
+                                                            const newScreenshots = project.screenshots?.filter((_, i) => i !== idx);
+                                                            setProject({ ...project, screenshots: newScreenshots });
+                                                        }}
+                                                    >
+                                                        <Trash className="w-4 h-4 mr-2" /> Remove Image
+                                                    </Button>
+                                                </div>
+                                            )}
+                                        </div>
                                     ))}
                                 </div>
-                            ) : (
-                                <div className="p-8 border border-dashed border-border rounded-xl text-center text-muted-foreground bg-muted/20">
-                                    <p>More visuals coming soon!</p>
-                                </div>
-                            )}
-                        </section>
+
+                                {/* Upload Area (Edit Only) */}
+                                {isEditing && (
+                                    <div className="mt-8">
+                                        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-xl cursor-pointer hover:bg-muted/50 transition-colors group">
+                                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <div className="p-3 rounded-full bg-primary/10 text-primary mb-3 group-hover:scale-110 transition-transform">
+                                                    <Plus className="w-6 h-6" />
+                                                </div>
+                                                <p className="text-sm text-muted-foreground">Click to upload a new image</p>
+                                            </div>
+                                            <input
+                                                type="file"
+                                                className="hidden"
+                                                accept="image/*"
+                                                onChange={async (e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (!file) return;
+
+                                                    const toastId = toast.loading("Uploading image...");
+
+                                                    try {
+                                                        const filename = `project-gallery/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '')}`;
+                                                        const { error: uploadError } = await supabase.storage
+                                                            .from('blog-images') // Re-using blog-images bucket for simplicity
+                                                            .upload(filename, file, { cacheControl: '3600', upsert: false });
+
+                                                        if (uploadError) throw uploadError;
+
+                                                        const { data: { publicUrl } } = supabase.storage
+                                                            .from('blog-images')
+                                                            .getPublicUrl(filename);
+
+                                                        const newShot = { url: publicUrl, caption: "" };
+                                                        setProject(prev => ({
+                                                            ...prev!,
+                                                            screenshots: [...(prev?.screenshots || []), newShot]
+                                                        }));
+
+                                                        toast.success("Image uploaded!");
+                                                    } catch (error: any) {
+                                                        console.error('Upload error:', error);
+                                                        toast.error(`Upload failed: ${error.message}`);
+                                                    } finally {
+                                                        toast.dismiss(toastId);
+                                                        e.target.value = ''; // Reset input
+                                                    }
+                                                }}
+                                            />
+                                        </label>
+                                    </div>
+                                )}
+                            </section>
+                        )}
                     </div>
                 </div>
             </div>
