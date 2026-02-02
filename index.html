@@ -1,29 +1,58 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Favicon -->
   <link rel="icon" type="image/png" href="/frog-queen-logo.png" />
-  <!-- TODO: Set the document title to the name of your application -->
-  <title>Rana's Digital Universe</title>
-  <meta name="description" content="Rana Islek - Digital Universe" />
-  <meta name="author" content="Rana Islek" />
-
-  <!-- TODO: Update og:title to match your application name -->
-  <meta property="og:title" content="Rana's Digital Universe" />
-  <meta property="og:description" content="Rana Islek - Digital Universe" />
+  
+  <!-- Primary SEO Tags -->
+  <title>Rana İşlek - Digital Universe | Portfolio & Blog</title>
+  <meta name="description" content="Personal portfolio and blog of Rana İşlek. Showcasing projects, writing about technology, and sharing creative work in my digital universe." />
+  <meta name="author" content="Rana İşlek" />
+  <meta name="keywords" content="Rana İşlek, Rana Islek, portfolio, blog, developer, creator, web development, digital universe" />
+  
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://ranaislek.com" />
+  
+  <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="public/og-image.png" />
-
+  <meta property="og:url" content="https://ranaislek.com" />
+  <meta property="og:title" content="Rana İşlek - Digital Universe | Portfolio & Blog" />
+  <meta property="og:description" content="Personal portfolio and blog of Rana İşlek. Showcasing projects, writing about technology, and sharing creative work." />
+  <meta property="og:image" content="https://ranaislek.com/og-image.png" />
+  <meta property="og:site_name" content="Rana's Digital Universe" />
+  
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://ranaislek.com" />
   <meta name="twitter:site" content="@RanaIslek" />
-  <meta name="twitter:image" content="public/og-image.png" />
+  <meta name="twitter:creator" content="@RanaIslek" />
+  <meta name="twitter:title" content="Rana İşlek - Digital Universe | Portfolio & Blog" />
+  <meta name="twitter:description" content="Personal portfolio and blog of Rana İşlek. Showcasing projects, writing about technology, and sharing creative work." />
+  <meta name="twitter:image" content="https://ranaislek.com/og-image.png" />
+  
+  <!-- Schema.org Structured Data for Google -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Rana İşlek",
+    "alternateName": "Rana Islek",
+    "url": "https://ranaislek.com",
+    "image": "https://ranaislek.com/og-image.png",
+    "sameAs": [
+      "https://github.com/ranaislek",
+      "https://twitter.com/RanaIslek"
+    ],
+    "jobTitle": "Developer & Creator",
+    "description": "Developer and creator sharing projects, blogs, and creative work"
+  }
+  </script>
 </head>
-
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
-
 </html>
