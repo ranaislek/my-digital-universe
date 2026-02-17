@@ -4,7 +4,7 @@ A personal digital garden, portfolio, and content platform built to share storie
 
 [**View Live Site**](https://ranaislek.vercel.app)
 
-![Project Preview](public/og-image.png)
+![Project Preview](public/og-image2.png)
 
 ## 🚀 About The Project
 
