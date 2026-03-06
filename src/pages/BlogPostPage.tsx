@@ -9,7 +9,9 @@ import PageTitle from "@/components/PageTitle";
 import PostControls from "@/components/admin/PostControls";
 import { useAuth } from "@/components/AuthProvider";
 import BackgroundElements from "@/components/BackgroundElements";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
+import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
+import { UnsavedChangesDialog } from "@/components/admin/UnsavedChangesDialog";
 
 const BlogPostPage = () => {
     const { slug } = useParams();
@@ -31,6 +33,18 @@ const BlogPostPage = () => {
     const [excerpt, setExcerpt] = useState("");
     const [content, setContent] = useState("");
     const [thumbnail, setThumbnail] = useState("");
+
+    // Check if the form is dirty
+    const [initialState, setInitialState] = useState({ title: "", excerpt: "", content: "", thumbnail: "", link: "" });
+    const isDirty = isEditing && (
+        title !== initialState.title ||
+        excerpt !== initialState.excerpt ||
+        content !== initialState.content ||
+        thumbnail !== initialState.thumbnail ||
+        (post?.link || "") !== initialState.link
+    );
+
+    const { showDialog, proceed, cancel } = useUnsavedChanges(isDirty);
 
     useEffect(() => {
         if (!id) {
@@ -58,6 +72,7 @@ const BlogPostPage = () => {
             setExcerpt("");
             setContent("");
             setThumbnail("");
+            setInitialState({ title: "", excerpt: "", content: "", thumbnail: "", link: "" });
             setIsLoading(false);
         } else {
             fetchPost(id);
@@ -85,6 +100,13 @@ const BlogPostPage = () => {
                 setExcerpt(mappedPost.excerpt || "");
                 setContent(mappedPost.content || "");
                 setThumbnail(mappedPost.thumbnail || "");
+                setInitialState({
+                    title: mappedPost.title,
+                    excerpt: mappedPost.excerpt || "",
+                    content: mappedPost.content || "",
+                    thumbnail: mappedPost.thumbnail || "",
+                    link: mappedPost.link || ""
+                });
             }
         } catch (error: any) {
             console.error("Error fetching post:", error);
@@ -94,8 +116,8 @@ const BlogPostPage = () => {
         }
     };
 
-    const handleSave = async (status: "draft" | "published") => {
-        if (!id) return;
+    const handleSave = async (status: "draft" | "published"): Promise<boolean> => {
+        if (!id) return false;
         setIsSaving(true);
         try {
             // Validate title before saving
@@ -135,14 +157,25 @@ const BlogPostPage = () => {
                 readTime: dbPayload.read_time
             } as ContentItem));
 
+            setInitialState({
+                title: finalTitle,
+                excerpt: finalExcerpt,
+                content: content,
+                thumbnail: thumbnail,
+                link: post?.link || ""
+            });
+
             // Update form display if it was empty (optional, keeping it empty allows further editing without deleting default)
             // But if we saved "Untitled Story", maybe we should show it? 
             // Let's keep it bound to state. If they didn't type anything, state is empty. 
             // dbPayload used defaults. 
 
+            // local state update omitted for brevity (handled above)
+            return true;
         } catch (error: any) {
             console.error("Save failed:", error);
             toast.error(`Save failed: ${error.message}`);
+            return false;
         } finally {
             setIsSaving(false);
         }
@@ -213,6 +246,19 @@ const BlogPostPage = () => {
 
     return (
         <article className="min-h-screen bg-background pb-20">
+            {/* Unsaved Changes Prompt */}
+            <UnsavedChangesDialog
+                isOpen={showDialog}
+                onProceed={proceed}
+                onCancel={cancel}
+                onSave={async () => {
+                    const success = await handleSave("draft");
+                    if (success) {
+                        proceed();
+                    }
+                }}
+            />
+
             <BackgroundElements />
             {/* Edit Mode Header */}
             {isEditing && (

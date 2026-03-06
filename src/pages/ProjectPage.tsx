@@ -8,6 +8,8 @@ import { supabase } from "@/lib/supabase";
 import { ContentItem } from "@/data/content";
 import { toast } from "sonner";
 import { useAuth } from "@/components/AuthProvider";
+import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
+import { UnsavedChangesDialog } from "@/components/admin/UnsavedChangesDialog";
 
 const ProjectPage = () => {
     const { slug } = useParams();
@@ -39,6 +41,31 @@ const ProjectPage = () => {
     const [challengesInput, setChallengesInput] = useState("");
     const [featuresInput, setFeaturesInput] = useState("");
     const [tagsInput, setTagsInput] = useState("");
+
+    // Check if the form is dirty
+    const [initialState, setInitialState] = useState({
+        title: "", category: "", company: "", date: "", excerpt: "",
+        description: "", techStackInput: "", liveLink: "", repoLink: "",
+        challengesInput: "", featuresInput: "", tagsInput: "", screenshotsLength: 0
+    });
+
+    const isDirty = isEditing && (
+        title !== initialState.title ||
+        category !== initialState.category ||
+        company !== initialState.company ||
+        date !== initialState.date ||
+        excerpt !== initialState.excerpt ||
+        description !== initialState.description ||
+        techStackInput !== initialState.techStackInput ||
+        liveLink !== initialState.liveLink ||
+        repoLink !== initialState.repoLink ||
+        challengesInput !== initialState.challengesInput ||
+        featuresInput !== initialState.featuresInput ||
+        tagsInput !== initialState.tagsInput ||
+        (project?.screenshots?.length || 0) !== initialState.screenshotsLength
+    );
+
+    const { showDialog, proceed, cancel } = useUnsavedChanges(isDirty);
 
     useEffect(() => {
         if (!id) return;
@@ -78,6 +105,11 @@ const ProjectPage = () => {
                     setChallengesInput("");
                     setFeaturesInput("");
                     setTagsInput("");
+                    setInitialState({
+                        title: "", category: "", company: "", date: "", excerpt: "",
+                        description: "", techStackInput: "", liveLink: "", repoLink: "",
+                        challengesInput: "", featuresInput: "", tagsInput: "", screenshotsLength: 0
+                    });
                 } else {
                     const { data, error } = await supabase
                         .from('experiences')
@@ -112,6 +144,21 @@ const ProjectPage = () => {
                     setChallengesInput(p.challenges?.join("\n") || "");
                     setFeaturesInput(p.features?.join("\n") || "");
                     setTagsInput(p.tags?.join(", ") || "");
+                    setInitialState({
+                        title: p.title,
+                        category: p.category || "Work",
+                        company: p.company || "",
+                        date: p.date || "",
+                        excerpt: p.excerpt || "",
+                        description: p.description || "",
+                        techStackInput: p.techStack?.join(", ") || "",
+                        liveLink: p.projectLinks?.demo || "",
+                        repoLink: p.projectLinks?.repo || "",
+                        challengesInput: p.challenges?.join("\n") || "",
+                        featuresInput: p.features?.join("\n") || "",
+                        tagsInput: p.tags?.join(", ") || "",
+                        screenshotsLength: p.screenshots?.length || 0
+                    });
                 }
             } catch (error) {
                 console.error("Error loading project:", error);
@@ -126,13 +173,13 @@ const ProjectPage = () => {
         window.scrollTo(0, 0);
     }, [id, isNew, navigate]);
 
-    const handleSave = async (status: "draft" | "published") => {
-        if (!id) return;
+    const handleSave = async (status: "draft" | "published"): Promise<boolean> => {
+        if (!id) return false;
 
         // Validation
         if (!category) {
             toast.error("Please select a category");
-            return;
+            return false;
         }
 
         setIsSaving(true);
@@ -192,14 +239,32 @@ const ProjectPage = () => {
             };
 
             setProject(updatedProject);
+            setInitialState({
+                title: title.trim() || "Untitled Experience",
+                category: category,
+                company: company,
+                date: date,
+                excerpt: excerpt,
+                description: description,
+                techStackInput: techStackInput,
+                liveLink: liveLink,
+                repoLink: repoLink,
+                challengesInput: challengesInput,
+                featuresInput: featuresInput,
+                tagsInput: tagsInput,
+                screenshotsLength: project?.screenshots?.length || 0
+            });
 
             if (status === 'published') {
                 navigate(`/project/${id}`); // Exit edit mode
             }
 
+            return true;
+
         } catch (error: any) {
             console.error("Save failed:", error);
             toast.error(`Save failed: ${error.message}`);
+            return false;
         } finally {
             setIsSaving(false);
         }
@@ -211,6 +276,19 @@ const ProjectPage = () => {
 
     return (
         <div className="min-h-screen bg-background pb-20">
+            {/* Unsaved Changes Prompt */}
+            <UnsavedChangesDialog
+                isOpen={showDialog}
+                onProceed={proceed}
+                onCancel={cancel}
+                onSave={async () => {
+                    const success = await handleSave("draft");
+                    if (success) {
+                        proceed();
+                    }
+                }}
+            />
+
             <BackgroundElements />
 
             {/* Edit Header */}

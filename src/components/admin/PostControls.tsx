@@ -4,6 +4,17 @@ import { useAuth } from "../AuthProvider";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface PostControlsProps {
     postId: string;
@@ -19,6 +30,7 @@ interface PostControlsProps {
 const PostControls = ({ postId, isFeatured, isPinned, onDelete, onUpdate, className = "", editPath, tableName = 'posts' }: PostControlsProps) => {
     const { isAdmin } = useAuth();
     const navigate = useNavigate();
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     if (!isAdmin) return null;
 
@@ -63,12 +75,13 @@ const PostControls = ({ postId, isFeatured, isPinned, onDelete, onUpdate, classN
         }
     };
 
-    const handleDelete = async (e: React.MouseEvent) => {
+    const handleDeleteClick = (e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
+        setIsDeleteDialogOpen(true);
+    };
 
-        if (!confirm("Are you sure you want to delete this post?")) return;
-
+    const confirmDelete = async () => {
         const { error } = await supabase
             .from(tableName)
             .delete()
@@ -80,6 +93,7 @@ const PostControls = ({ postId, isFeatured, isPinned, onDelete, onUpdate, classN
             toast.success("Post deleted");
             onDelete?.();
         }
+        setIsDeleteDialogOpen(false);
     };
 
     const handleEdit = (e: React.MouseEvent) => {
@@ -129,11 +143,31 @@ const PostControls = ({ postId, isFeatured, isPinned, onDelete, onUpdate, classN
                 variant="secondary"
                 size="icon"
                 className="h-8 w-8 rounded-full bg-white/80 hover:bg-white shadow-sm"
-                onClick={handleDelete}
+                onClick={handleDeleteClick}
                 title="Delete"
             >
                 <Trash2 className="w-4 h-4 text-red-600" />
             </Button>
+
+            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete the post and remove its data from our servers.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={(e) => { e.stopPropagation(); setIsDeleteDialogOpen(false); }}>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={(e) => { e.stopPropagation(); confirmDelete(); }}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 };

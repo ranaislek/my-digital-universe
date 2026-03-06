@@ -52,7 +52,7 @@ const Hero = () => {
   );
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden py-20 lg:py-0">
       {/* Decorative Blobs */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 blob-shape float-animation" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 blob-shape-2 float-animation-delayed" />
@@ -77,7 +77,7 @@ const Hero = () => {
         ))}
       </div>
 
-      <div className="container mx-auto px-6 text-center relative z-10 -mt-32">
+      <div className="container mx-auto px-6 text-center relative z-10">
         <div className="flex w-fit items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 mb-8 mx-auto">
           <Sparkles className="w-4 h-4 text-primary" />
           <span className="text-sm text-foreground/70 font-medium">Data Analyst & Content Creator</span>
