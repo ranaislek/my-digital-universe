@@ -9,24 +9,24 @@ import PageTitle from "@/components/PageTitle";
 
 const Index = () => {
   return (
-    <div id="home-scroll-container" className="h-[100dvh] overflow-y-auto snap-y snap-proximity scroll-smooth bg-background">
+    <div id="home-scroll-container" className="w-full bg-background pb-12">
       <PageTitle title="Home" />
-      <div className="snap-start">
+      <div>
         <Hero />
       </div>
-      <div className="snap-start">
+      <div>
         <About isTeaser={true} />
       </div>
-      <div className="snap-start">
+      <div>
         <Portfolio isTeaser={true} />
       </div>
-      <div className="snap-start">
+      <div>
         <Thoughts isTeaser={true} />
       </div>
-      <div className="snap-start">
+      <div>
         <Contact isTeaser={true} />
       </div>
-      <div className="snap-start">
+      <div>
         <Footer />
       </div>
     </div>
