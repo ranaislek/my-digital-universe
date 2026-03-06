@@ -14,6 +14,7 @@ create table public.posts (
   thumbnail text,
   content text,
   status text default 'draft' check (status in ('draft', 'published')),
+  language text default 'both' check (language in ('en', 'tr', 'both')),
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 

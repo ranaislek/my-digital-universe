@@ -1,0 +1,229 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "portfolio": "Portfolio",
+    "thoughts": "Blogs & Vlogs",
+    "journey": "Journey",
+    "contact": "Say Hi"
+  },
+  "pages": {
+    "home": "Home",
+    "about": "About",
+    "portfolio": "Portfolio",
+    "thoughts": "Blogs & Vlogs",
+    "journey": "Journey",
+    "contact": "Contact",
+    "admin": "Admin",
+    "notfound": "Page Not Found",
+    "project": "Project"
+  },
+  "home": {
+    "role": "Data Analyst & Content Creator",
+    "description": "MSc graduate in Big Data & Analytics, exploring the world through data, dance, and documenting my Erasmus adventures across Europe.",
+    "journeySummary": "Brussels → Barcelona → Padova ✨",
+    "viewProjects": "View My Work",
+    "readThoughts": "Watch My Vlogs",
+    "countries": "Countries",
+    "languages": "Languages",
+    "curiosity": "Curiosity"
+  },
+  "about": {
+    "subtitle": "Nice to meet you!",
+    "title1": "A Little About",
+    "title2": "My Journey",
+    "quote": "\"Data tells stories, I make them beautiful.\"",
+    "p1": "I'm a <1>Data & Analytics Specialist</1> with an MSc in Big Data Management & Analytics (Erasmus Mundus). My journey has taken me from <2>Istanbul</2> to <3>Brussels</3>, <4>Barcelona</4>, and <5>Padova</5>.",
+    "p2": "When I'm not building dashboards or training ML models, you'll find me creating YouTube content about student life abroad, leading dance clubs, or exploring new cities. I believe life is about collecting experiences, not just data points! 💃",
+    "readMore": "Read Full Story"
+  },
+  "portfolio": {
+    "subtitle": "Portfolio",
+    "title1": "Experience &",
+    "title2": "Education",
+    "description": "From analyzing user journeys to training neural networks — here's a peek into my professional adventures.",
+    "tabs": {
+      "all": "All",
+      "work": "Work",
+      "project": "Project",
+      "startup": "Startup",
+      "research": "Research"
+    },
+    "viewFull": "View Full Portfolio",
+    "educationTitle": "Education Journey",
+    "downloadCv": "Download Full CV"
+  },
+  "contact": {
+    "subtitle": "Let's Connect",
+    "title1": "Say",
+    "title2": "Hello!",
+    "description": "Whether it's about data, Erasmus advice, dance, or just to chat — I'd love to hear from you!",
+    "location": "Currently in Istanbul, Türkiye",
+    "getInTouch": "Get in Touch",
+    "directContact": "Direct Contact",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your Name",
+      "email": "Email",
+      "emailPlaceholder": "hello@example.com",
+      "message": "Message",
+      "messagePlaceholder": "Write your message here...",
+      "submit": "Send Message",
+      "submitting": "Sending..."
+    }
+  },
+  "journey": {
+    "subtitle": "Time Tunnel",
+    "title1": "A Decade of",
+    "title2": "Adventure",
+    "description": "From high school halls in Izmir to AI research in Padova, and everything in between.",
+    "events": {
+      "cakabey": {
+        "title": "High School Graduation",
+        "location": "Izmir, Turkey 🇹🇷",
+        "description": "Graduated from Private Çakabey Schools, where my educational journey began.",
+        "type": "education"
+      },
+      "sabanci-start": {
+        "title": "Started Sabanci University",
+        "location": "Istanbul, Turkey 🇹🇷",
+        "description": "Began my undergraduate studies in Computer Science & Engineering.",
+        "type": "education"
+      },
+      "budapest-erasmus": {
+        "title": "Erasmus in Budapest",
+        "location": "Budapest, Hungary 🇭🇺",
+        "description": "A semester of exploration, new cultures, and academic growth in the heart of Europe.",
+        "type": "travel"
+      },
+      "sabanci-grad": {
+        "title": "Graduated from Sabanci",
+        "location": "Istanbul, Turkey 🇹🇷",
+        "description": "Completed my Bachelor's degree with a focus on Software Engineering.",
+        "type": "education"
+      },
+      "erasmus-mundus-brussels": {
+        "title": "Erasmus Mundus Master's",
+        "location": "Brussels, Belgium 🇧🇪",
+        "description": "Started my Joint Master Degree. First semester adventure in the capital of Europe.",
+        "type": "education"
+      },
+      "barcelona": {
+        "title": "Semester in Barcelona",
+        "location": "Barcelona, Spain 🇪🇸",
+        "description": "Living and studying in the vibrant city of Barcelona.",
+        "type": "travel"
+      },
+      "padova": {
+        "title": "Specialization in AI",
+        "location": "Padova, Italy 🇮🇹",
+        "description": "Specializing in Deep Learning & AI at the University of Padua while writing my Master's Thesis.",
+        "type": "education"
+      },
+      "ngn-work": {
+        "title": "Full-time at NGN",
+        "location": "Turkey 🇹🇷",
+        "description": "Returned to Turkey and started my professional career working full-time at NGN.",
+        "type": "work"
+      },
+      "masters-grad": {
+        "title": "Master's Graduation",
+        "location": "Europe 🇪🇺",
+        "description": "Officially graduating from the Erasmus Mundus Joint Master Program.",
+        "type": "milestone"
+      },
+      "now": {
+        "title": "The Journey Continues...",
+        "location": "Digital Universe 🌐",
+        "description": "Currently building, learning, and sharing my experiences with the world.",
+        "type": "milestone"
+      },
+      "Present": "Present"
+    }
+  },
+  "thoughts": {
+    "subtitle": "Blogs & Vlogs",
+    "titlePart1": "Stories &",
+    "titlePart2": "Adventures",
+    "description": "Sharing my Erasmus journey, study abroad tips, and random life musings.",
+    "all": "All",
+    "blogs": "Blogs",
+    "vlogs": "Vlogs",
+    "readMore": "Read Story",
+    "watchVideo": "Watch Video",
+    "subscribeYoutube": "Subscribe on YouTube",
+    "readMoreStories": "Read More Stories"
+  },
+  "footer": {
+    "minRead": "{{count}} min read"
+  },
+  "common": {
+    "search": "Search...",
+    "loading": "Loading...",
+    "notFound": "Page not found",
+    "backToHome": "Back to Home""admin": {
+      "title": "Admin Portal",
+      "email": "Email",
+      "password": "Password",
+      "login": "Login",
+      "authenticating": "Authenticating...",
+      "returnToWebsite": "← Return to Website",
+      "unauthorized": "Redirecting...",
+      "welcomeBack": "Welcome back! 🚀",
+      "newStory": "New Story",
+      "editing": "Editing",
+      "saveDraft": "Save Draft",
+      "publish": "Publish",
+      "publishing": "Publishing...",
+      "postNotFound": "Post not found",
+      "backToAll": "Back to all posts",
+      "editPost": "Edit Post",
+      "backToStories": "Back to Stories",
+      "draftPreview": "Draft Preview",
+      "blogPost": "📝 Blog Post",
+      "vlog": "📹 Vlog",
+      "language": "Language",
+      "both": "Both",
+      "untitledStory": "Untitled Story",
+      "youtubeUrl": "YouTube Video URL (e.g. https://youtu.be/...)",
+      "writeSummary": "Write a short summary...",
+      "watchYoutube": "Watch on YouTube",
+      "addCoverUrl": "Add Cover Image",
+      "changeCover": "Change Cover Image",
+      "addCover": "Add a Cover Photo",
+      "thanksReading": "Thanks for reading!",
+      "share": "Share",
+      "newExperience": "New Experience",
+      "editingExperience": "Editing Experience",
+      "publishChange": "Publish Change",
+      "saving": "Saving...",
+      "editExperience": "Edit Experience",
+      "backToPortfolio": "Back to Portfolio",
+      "selectCategory": "Select Category",
+      "company": "Company / Org",
+      "titlePlaceholder": "Title",
+      "shortExcerpt": "Short excerpt/summary...",
+      "detailedDescription": "Detailed description...",
+      "tagsPlaceholder": "Tags (comma separated)",
+      "liveDemo": "Live Demo URL",
+      "githubRepo": "GitHub Repo URL",
+      "viewDemo": "Live Demo",
+      "viewCode": "View Code",
+      "timeline": "Timeline",
+      "timelinePlaceholder": "e.g. Jan 2023 - Present",
+      "currentRole": "Current Role",
+      "techStack": "Tech Stack",
+      "techStackPlaceholder": "React, TypeScript, Tailwind...",
+      "overview": "Overview",
+      "keyChallenges": "Key Challenges",
+      "challengesPlaceholder": "One challenge per line...",
+      "keyFeatures": "Key Features",
+      "featuresPlaceholder": "One feature per line...",
+      "gallery": "Gallery",
+      "imageNotAvailable": "Image not available",
+      "addCaption": "Add a caption...",
+      "removeImage": "Remove Image",
+      "clickToUpload": "Click to upload a new image",
+      "newPost": "New Post"
+    }
+  }

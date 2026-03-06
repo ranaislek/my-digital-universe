@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { journeyEvents } from "@/data/journey";
 import { MapPin, Calendar, Briefcase, GraduationCap, Plane, Star } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const JourneyTimeline = () => {
+    const { t } = useTranslation();
     return (
         <div className="relative py-20 px-4 md:px-0 max-w-5xl mx-auto">
             {/* Center Line (Hidden on mobile, visible on md+) */}
@@ -33,7 +35,7 @@ const JourneyTimeline = () => {
                         {/* Date Bubble (Mobile: Top Left, Desktop: Center) */}
                         <div className="absolute left-0 md:left-1/2 -translate-x-1/2 md:-translate-x-1/2 flex items-center justify-center w-12 h-12 rounded-full bg-background border-4 border-muted z-10 shadow-xl">
                             <span className="text-[10px] font-bold text-center leading-tight px-1">
-                                {event.year}
+                                {event.year === "Present" ? t('journey.events.Present') : event.year}
                             </span>
                         </div>
 
@@ -49,8 +51,8 @@ const JourneyTimeline = () => {
                                                 src={event.image}
                                                 alt={event.title}
                                                 className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${event.imagePosition === 'top' ? 'object-top' :
-                                                        event.imagePosition === 'bottom' ? 'object-bottom' :
-                                                            'object-center'
+                                                    event.imagePosition === 'bottom' ? 'object-bottom' :
+                                                        'object-center'
                                                     }`}
                                             />
                                         </div>
@@ -59,18 +61,20 @@ const JourneyTimeline = () => {
                                     <div className={`flex flex-col gap-1 flex-grow ${isEven ? 'text-left' : 'text-left sm:text-right'}`}>
                                         <div className={`flex items-center gap-2 text-primary text-xs font-medium uppercase tracking-wider ${isEven ? '' : 'sm:flex-row-reverse'}`}>
                                             {getIcon()}
-                                            <span>{event.type}</span>
+                                            <span>{t(`journey.events.${event.id}.type`, { defaultValue: event.type })}</span>
                                         </div>
 
-                                        <h3 className="font-serif text-lg font-bold leading-tight">{event.title}</h3>
+                                        <h3 className="font-serif text-lg font-bold leading-tight">
+                                            {t(`journey.events.${event.id}.title`, { defaultValue: event.title })}
+                                        </h3>
 
                                         <div className={`flex items-center gap-1 text-muted-foreground text-xs ${isEven ? '' : 'sm:flex-row-reverse'}`}>
                                             <MapPin className="w-3 h-3" />
-                                            {event.location}
+                                            {t(`journey.events.${event.id}.location`, { defaultValue: event.location })}
                                         </div>
 
                                         <p className="text-muted-foreground mt-2 text-sm leading-relaxed line-clamp-3">
-                                            {event.description}
+                                            {t(`journey.events.${event.id}.description`, { defaultValue: event.description })}
                                         </p>
                                     </div>
                                 </div>

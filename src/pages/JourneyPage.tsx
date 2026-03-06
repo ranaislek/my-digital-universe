@@ -1,8 +1,10 @@
 import PageTitle from "@/components/PageTitle";
 import JourneyTimeline from "@/components/JourneyTimeline";
 import BackgroundElements from "@/components/BackgroundElements";
+import { useTranslation } from "react-i18next";
 
 const JourneyPage = () => {
+    const { t } = useTranslation();
     return (
         <div className="min-h-screen pt-20 pb-16">
             <BackgroundElements showStars={true} />
@@ -11,13 +13,13 @@ const JourneyPage = () => {
             <div className="container mx-auto px-6 py-20">
                 <div className="text-center max-w-2xl mx-auto mb-16">
                     <span className="text-primary font-medium text-sm tracking-wider uppercase">
-                        Time Tunnel
+                        {t('journey.subtitle')}
                     </span>
                     <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-medium mt-4 mb-6">
-                        A Decade of <span className="gradient-text">Adventure</span>
+                        {t('journey.title1')} <span className="gradient-text">{t('journey.title2')}</span>
                     </h1>
                     <p className="text-xl text-muted-foreground">
-                        From high school halls in Izmir to AI research in Padova,  and everything in between.
+                        {t('journey.description')}
                     </p>
                 </div>
                 <JourneyTimeline />

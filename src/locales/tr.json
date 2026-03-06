@@ -1,0 +1,231 @@
+{
+    "nav": {
+        "home": "Ana Sayfa",
+        "about": "Hakkımda",
+        "portfolio": "Portfolyo",
+        "thoughts": "Bloglar & Vloglar",
+        "journey": "Yolculuk",
+        "contact": "İletişim"
+    },
+    "pages": {
+        "home": "Ana Sayfa",
+        "about": "Hakkımda",
+        "portfolio": "Portfolyo",
+        "thoughts": "Bloglar & Vloglar",
+        "journey": "Yolculuk",
+        "contact": "İletişim",
+        "admin": "Yönetici",
+        "notfound": "Sayfa Bulunamadı",
+        "project": "Proje"
+    },
+    "home": {
+        "role": "Veri Analisti & İçerik Üreticisi",
+        "description": "Büyük Veri ve Analiz üzerine yüksek lisans yaptım. Dijital dünyayı veriyle, dansla ve Avrupa'daki Erasmus maceralarımı paylaştığım içeriklerle keşfediyorum.",
+        "journeySummary": "Brüksel → Barselona → Padova ✨",
+        "viewProjects": "Çalışmalarımı İncele",
+        "readThoughts": "Vloglarımı İzle",
+        "countries": "Ülke",
+        "languages": "Dil",
+        "curiosity": "Merak"
+    },
+    "about": {
+        "subtitle": "Tanıştığımıza memnun oldum!",
+        "title1": "Kısaca",
+        "title2": "Benim Hikayem",
+        "quote": "\"Veriler hikayeler anlatır, ben onları güzelleştiririm.\"",
+        "p1": "Büyük Veri Yönetimi ve Analitiği (Erasmus Mundus) alanında yüksek lisans yapmış bir <1>Veri & Analitik Uzmanıyım</1>. Serüvenim <2>İstanbul'dan</2> <3>Brüksel</3>, <4>Barselona</4> ve <5>Padova'ya</5> kadar uzandı.",
+        "p2": "Gösterge panelleri oluşturmadığım veya makine öğrenimi modelleri eğitmediğim zamanlarda; beni yurtdışında öğrenci olmakla ilgili YouTube içerikleri üretirken, dans kulüplerine liderlik ederken veya yeni şehirler keşfederken bulabilirsiniz. Hayatın sadece veri noktalarından değil, deneyimler biriktirmekten ibaret olduğuna inanıyorum! 💃",
+        "readMore": "Hikayenin Tamamını Oku"
+    },
+    "portfolio": {
+        "subtitle": "Portfolyo",
+        "title1": "Deneyim &",
+        "title2": "Eğitim",
+        "description": "Kullanıcı yolculuklarını analiz etmekten sinir ağlarını eğitmeye kadar — profesyonel maceralarıma kısa bir bakış.",
+        "tabs": {
+            "all": "Tümü",
+            "work": "İş",
+            "project": "Proje",
+            "startup": "Girişim",
+            "research": "Araştırma"
+        },
+        "viewFull": "Tüm Portfolyoyu Görüntüle",
+        "educationTitle": "Eğitim Serüvenim",
+        "downloadCv": "CV'mi İndir"
+    },
+    "contact": {
+        "subtitle": "İletişime Geçelim",
+        "title1": "Merhaba",
+        "title2": "De!",
+        "description": "İster veri, ister Erasmus tavsiyesi, ister dans hakkında olsun; ya da sadece sohbet etmek için — senden haber almayı çok isterim!",
+        "location": "Şu an İstanbul, Türkiye'deyim",
+        "getInTouch": "Bana Ulaşın",
+        "directContact": "Doğrudan İletişim",
+        "form": {
+            "name": "İsim",
+            "namePlaceholder": "İsminiz",
+            "email": "E-posta",
+            "emailPlaceholder": "merhaba@ornek.com",
+            "message": "Mesaj",
+            "messagePlaceholder": "Mesajınızı buraya yazın...",
+            "submit": "Mesajı Gönder",
+            "submitting": "Gönderiliyor..."
+        }
+    },
+    "journey": {
+        "subtitle": "Zaman Tüneli",
+        "title1": "Macera Dolu Bir",
+        "title2": "On Yıl",
+        "description": "İzmir'deki lise koridorlarından Padova'daki yapay zeka araştırmalarına, ve aradaki tüm o güzel anılara.",
+        "events": {
+            "cakabey": {
+                "title": "Lise Mezuniyeti",
+                "location": "İzmir, Türkiye 🇹🇷",
+                "description": "Eğitim serüvenimin başladığı Özel Çakabey Okulları'ndan mezun oldum.",
+                "type": "eğitim"
+            },
+            "sabanci-start": {
+                "title": "Sabancı Üniversitesi'ne Başladım",
+                "location": "İstanbul, Türkiye 🇹🇷",
+                "description": "Bilgisayar Bilimi ve Mühendisliği lisans eğitimime başladım.",
+                "type": "eğitim"
+            },
+            "budapest-erasmus": {
+                "title": "Budapeşte'de Erasmus",
+                "location": "Budapeşte, Macaristan 🇭🇺",
+                "description": "Avrupa'nın kalbinde keşif, yeni kültürler ve akademik gelişimle dolu bir dönem.",
+                "type": "seyahat"
+            },
+            "sabanci-grad": {
+                "title": "Sabancı'dan Mezun Oldum",
+                "location": "İstanbul, Türkiye 🇹🇷",
+                "description": "Yazılım Mühendisliği ağırlıklı olmak üzere lisans eğitimimi tamamladım.",
+                "type": "eğitim"
+            },
+            "erasmus-mundus-brussels": {
+                "title": "Erasmus Mundus Yüksek Lisans",
+                "location": "Brüksel, Belçika 🇧🇪",
+                "description": "Ortak Yüksek Lisans eğitimime başladım. İlk dönem macerası Avrupa'nın başkentindeydi.",
+                "type": "eğitim"
+            },
+            "barcelona": {
+                "title": "Barselona'da Bir Dönem",
+                "location": "Barselona, İspanya 🇪🇸",
+                "description": "Hayat dolu Barselona şehrinde yaşamak ve eğitim görmek.",
+                "type": "seyahat"
+            },
+            "padova": {
+                "title": "Yapay Zeka Uzmanlığı",
+                "location": "Padova, İtalya 🇮🇹",
+                "description": "Yüksek Lisans tezimi yazarken Padua Üniversitesi'nde Derin Öğrenme ve Yapay Zeka alanında uzmanlaşıyorum.",
+                "type": "eğitim"
+            },
+            "ngn-work": {
+                "title": "NGN'de Tam Zamanlı",
+                "location": "Türkiye 🇹🇷",
+                "description": "Türkiye'ye döndüm ve NGN'de tam zamanlı çalışarak profesyonel kariyerime başladım.",
+                "type": "iş"
+            },
+            "masters-grad": {
+                "title": "Yüksek Lisans Mezuniyeti",
+                "location": "Avrupa 🇪🇺",
+                "description": "Erasmus Mundus Ortak Yüksek Lisans Programından resmen mezun oluyorum.",
+                "type": "kilometre taşı"
+            },
+            "now": {
+                "title": "Yolculuk Devam Ediyor...",
+                "location": "Dijital Evren 🌐",
+                "description": "Şu an deneyimlerimi geliştiriyor, öğreniyor ve dünyayla paylaşıyorum.",
+                "type": "kilometre taşı"
+            },
+            "Present": "Günümüz"
+        }
+    },
+    "footer": {
+        "madeWith": "ile yapıldı",
+        "by": "tarafından",
+        "allRightsReserved": "Tüm hakları saklıdır."
+    },
+    "thoughts": {
+        "subtitle": "Bloglar & Vloglar",
+        "titlePart1": "Hikayeler &",
+        "titlePart2": "Maceralar",
+        "description": "Erasmus serüvenimi, yurtdışı eğitim tavsiyelerimi ve hayata dair düşüncelerimi paylaşıyorum.",
+        "all": "Tümü",
+        "blogs": "Bloglar",
+        "vlogs": "Vloglar",
+        "readMore": "Haberi Oku",
+        "watchVideo": "Videoyu İzle",
+        "subscribeYoutube": "YouTube'a Abone Ol",
+        "readMoreStories": "Daha Fazla Hikaye Oku"
+    },
+    "common": {
+        "search": "Ara...",
+        "loading": "Yükleniyor...",
+        "notFound": "Sayfa bulunamadı",
+        "backToHome": "Ana Sayfaya Dön""admin": {
+            "title": "Yönetici Portalı",
+            "email": "E-posta",
+            "password": "Şifre",
+            "login": "Giriş Yap",
+            "authenticating": "Doğrulanıyor...",
+            "returnToWebsite": "← Web Sitesine Dön",
+            "unauthorized": "Yönlendiriliyor...",
+            "welcomeBack": "Tekrar hoş geldin! 🚀",
+            "newStory": "Yeni Hikaye",
+            "editing": "Düzenleniyor",
+            "saveDraft": "Taslağı Kaydet",
+            "publish": "Yayınla",
+            "publishing": "Yayınlanıyor...",
+            "postNotFound": "Gönderi bulunamadı",
+            "backToAll": "Tüm gönderilere dön",
+            "editPost": "Gönderiyi Düzenle",
+            "backToStories": "Hikayelere Dön",
+            "draftPreview": "Taslak Önizlemesi",
+            "blogPost": "📝 Blog Gönderisi",
+            "vlog": "📹 Vlog",
+            "language": "Dil",
+            "both": "İkisi de",
+            "untitledStory": "Başlıksız Hikaye",
+            "youtubeUrl": "YouTube Video URL'si (örn. https://youtu.be/...)",
+            "writeSummary": "Kısa bir özet yazın...",
+            "watchYoutube": "YouTube'da İzle",
+            "addCoverUrl": "Kapak Fotoğrafı Ekle",
+            "changeCover": "Kapak Fotoğrafını Değiştir",
+            "addCover": "Bir Kapak Fotoğrafı Ekle",
+            "thanksReading": "Okuduğunuz için teşekkürler!",
+            "share": "Paylaş",
+            "newExperience": "Yeni Deneyim",
+            "editingExperience": "Deneyimi Düzenle",
+            "publishChange": "Değişikliği Yayınla",
+            "saving": "Kaydediliyor...",
+            "editExperience": "Deneyimi Düzenle",
+            "backToPortfolio": "Portfolyoya Dön",
+            "selectCategory": "Kategori Seç",
+            "company": "Şirket / Kurum",
+            "titlePlaceholder": "Başlık",
+            "shortExcerpt": "Kısa özet...",
+            "detailedDescription": "Detaylı açıklama...",
+            "tagsPlaceholder": "Etiketler (virgülle ayrılmış)",
+            "liveDemo": "Canlı Demo URL'si",
+            "githubRepo": "GitHub Repo URL'si",
+            "viewDemo": "Canlı Demo",
+            "viewCode": "Kodu Görüntüle",
+            "timeline": "Zaman Çizelgesi",
+            "timelinePlaceholder": "örn. Oca 2023 - Günümüz",
+            "currentRole": "Mevcut Pozisyon",
+            "techStack": "Teknoloji Yığını",
+            "techStackPlaceholder": "React, TypeScript, Tailwind...",
+            "overview": "Genel Bakış",
+            "keyChallenges": "Karşılaşılan Zorluklar",
+            "challengesPlaceholder": "Her satıra bir zorluk...",
+            "keyFeatures": "Ana Özellikler",
+            "featuresPlaceholder": "Her satıra bir özellik...",
+            "gallery": "Galeri",
+            "imageNotAvailable": "Görsel mevcut değil",
+            "addCaption": "Bir alt yazı ekle...",
+            "removeImage": "Görseli Kaldır",
+            "clickToUpload": "Yeni bir görsel yüklemek için tıkla",
+            "newPost": "Yeni Gönderi"
+        }
+    }

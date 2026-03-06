@@ -65,7 +65,8 @@ const BlogPostPage = () => {
                 excerpt: "", // Empty for placeholder
                 date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
                 content: "",
-                status: "draft"
+                status: "draft",
+                language: "both"
             };
             setPost(newPost);
             setTitle("");
@@ -134,6 +135,7 @@ const BlogPostPage = () => {
                 link: post?.link || null, // VLOG LINK
                 date: post?.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
                 status: status,
+                language: post?.language || "both",
                 read_time: `${Math.max(1, Math.ceil(content.split(" ").length / 200))} min read`
             };
 
@@ -343,19 +345,33 @@ const BlogPostPage = () => {
                                 {post?.type === "blog" ? "📝 Blog Post" : "📹 Vlog"}
                             </span>
                         ) : (
-                            <div className="flex justify-center gap-4 mb-6">
-                                <button
-                                    onClick={() => setPost(p => ({ ...p!, type: 'blog' }))}
-                                    className={`px-4 py-1 rounded-full text-xs font-medium border ${post?.type === 'blog' ? 'bg-primary text-primary-foreground' : 'bg-muted border-input'}`}
-                                >
-                                    📝 Blog
-                                </button>
-                                <button
-                                    onClick={() => setPost(p => ({ ...p!, type: 'vlog' }))}
-                                    className={`px-4 py-1 rounded-full text-xs font-medium border ${post?.type === 'vlog' ? 'bg-red-500 text-white' : 'bg-muted border-input'}`}
-                                >
-                                    📹 Vlog
-                                </button>
+                            <div className="flex flex-col items-center gap-4 mb-6">
+                                <div className="flex justify-center gap-4">
+                                    <button
+                                        onClick={() => setPost(p => ({ ...p!, type: 'blog' }))}
+                                        className={`px-4 py-1 rounded-full text-xs font-medium border ${post?.type === 'blog' ? 'bg-primary text-primary-foreground' : 'bg-muted border-input'}`}
+                                    >
+                                        📝 Blog
+                                    </button>
+                                    <button
+                                        onClick={() => setPost(p => ({ ...p!, type: 'vlog' }))}
+                                        className={`px-4 py-1 rounded-full text-xs font-medium border ${post?.type === 'vlog' ? 'bg-red-500 text-white' : 'bg-muted border-input'}`}
+                                    >
+                                        📹 Vlog
+                                    </button>
+                                </div>
+                                <div className="flex gap-2 items-center">
+                                    <span className="text-sm font-medium text-muted-foreground mr-2">Language:</span>
+                                    {['both', 'en', 'tr'].map(lang => (
+                                        <button
+                                            key={lang}
+                                            onClick={() => setPost(p => ({ ...p!, language: lang as any }))}
+                                            className={`px-3 py-1 rounded-md text-xs font-medium border ${post?.language === lang ? 'bg-primary text-primary-foreground' : 'bg-muted border-input hover:bg-muted/80'}`}
+                                        >
+                                            {lang === 'both' ? 'Both' : lang.toUpperCase()}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                         )}
 

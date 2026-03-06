@@ -6,6 +6,7 @@ import { supabase } from "../lib/supabase";
 import { ContentItem } from "../data/content";
 import PostControls from "./admin/PostControls";
 import { useAuth } from "./AuthProvider";
+import { useTranslation } from "react-i18next";
 
 const iconMap: Record<string, LucideIcon> = {
   "Briefcase": Briefcase,
@@ -34,6 +35,7 @@ interface PortfolioProps {
 }
 
 const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
+  const { t } = useTranslation();
   const [projects, setProjects] = useState<ContentItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { isAdmin } = useAuth();
@@ -135,16 +137,15 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
         <div className={`text-center max-w-2xl mx-auto ${isTeaser ? "mb-8 lg:mb-12" : "mb-16"}`}>
           {!isTeaser && (
             <span className="text-primary font-medium text-xs tracking-wider uppercase">
-              Portfolio
+              {t('portfolio.subtitle')}
             </span>
           )}
 
           <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1 mb-3">
-            Experience & <span className="gradient-text">Education</span>
+            {t('portfolio.title1')} <span className="gradient-text">{t('portfolio.title2')}</span>
           </h2>
           <p className="text-muted-foreground text-sm md:text-base">
-            From analyzing user journeys to training neural networks —
-            here's a peek into my professional adventures.
+            {t('portfolio.description')}
           </p>
         </div>
 
@@ -160,7 +161,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
                   : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
               >
-                {tab}
+                {t(`portfolio.tabs.${tab.toLowerCase()}`)}
                 {tab === "All" && <span className="ml-2 text-xs opacity-60">{projects.length}</span>}
               </button>
             ))}
@@ -273,7 +274,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
               to="/portfolio"
               className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-medium hover:bg-primary/90 transition-colors group"
             >
-              <span>View Full Portfolio</span>
+              <span>{t('portfolio.viewFull')}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -285,7 +286,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
             <div className="max-w-2xl mx-auto">
               <h3 className="font-serif text-2xl font-medium text-center mb-8">
                 <GraduationCap className="inline-block w-6 h-6 text-primary mr-2" />
-                Education Journey
+                {t('portfolio.educationTitle')}
               </h3>
               <div className="space-y-4">
                 {education.map((edu, index) => (
@@ -320,7 +321,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 bg-primary/10 text-primary rounded-full font-medium hover:bg-primary/20 transition-colors mt-12"
             >
-              <span>Download Full CV</span>
+              <span>{t('portfolio.downloadCv')}</span>
               <ExternalLink className="w-4 h-4" />
             </a>
           </>

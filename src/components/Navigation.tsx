@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Sparkles, Home } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const Navigation = () => {
+  const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -16,12 +19,12 @@ const Navigation = () => {
   }, []);
 
   const navLinks = [
-    { href: "/", label: "Home", icon: Home },
-    { href: "/about", label: "About" },
-    { href: "/portfolio", label: "Portfolio" },
-    { href: "/thoughts", label: "Blogs & Vlogs" },
-    { href: "/journey", label: "Journey" },
-    { href: "/contact", label: "Say Hi" },
+    { href: "/", label: t('nav.home'), icon: Home },
+    { href: "/about", label: t('nav.about') },
+    { href: "/portfolio", label: t('nav.portfolio') },
+    { href: "/thoughts", label: t('nav.thoughts') },
+    { href: "/journey", label: t('nav.journey') },
+    { href: "/contact", label: t('nav.contact') },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -53,30 +56,36 @@ const Navigation = () => {
             <img src="/rana-frog-logo.png" alt="Rana" className="h-14 w-auto object-contain" />
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className={`text-sm font-medium transition-colors relative group ${isActive(link.href) ? "text-primary" : "text-muted-foreground hover:text-primary"
-                  }`}
-                onClick={handleScrollTop}
-              >
-                {link.label}
-                <span className={`absolute -bottom-1 left-0 h-0.5 bg-primary rounded-full transition-all ${isActive(link.href) ? "w-full" : "w-0 group-hover:w-full"
-                  }`} />
-              </Link>
-            ))}
-          </div>
+          <div className="flex items-center gap-4 md:gap-8">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={`text-sm font-medium transition-colors relative group ${isActive(link.href) ? "text-primary" : "text-muted-foreground hover:text-primary"
+                    }`}
+                  onClick={handleScrollTop}
+                >
+                  {link.label}
+                  <span className={`absolute -bottom-1 left-0 h-0.5 bg-primary rounded-full transition-all ${isActive(link.href) ? "w-full" : "w-0 group-hover:w-full"
+                    }`} />
+                </Link>
+              ))}
+            </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher />
+
+              {/* Mobile Menu Toggle */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
+              >
+                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

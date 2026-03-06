@@ -13,6 +13,7 @@ export interface ContentItem {
     thumbnail?: string;
     content?: string; // HTML content for blogs
     status?: "draft" | "published";
+    language?: "en" | "tr" | "both";
     featured?: boolean;
     pinned?: boolean;
     // Project specific fields

@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Mail, Linkedin, Github, Youtube, MapPin, Heart, Send, Instagram } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
+import { useTranslation } from "react-i18next";
 
 interface ContactProps {
   isTeaser?: boolean;
 }
 
 const Contact = ({ isTeaser = false }: ContactProps) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -131,27 +133,26 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
         <div className={`max-w-2xl mx-auto text-center ${isTeaser ? "mb-8 lg:mb-12" : "mb-16"}`}>
           {!isTeaser && (
             <span className="text-primary font-medium text-xs tracking-wider uppercase">
-              Let's Connect
+              {t('contact.subtitle')}
             </span>
           )}
           <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1 mb-3">
-            Say <span className="gradient-text">Hello!</span>
+            {t('contact.title1')} <span className="gradient-text">{t('contact.title2')}</span>
             <span className="inline-block ml-2">👋</span>
           </h2>
           <p className="text-muted-foreground text-sm md:text-base mb-2">
-            Whether it's about data, Erasmus advice, dance, or just to chat —
-            I'd love to hear from you!
+            {t('contact.description')}
           </p>
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <MapPin className="w-3 h-3 text-primary" />
-            <span>Currently in Istanbul, Türkiye</span>
+            <span>{t('contact.location')}</span>
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-center">
           {/* Contact Info Side */}
           <div className="space-y-6">
-            <h3 className="font-serif text-xl font-medium mb-4">Get in Touch</h3>
+            <h3 className="font-serif text-xl font-medium mb-4">{t('contact.getInTouch')}</h3>
 
             {/* Social Links */}
             <div className="flex flex-wrap gap-3">
@@ -170,7 +171,7 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
             </div>
 
             <div className={`p-4 rounded-2xl bg-card border border-border ${isTeaser ? "mt-6" : "mt-8"}`}>
-              <h4 className="font-medium text-sm mb-1">Direct Contact</h4>
+              <h4 className="font-medium text-sm mb-1">{t('contact.directContact')}</h4>
               <a
                 href="mailto:islekrana@gmail.com"
                 className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -181,41 +182,40 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
             </div>
           </div>
 
-          {/* Contact Form Side */}
           <div className={`bg-card rounded-3xl border border-border shadow-sm ${isTeaser ? "p-6" : "p-8"}`}>
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
-                <label htmlFor="name" className="block text-xs font-medium mb-1 ml-1">Name</label>
+                <label htmlFor="name" className="block text-xs font-medium mb-1 ml-1">{t('contact.form.name')}</label>
                 <input
                   type="text"
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full px-3 py-2 rounded-lg bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm"
-                  placeholder="Your Name"
+                  placeholder={t('contact.form.namePlaceholder')}
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-xs font-medium mb-1 ml-1">Email</label>
+                <label htmlFor="email" className="block text-xs font-medium mb-1 ml-1">{t('contact.form.email')}</label>
                 <input
                   type="email"
                   id="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full px-3 py-2 rounded-lg bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm"
-                  placeholder="hello@example.com"
+                  placeholder={t('contact.form.emailPlaceholder')}
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-xs font-medium mb-1 ml-1">Message</label>
+                <label htmlFor="message" className="block text-xs font-medium mb-1 ml-1">{t('contact.form.message')}</label>
                 <textarea
                   id="message"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className={`w-full px-3 py-2 rounded-lg bg-background border border-input focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm ${isTeaser ? "min-h-[80px]" : "min-h-[120px]"}`}
-                  placeholder="Write your message here..."
+                  placeholder={t('contact.form.messagePlaceholder')}
                 />
               </div>
 
@@ -225,10 +225,10 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
                 className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
-                  <span>Sending...</span>
+                  <span>{t('contact.form.submitting')}</span>
                 ) : (
                   <>
-                    <span>Send Message</span>
+                    <span>{t('contact.form.submit')}</span>
                     <Send className="w-3 h-3" />
                   </>
                 )}

@@ -5,8 +5,10 @@ import { supabase } from "../lib/supabase";
 import { ContentItem } from "../data/content";
 import PostControls from "./admin/PostControls";
 import { useAuth } from "./AuthProvider";
+import { useTranslation } from "react-i18next";
 
 const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState<"all" | "vlog" | "blog" | "drafts">("all");
   const [posts, setPosts] = useState<ContentItem[]>([]);
   const [drafts, setDrafts] = useState<ContentItem[]>([]);
@@ -57,11 +59,17 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
     }
   };
 
-  const filteredContent = activeTab === "all"
+  const currentLang = i18n.language.startsWith('tr') ? 'tr' : 'en';
+
+  const typeFiltered = activeTab === "all"
     ? posts
     : activeTab === "drafts"
       ? drafts
       : posts.filter((item) => item.type === activeTab);
+
+  const filteredContent = typeFiltered.filter(
+    (item) => !item.language || item.language === 'both' || item.language === currentLang
+  );
 
   // Layout Logic
   // Homepage (Teaser): Show only FEATURED posts. 1 Hero + Grid (2 cols)
@@ -153,7 +161,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
             {(post.duration || post.readTime) && (
               <span className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />
-                {post.type === "vlog" ? post.duration : post.readTime}
+                {post.type === "vlog" ? post.duration : post.readTime?.replace('min read', t('thoughts.minRead', { count: parseInt(post.readTime) || 0 }).replace('{{count}} ', '')) || post.readTime}
               </span>
             )}
             <span
@@ -162,7 +170,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
                 : "bg-primary/10 text-primary"
                 }`}
             >
-              {post.type === "vlog" ? "📹 Vlog" : "📝 Blog"}
+              {post.type === "vlog" ? `📹 ${t('thoughts.vlogs')}` : `📝 ${t('thoughts.blog')}`}
             </span>
           </div>
 
@@ -175,7 +183,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
 
           {isHero && (
             <div className="mt-4 flex items-center text-primary font-medium text-xs group/link">
-              Read Story <ArrowRight className="w-3 h-3 ml-2 group-hover/link:translate-x-1 transition-transform" />
+              {post.type === "vlog" ? t('thoughts.watchVideo') : t('thoughts.readMore')} <ArrowRight className="w-3 h-3 ml-2 group-hover/link:translate-x-1 transition-transform" />
             </div>
           )}
         </div>
@@ -190,14 +198,14 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
           <div>
             {!isTeaser && (
               <span className="text-primary font-medium text-xs tracking-wider uppercase">
-                Blogs & Vlogs
+                {t('thoughts.subtitle')}
               </span>
             )}
             <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1">
-              Stories & <span className="gradient-text">Adventures</span>
+              {t('thoughts.titlePart1')} <span className="gradient-text">{t('thoughts.titlePart2')}</span>
             </h2>
             <p className={`text-muted-foreground mt-2 max-w-lg ${isTeaser ? "text-sm" : ""}`}>
-              Sharing my Erasmus journey, study abroad tips, and random life musings.
+              {t('thoughts.description')}
             </p>
           </div>
           <a
@@ -207,7 +215,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
             className="inline-flex items-center gap-2 px-4 py-2 bg-[#FF0000]/10 text-[#FF0000] rounded-full text-sm font-medium hover:bg-[#FF0000]/20 transition-colors group"
           >
             <Youtube className="w-4 h-4" />
-            <span>Subscribe on YouTube</span>
+            <span>{t('thoughts.subscribeYoutube')}</span>
             <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
           </a>
         </div>
@@ -219,19 +227,19 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
               onClick={() => setActiveTab("all")}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "all" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
             >
-              All
+              {t('thoughts.all')}
             </button>
             <button
               onClick={() => setActiveTab("blog")}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "blog" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
             >
-              Blogs
+              {t('thoughts.blog')}
             </button>
             <button
               onClick={() => setActiveTab("vlog")}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "vlog" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
             >
-              Vlogs
+              {t('thoughts.vlogs')}
             </button>
             {isAdmin && (
               <button
@@ -279,7 +287,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
               ))}
               {displayedContent.length === 0 && (
                 <div className="col-span-full py-12 text-center text-muted-foreground">
-                  No content found for this category.
+                  {t('thoughts.noContent', { defaultValue: 'No content found for this category.' })}
                 </div>
               )}
             </div>
@@ -316,7 +324,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
               to="/thoughts"
               className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-medium hover:bg-primary/90 transition-colors group"
             >
-              <span>Read More Stories</span>
+              <span>{t('thoughts.readMoreStories')}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>

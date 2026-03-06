@@ -1,13 +1,16 @@
 import { ArrowDown, Sparkles, Heart, Star } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const Hero = () => {
+  const { t, i18n } = useTranslation();
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 200], [0, 100]);
   const opacity = useTransform(scrollY, [0, 200], [1, 0]);
 
   // Typewriter Logic
+  // Phrases depend on language
   const phrases = ["Hey, I'm Rana", "Merhaba, ben Rana", "Hola, soy Rana", "Ciao, sono Rana", "Salut, je suis Rana"];
   const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -80,7 +83,7 @@ const Hero = () => {
       <div className="container mx-auto px-6 text-center relative z-10">
         <div className="flex w-fit items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 mb-8 mx-auto">
           <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-sm text-foreground/70 font-medium">Data Analyst & Content Creator</span>
+          <span className="text-sm text-foreground/70 font-medium">{t('home.role')}</span>
         </div>
 
         <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium mb-6 text-balance leading-tight">
@@ -97,9 +100,8 @@ const Hero = () => {
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
-          MSc graduate in Big Data & Analytics, exploring the world through data,
-          dance, and documenting my Erasmus adventures across Europe.
-          <span className="text-primary font-medium"> Brussels → Barcelona → Padova</span> ✨
+          {t('home.description')} <br />
+          <span className="text-primary">{t('home.journeySummary')}</span>
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -107,13 +109,13 @@ const Hero = () => {
             href="#portfolio"
             className="px-8 py-3.5 bg-primary text-primary-foreground rounded-full font-medium hover:opacity-90 transition-all hover:scale-105 shadow-lg shadow-primary/25"
           >
-            Explore My Work
+            {t('home.viewProjects')}
           </a>
           <a
             href="#thoughts"
             className="px-8 py-3.5 border-2 border-primary/30 text-foreground rounded-full font-medium hover:bg-primary/10 transition-all hover:border-primary/50"
           >
-            Watch My Vlogs
+            {t('home.readThoughts')}
           </a>
         </div>
 
@@ -121,17 +123,17 @@ const Hero = () => {
         <div className="flex items-center justify-center gap-8 mt-16 text-sm text-muted-foreground">
           <div className="text-center">
             <div className="font-serif text-2xl text-foreground font-medium">25+</div>
-            <div>Countries</div>
+            <div>{t('home.countries')}</div>
           </div>
           <div className="w-px h-8 bg-border" />
           <div className="text-center">
             <div className="font-serif text-2xl text-foreground font-medium">3</div>
-            <div>Languages</div>
+            <div>{t('home.languages')}</div>
           </div>
           <div className="w-px h-8 bg-border" />
           <div className="text-center">
             <div className="font-serif text-2xl text-foreground font-medium">∞</div>
-            <div>Curiosity</div>
+            <div>{t('home.curiosity')}</div>
           </div>
         </div>
       </div>
