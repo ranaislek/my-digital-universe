@@ -162,7 +162,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
             {(post.readTime || post.duration) && (
               <span className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />
-                {post.type === "vlog" ? (post.readTime || post.duration) : post.readTime?.replace('min read', t('thoughts.minRead', { count: parseInt(post.readTime) || 0 }).replace('{{count}} ', '')) || post.readTime}
+                {post.type === "vlog" ? (post.readTime || post.duration) : t('thoughts.minRead', { count: parseInt(post.readTime || '0', 10) || 0 })}
               </span>
             )}
             <span

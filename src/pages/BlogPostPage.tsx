@@ -353,7 +353,7 @@ const BlogPostPage = () => {
 
                         {!isEditing ? (
                             <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium mb-6">
-                                {post?.type === "blog" ? "{t('common.admin.blogPost')}" : "{t('common.admin.vlog')}"}
+                                {post?.type === "blog" ? t('common.admin.blogPost') : t('common.admin.vlog')}
                             </span>
                         ) : (
                             <div className="flex flex-col items-center gap-4 mb-6">
@@ -441,7 +441,7 @@ const BlogPostPage = () => {
                                     {(post?.readTime || post?.duration) && (
                                         <span className="flex items-center gap-2">
                                             <Clock className="w-4 h-4" />
-                                            {post?.readTime || post?.duration}
+                                            {post?.type === "vlog" ? (post?.readTime || post?.duration) : t('thoughts.minRead', { count: parseInt(post?.readTime || '0', 10) || 0 })}
                                         </span>
                                     )}
                                 </div>
