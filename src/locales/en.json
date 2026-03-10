@@ -152,7 +152,9 @@
     "readMore": "Read Story",
     "watchVideo": "Watch Video",
     "subscribeYoutube": "Subscribe on YouTube",
-    "readMoreStories": "Read More Stories"
+    "readMoreStories": "Read More Stories",
+    "noContent": "No content found for this category.",
+    "minRead": "{{count}} min read"
   },
   "footer": {
     "minRead": "{{count}} min read"
@@ -161,7 +163,8 @@
     "search": "Search...",
     "loading": "Loading...",
     "notFound": "Page not found",
-    "backToHome": "Back to Home""admin": {
+    "backToHome": "Back to Home",
+    "admin": {
       "title": "Admin Portal",
       "email": "Email",
       "password": "Password",
@@ -227,3 +230,4 @@
       "newPost": "New Post"
     }
   }
+}

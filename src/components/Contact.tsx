@@ -124,29 +124,29 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
   };
 
   return (
-    <section id="contact" className={`relative ${isTeaser ? "min-h-screen flex flex-col justify-center py-20 md:py-24" : "py-16 md:py-24"}`}>
+    <section id="contact" className={`relative ${isTeaser ? "min-h-screen flex flex-col justify-center py-10 md:py-12" : "pb-12"}`}>
       {/* Decorative blobs */}
       <div className="absolute top-1/4 left-0 w-72 h-72 bg-primary/10 blob-shape opacity-50" />
       <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-accent/10 blob-shape-2 opacity-50" />
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className={`max-w-2xl mx-auto text-center ${isTeaser ? "mb-8 lg:mb-12" : "mb-16"}`}>
-          {!isTeaser && (
-            <span className="text-primary font-medium text-xs tracking-wider uppercase">
-              {t('contact.subtitle')}
-            </span>
-          )}
+        <div className={`max-w-2xl mx-auto flex flex-col items-center text-center ${isTeaser ? "mb-8 lg:mb-12" : "mb-16"}`}>
           <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1 mb-3">
             {t('contact.title1')} <span className="gradient-text">{t('contact.title2')}</span>
             <span className="inline-block ml-2">👋</span>
           </h2>
-          <p className="text-muted-foreground text-sm md:text-base mb-2">
+          <p className="text-muted-foreground text-sm md:text-base mb-2 max-w-[500px] text-center text-balance mx-auto">
             {t('contact.description')}
           </p>
           <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
             <MapPin className="w-3 h-3 text-primary" />
             <span>{t('contact.location')}</span>
           </div>
+          {!isTeaser && (
+            <span className="inline-block text-primary font-medium text-xs tracking-wider uppercase mt-6">
+              {t('contact.subtitle')}
+            </span>
+          )}
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-center">

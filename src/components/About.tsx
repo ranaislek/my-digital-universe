@@ -94,12 +94,6 @@ const About = ({ isTeaser = false }: AboutProps) => {
 
 
           <div>
-            {!isTeaser && (
-              <span className="text-primary font-medium text-xs tracking-wider uppercase">
-                {t('about.subtitle')}
-              </span>
-            )}
-
             <h2 className="font-serif text-3xl md:text-5xl font-medium mt-1 mb-6">
               {t('about.title1')}
               <br />
@@ -120,6 +114,12 @@ const About = ({ isTeaser = false }: AboutProps) => {
             <p className="text-muted-foreground text-sm md:text-base leading-relaxed mb-6">
               {t('about.p2')}
             </p>
+
+            {!isTeaser && (
+              <span className="inline-block text-primary font-medium text-xs tracking-wider uppercase mb-8">
+                {t('about.subtitle')}
+              </span>
+            )}
 
             {/* Interest Cards */}
             <div className="grid sm:grid-cols-2 gap-3 mb-6">

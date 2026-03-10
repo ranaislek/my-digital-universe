@@ -35,7 +35,7 @@ interface PortfolioProps {
 }
 
 const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [projects, setProjects] = useState<ContentItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { isAdmin } = useAuth();
@@ -119,10 +119,15 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
       // return p.category?.toLowerCase() === activeTab.toLowerCase();
     }).filter(p => isAdmin || p.status === 'published'); // Ensure only admins see drafts even after filter
 
+  const currentLang = i18n.language.startsWith('tr') ? 'tr' : 'en';
+
   // Helper for normalizing category comparison
   const filterProjects = (tab: string) => {
-    if (tab === "All") return projects;
-    return projects.filter(p => p.category?.toLowerCase().includes(tab.toLowerCase()) || p.category === tab);
+    let filtered = projects.filter(
+      (item) => !item.language || item.language === 'both' || item.language === currentLang
+    );
+    if (tab === "All") return filtered;
+    return filtered.filter(p => p.category?.toLowerCase().includes(tab.toLowerCase()) || p.category === tab);
   };
 
   const finalDisplay = isTeaser ? displayedExperiences : filterProjects(activeTab);
@@ -134,19 +139,18 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
       <div className="absolute inset-0 pop-gradient opacity-50" />
 
       <div className="container mx-auto px-6 md:px-12 lg:px-24 relative z-10">
-        <div className={`text-center max-w-2xl mx-auto ${isTeaser ? "mb-8 lg:mb-12" : "mb-16"}`}>
-          {!isTeaser && (
-            <span className="text-primary font-medium text-xs tracking-wider uppercase">
-              {t('portfolio.subtitle')}
-            </span>
-          )}
-
+        <div className={`text-center max-w-2xl mx-auto ${isTeaser ? "mb-8 lg:mb-12" : "mb-8"}`}>
           <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1 mb-3">
             {t('portfolio.title1')} <span className="gradient-text">{t('portfolio.title2')}</span>
           </h2>
           <p className="text-muted-foreground text-sm md:text-base">
             {t('portfolio.description')}
           </p>
+          {!isTeaser && (
+            <span className="inline-block text-primary font-medium text-xs tracking-wider uppercase mt-4">
+              {t('portfolio.subtitle')}
+            </span>
+          )}
         </div>
 
         {/* Filters & Admin Actions */}
@@ -230,7 +234,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
                           </div>
                           <div>
                             <span className="text-xs font-medium text-primary uppercase tracking-wider">
-                              {project.category}
+                              {t(`portfolio.tabs.${project.category.toLowerCase()}`, { defaultValue: project.category })}
                             </span>
                             <p className="text-xs text-muted-foreground">{project.company}</p>
                           </div>

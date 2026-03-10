@@ -9,7 +9,7 @@ import PageTitle from "@/components/PageTitle";
 
 const Index = () => {
   return (
-    <div id="home-scroll-container" className="w-full bg-background pb-12">
+    <div id="home-scroll-container" className="w-full bg-background">
       <PageTitle title="Home" />
       <div>
         <Hero />

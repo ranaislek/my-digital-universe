@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { useParams, Link, useSearchParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, ExternalLink, Github, LayoutGrid, Award, CheckCircle2, Layers, Calendar, Building, Briefcase, Play, Plus, Trash, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ const ProjectPage = () => {
     const { isAdmin } = useAuth();
 
     // Mode
+    const { t } = useTranslation();
     const isEditing = searchParams.get("edit") === "true";
     const isNew = searchParams.get("new") === "true";
 
@@ -41,12 +43,13 @@ const ProjectPage = () => {
     const [challengesInput, setChallengesInput] = useState("");
     const [featuresInput, setFeaturesInput] = useState("");
     const [tagsInput, setTagsInput] = useState("");
+    const [language, setLanguage] = useState<"en" | "tr" | "both">("both");
 
     // Check if the form is dirty
     const [initialState, setInitialState] = useState({
         title: "", category: "", company: "", date: "", excerpt: "",
         description: "", techStackInput: "", liveLink: "", repoLink: "",
-        challengesInput: "", featuresInput: "", tagsInput: "", screenshotsLength: 0
+        challengesInput: "", featuresInput: "", tagsInput: "", screenshotsLength: 0, language: "both"
     });
 
     const isDirty = isEditing && (
@@ -62,6 +65,7 @@ const ProjectPage = () => {
         challengesInput !== initialState.challengesInput ||
         featuresInput !== initialState.featuresInput ||
         tagsInput !== initialState.tagsInput ||
+        language !== initialState.language ||
         (project?.screenshots?.length || 0) !== initialState.screenshotsLength
     );
 
@@ -105,10 +109,11 @@ const ProjectPage = () => {
                     setChallengesInput("");
                     setFeaturesInput("");
                     setTagsInput("");
+                    setLanguage("both");
                     setInitialState({
                         title: "", category: "", company: "", date: "", excerpt: "",
                         description: "", techStackInput: "", liveLink: "", repoLink: "",
-                        challengesInput: "", featuresInput: "", tagsInput: "", screenshotsLength: 0
+                        challengesInput: "", featuresInput: "", tagsInput: "", screenshotsLength: 0, language: "both"
                     });
                 } else {
                     const { data, error } = await supabase
@@ -144,6 +149,7 @@ const ProjectPage = () => {
                     setChallengesInput(p.challenges?.join("\n") || "");
                     setFeaturesInput(p.features?.join("\n") || "");
                     setTagsInput(p.tags?.join(", ") || "");
+                    setLanguage(p.language || "both");
                     setInitialState({
                         title: p.title,
                         category: p.category || "Work",
@@ -157,7 +163,8 @@ const ProjectPage = () => {
                         challengesInput: p.challenges?.join("\n") || "",
                         featuresInput: p.features?.join("\n") || "",
                         tagsInput: p.tags?.join(", ") || "",
-                        screenshotsLength: p.screenshots?.length || 0
+                        screenshotsLength: p.screenshots?.length || 0,
+                        language: p.language || "both"
                     });
                 }
             } catch (error) {
@@ -206,6 +213,7 @@ const ProjectPage = () => {
                 features: features,
                 tags: tags,
                 screenshots: project?.screenshots || [],
+                language: language,
                 status: status,
                 updated_at: new Date().toISOString()
             };
@@ -252,6 +260,7 @@ const ProjectPage = () => {
                 challengesInput: challengesInput,
                 featuresInput: featuresInput,
                 tagsInput: tagsInput,
+                language: language,
                 screenshotsLength: project?.screenshots?.length || 0
             });
 
@@ -299,7 +308,7 @@ const ProjectPage = () => {
                             <ArrowLeft className="w-5 h-5" />
                         </Link>
                         <span className="text-sm font-medium text-muted-foreground">
-                            {isNew ? "New Experience" : "Editing Experience"}
+                            {isNew ? t('common.admin.newExperience') : t('common.admin.editingExperience')}
                         </span>
                     </div>
                     <div className="flex gap-2">
@@ -308,13 +317,13 @@ const ProjectPage = () => {
                             onClick={() => handleSave("draft")}
                             disabled={isSaving}
                         >
-                            Save Draft
+                            {t('common.admin.saveDraft')}
                         </Button>
                         <Button
                             onClick={() => handleSave("published")}
                             disabled={isSaving}
                         >
-                            {isSaving ? "Saving..." : "Publish Change"}
+                            {isSaving ? t('common.admin.saving') : t('common.admin.publishChange')}
                         </Button>
                     </div>
                 </div>
@@ -333,7 +342,7 @@ const ProjectPage = () => {
                             onClick={() => navigate(`/project/${id}?edit=true`)}
                             className="rounded-full shadow-lg"
                         >
-                            Edit Experience
+                            {t('common.admin.editExperience')}
                         </Button>
                     </div>
                 )}
@@ -345,7 +354,7 @@ const ProjectPage = () => {
                             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8"
                         >
                             <ArrowLeft className="w-4 h-4" />
-                            Back to Portfolio
+                            {t('common.admin.backToPortfolio')}
                         </Link>
                     )}
 
@@ -360,17 +369,26 @@ const ProjectPage = () => {
                                             onChange={(e) => setCategory(e.target.value)}
                                             className="p-2 rounded-md bg-background border border-border"
                                         >
-                                            <option value="" disabled>Select Category</option>
+                                            <option value="" disabled>{t("common.admin.selectCategory")}</option>
                                             <option value="Work">Work</option>
                                             <option value="Project">Project</option>
                                             <option value="Startup">Startup</option>
                                             <option value="Research">Research</option>
                                         </select>
+                                        <select
+                                            value={language}
+                                            onChange={(e) => setLanguage(e.target.value as any)}
+                                            className="p-2 rounded-md bg-background border border-border"
+                                        >
+                                            <option value="both">All Languages / Both</option>
+                                            <option value="en">English (en)</option>
+                                            <option value="tr">Turkish (tr)</option>
+                                        </select>
                                         <input
                                             type="text"
                                             value={company}
                                             onChange={(e) => setCompany(e.target.value)}
-                                            placeholder="Company / Org"
+                                            placeholder={t("common.admin.company")}
                                             className="p-2 rounded-md bg-background border border-border flex-1"
                                         />
                                     </>
@@ -395,7 +413,7 @@ const ProjectPage = () => {
                                     type="text"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    placeholder="Title"
+                                    placeholder={t("common.admin.titlePlaceholder")}
                                     className="w-full font-serif text-4xl md:text-5xl lg:text-6xl font-medium mb-6 bg-transparent border-none outline-none placeholder:opacity-30"
                                 />
                             ) : (
@@ -409,7 +427,7 @@ const ProjectPage = () => {
                                 <textarea
                                     value={excerpt}
                                     onChange={(e) => setExcerpt(e.target.value)}
-                                    placeholder="Short excerpt/summary..."
+                                    placeholder={t("common.admin.shortExcerpt")}
                                     className="w-full text-xl text-muted-foreground bg-transparent border-none outline-none resize-none h-24 placeholder:opacity-30"
                                 />
                             ) : (
@@ -424,7 +442,7 @@ const ProjectPage = () => {
                                     type="text"
                                     value={tagsInput}
                                     onChange={(e) => setTagsInput(e.target.value)}
-                                    placeholder="Tags (comma separated)"
+                                    placeholder={t("common.admin.tagsPlaceholder")}
                                     className="w-full p-2 bg-background border border-border rounded-md mb-8"
                                 />
                             ) : (
@@ -448,14 +466,14 @@ const ProjectPage = () => {
                                             type="text"
                                             value={liveLink}
                                             onChange={(e) => setLiveLink(e.target.value)}
-                                            placeholder="Live Demo URL"
+                                            placeholder={t("common.admin.liveDemo")}
                                             className="flex-1 p-2 border border-border rounded-md"
                                         />
                                         <input
                                             type="text"
                                             value={repoLink}
                                             onChange={(e) => setRepoLink(e.target.value)}
-                                            placeholder="GitHub Repo URL"
+                                            placeholder={t("common.admin.githubRepo")}
                                             className="flex-1 p-2 border border-border rounded-md"
                                         />
                                     </div>
@@ -465,7 +483,7 @@ const ProjectPage = () => {
                                             <Button asChild className="rounded-full">
                                                 <a href={project.projectLinks.demo} target="_blank" rel="noopener noreferrer">
                                                     <ExternalLink className="w-4 h-4 mr-2" />
-                                                    Live Demo
+                                                    {t('common.admin.viewDemo')}
                                                 </a>
                                             </Button>
                                         )}
@@ -473,7 +491,7 @@ const ProjectPage = () => {
                                             <Button asChild variant="outline" className="rounded-full">
                                                 <a href={project.projectLinks.repo} target="_blank" rel="noopener noreferrer">
                                                     <Github className="w-4 h-4 mr-2" />
-                                                    View Code
+                                                    {t('common.admin.viewCode')}
                                                 </a>
                                             </Button>
                                         )}
@@ -487,7 +505,7 @@ const ProjectPage = () => {
                             {/* Date / Time Interval */}
                             <div>
                                 <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
-                                    <Calendar className="w-4 h-4" /> Timeline
+                                    <Calendar className="w-4 h-4" /> {t("common.admin.timeline")}
                                 </h3>
                                 {isEditing ? (
                                     <div className="flex flex-col gap-2">
@@ -495,7 +513,7 @@ const ProjectPage = () => {
                                             type="text"
                                             value={date}
                                             onChange={(e) => setDate(e.target.value)}
-                                            placeholder="e.g. Jan 2023 - Present"
+                                            placeholder={t("common.admin.timelinePlaceholder")}
                                             className="p-2 border border-border rounded-md w-full"
                                         />
                                         <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
@@ -513,7 +531,7 @@ const ProjectPage = () => {
                                                     }
                                                 }}
                                             />
-                                            Current Role
+                                            {t("common.admin.currentRole")}
                                         </label>
                                     </div>
                                 ) : (
@@ -523,13 +541,13 @@ const ProjectPage = () => {
 
                             <div>
                                 <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-2">
-                                    <Layers className="w-4 h-4" /> Tech Stack
+                                    <Layers className="w-4 h-4" /> {t("common.admin.techStack")}
                                 </h3>
                                 {isEditing ? (
                                     <textarea
                                         value={techStackInput}
                                         onChange={(e) => setTechStackInput(e.target.value)}
-                                        placeholder="React, TypeScript, Tailwind..."
+                                        placeholder={t("common.admin.techStackPlaceholder")}
                                         className="w-full p-2 border border-border rounded-md h-24"
                                     />
                                 ) : (
@@ -553,12 +571,12 @@ const ProjectPage = () => {
                     <div className="lg:col-span-2 space-y-12">
                         {/* Overview */}
                         <section>
-                            <h2 className="font-serif text-2xl mb-6">Overview</h2>
+                            <h2 className="font-serif text-2xl mb-6">{t("common.admin.overview")}</h2>
                             {isEditing ? (
                                 <textarea
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    placeholder="Detailed description..."
+                                    placeholder={t("common.admin.detailedDescription")}
                                     className="w-full h-48 p-4 bg-muted/20 border border-border rounded-xl resize-y"
                                 />
                             ) : (
@@ -573,13 +591,13 @@ const ProjectPage = () => {
                             <section>
                                 <h2 className="font-serif text-2xl mb-6 flex items-center gap-2">
                                     <Award className="w-6 h-6 text-primary" />
-                                    Key Challenges
+                                    {t("common.admin.keyChallenges")}
                                 </h2>
                                 {isEditing ? (
                                     <textarea
                                         value={challengesInput}
                                         onChange={(e) => setChallengesInput(e.target.value)}
-                                        placeholder="One challenge per line..."
+                                        placeholder={t("common.admin.challengesPlaceholder")}
                                         className="w-full h-32 p-4 bg-muted/20 border border-border rounded-xl resize-y"
                                     />
                                 ) : (
@@ -600,13 +618,13 @@ const ProjectPage = () => {
                             <section>
                                 <h2 className="font-serif text-2xl mb-6 flex items-center gap-2">
                                     <Layers className="w-6 h-6 text-primary" />
-                                    Key Features
+                                    {t("common.admin.keyFeatures")}
                                 </h2>
                                 {isEditing ? (
                                     <textarea
                                         value={featuresInput}
                                         onChange={(e) => setFeaturesInput(e.target.value)}
-                                        placeholder="One feature per line..."
+                                        placeholder={t("common.admin.featuresPlaceholder")}
                                         className="w-full h-32 p-4 bg-muted/20 border border-border rounded-xl resize-y"
                                     />
                                 ) : (
@@ -644,7 +662,7 @@ const ProjectPage = () => {
                                             />
                                             {/* Fallback Text for Broken Images */}
                                             <div className="hidden group-has-[img[style*='none']]:block absolute inset-0 flex items-center justify-center text-muted-foreground p-4 text-center">
-                                                <span>Image not available</span>
+                                                <span>{t("common.admin.imageNotAvailable")}</span>
                                             </div>
 
                                             {/* Caption Display */}
@@ -675,7 +693,7 @@ const ProjectPage = () => {
                                                             newScreenshots[idx] = shotObj;
                                                             setProject({ ...project, screenshots: newScreenshots });
                                                         }}
-                                                        placeholder="Add a caption..."
+                                                        placeholder={t("common.admin.addCaption")}
                                                         className="w-full bg-white/10 border border-white/20 rounded px-3 py-1.5 text-sm text-white placeholder:text-white/50 focus:outline-none focus:border-primary/50"
                                                     />
                                                     <Button
@@ -688,7 +706,7 @@ const ProjectPage = () => {
                                                             setProject({ ...project, screenshots: newScreenshots });
                                                         }}
                                                     >
-                                                        <Trash className="w-4 h-4 mr-2" /> Remove Image
+                                                        <Trash className="w-4 h-4 mr-2" /> {t("common.admin.removeImage")}
                                                     </Button>
                                                 </div>
                                             )}
@@ -704,7 +722,7 @@ const ProjectPage = () => {
                                                 <div className="p-3 rounded-full bg-primary/10 text-primary mb-3 group-hover:scale-110 transition-transform">
                                                     <Plus className="w-6 h-6" />
                                                 </div>
-                                                <p className="text-sm text-muted-foreground">Click to upload a new image</p>
+                                                <p className="text-sm text-muted-foreground">{t("common.admin.clickToUpload")}</p>
                                             </div>
                                             <input
                                                 type="file"

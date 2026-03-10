@@ -41,12 +41,12 @@ const JourneyTimeline = () => {
 
                         {/* Content Card */}
                         <div className={`w-full md:w-[calc(50%-40px)] pl-16 md:pl-0 ${isEven ? 'md:pr-8' : 'md:pl-8'}`}>
-                            <div className="group relative bg-card/50 hover:bg-card border border-border/50 hover:border-border p-4 rounded-xl transition-all hover:shadow-lg hover:-translate-y-1">
+                            <div className="group relative bg-card/50 hover:bg-card border border-border/50 hover:border-border p-5 md:p-6 rounded-2xl transition-all hover:shadow-lg hover:-translate-y-1">
 
                                 <div className={`flex flex-col sm:flex-row gap-4 items-center ${isEven ? '' : 'sm:flex-row-reverse'}`}>
                                     {/* Image (Optional) */}
                                     {event.image && (
-                                        <div className="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 overflow-hidden rounded-lg">
+                                        <div className="w-28 h-28 sm:w-36 sm:h-36 flex-shrink-0 overflow-hidden rounded-xl">
                                             <img
                                                 src={event.image}
                                                 alt={event.title}
@@ -64,7 +64,7 @@ const JourneyTimeline = () => {
                                             <span>{t(`journey.events.${event.id}.type`, { defaultValue: event.type })}</span>
                                         </div>
 
-                                        <h3 className="font-serif text-lg font-bold leading-tight">
+                                        <h3 className="font-serif text-xl md:text-2xl font-bold leading-tight">
                                             {t(`journey.events.${event.id}.title`, { defaultValue: event.title })}
                                         </h3>
 
@@ -73,7 +73,7 @@ const JourneyTimeline = () => {
                                             {t(`journey.events.${event.id}.location`, { defaultValue: event.location })}
                                         </div>
 
-                                        <p className="text-muted-foreground mt-2 text-sm leading-relaxed line-clamp-3">
+                                        <p className="text-muted-foreground mt-3 text-sm md:text-base leading-relaxed line-clamp-4">
                                             {t(`journey.events.${event.id}.description`, { defaultValue: event.description })}
                                         </p>
                                     </div>

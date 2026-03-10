@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import { useParams, Link, useSearchParams, useNavigate } from "react-router-dom";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import { ArrowLeft, Calendar, Clock, Share2, ExternalLink, Edit } from "lucide-react";
@@ -18,6 +19,7 @@ const BlogPostPage = () => {
     const id = slug; // Alias for compatibility
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const isEditing = searchParams.get("edit") === "true";
     const isNew = searchParams.get("new") === "true";
     const { isAdmin } = useAuth(); // Check for admin status
@@ -238,9 +240,9 @@ const BlogPostPage = () => {
     if (!post && !isNew) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center">
-                <h1 className="text-2xl font-serif mb-4">Post not found</h1>
+                <h1 className="text-2xl font-serif mb-4">{t("common.admin.postNotFound")}</h1>
                 <Link to="/thoughts" className="text-primary hover:underline">
-                    Back to all posts
+                    {t("common.admin.backToAll")}
                 </Link>
             </div>
         );
@@ -271,7 +273,7 @@ const BlogPostPage = () => {
                         </Link>
                         <div className="flex flex-col">
                             <span className="text-sm font-medium text-muted-foreground">
-                                {isNew ? "New Story" : "Editing"}
+                                {isNew ? t('common.admin.newStory') : t('common.admin.editing')}
                             </span>
                         </div>
                     </div>
@@ -288,7 +290,7 @@ const BlogPostPage = () => {
                             disabled={isSaving || isUploading}
                             className="px-6 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
                         >
-                            {isSaving ? "Publishing..." : "Publish"}
+                            {isSaving ? t('common.admin.publishing') : t('common.admin.publish')}
                         </button>
                     </div>
                 </div>
@@ -314,7 +316,7 @@ const BlogPostPage = () => {
                             onClick={() => navigate(`/blog/${post.id}?edit=true`)}
                             className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium shadow-lg hover:bg-primary/90 transition-all"
                         >
-                            <Edit className="w-4 h-4" /> Edit Post
+                            <Edit className="w-4 h-4" /> {t("common.admin.editPost")}
                         </button>
                     </div>
                 )}
@@ -326,7 +328,7 @@ const BlogPostPage = () => {
                             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8"
                         >
                             <ArrowLeft className="w-4 h-4" />
-                            Back to Stories
+                            {t("common.admin.backToStories")}
                         </Link>
                     )}
 
@@ -335,14 +337,14 @@ const BlogPostPage = () => {
                         {!isEditing && post?.status === 'draft' && (
                             <div className="mb-6">
                                 <span className="px-3 py-1 bg-orange-500 text-white rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
-                                    Draft Preview
+                                    {t("common.admin.draftPreview")}
                                 </span>
                             </div>
                         )}
 
                         {!isEditing ? (
                             <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium mb-6">
-                                {post?.type === "blog" ? "📝 Blog Post" : "📹 Vlog"}
+                                {post?.type === "blog" ? "{t('common.admin.blogPost')}" : "{t('common.admin.vlog')}"}
                             </span>
                         ) : (
                             <div className="flex flex-col items-center gap-4 mb-6">
@@ -361,14 +363,14 @@ const BlogPostPage = () => {
                                     </button>
                                 </div>
                                 <div className="flex gap-2 items-center">
-                                    <span className="text-sm font-medium text-muted-foreground mr-2">Language:</span>
+                                    <span className="text-sm font-medium text-muted-foreground mr-2">{t("common.admin.language")}</span>
                                     {['both', 'en', 'tr'].map(lang => (
                                         <button
                                             key={lang}
                                             onClick={() => setPost(p => ({ ...p!, language: lang as any }))}
                                             className={`px-3 py-1 rounded-md text-xs font-medium border ${post?.language === lang ? 'bg-primary text-primary-foreground' : 'bg-muted border-input hover:bg-muted/80'}`}
                                         >
-                                            {lang === 'both' ? 'Both' : lang.toUpperCase()}
+                                            {lang === 'both' ? t('common.admin.both') : lang.toUpperCase()}
                                         </button>
                                     ))}
                                 </div>
@@ -380,7 +382,7 @@ const BlogPostPage = () => {
                                 type="text"
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                                placeholder="Untitled Story"
+                                placeholder={t("common.admin.untitledStory")}
                                 className="w-full text-center font-serif text-4xl md:text-5xl lg:text-6xl font-medium mb-6 bg-transparent border-none outline-none placeholder:text-muted-foreground/30"
                             />
                         ) : (
@@ -395,7 +397,7 @@ const BlogPostPage = () => {
                                 type="text"
                                 value={post.link || ''}
                                 onChange={(e) => setPost(p => ({ ...p!, link: e.target.value }))}
-                                placeholder="YouTube Video URL (e.g. https://youtu.be/...)"
+                                placeholder={t("common.admin.youtubeUrl")}
                                 className="w-full text-center text-red-400 bg-red-500/10 border-none outline-none rounded-lg p-2 mb-6 placeholder:text-red-300/50"
                             />
                         )}
@@ -404,7 +406,7 @@ const BlogPostPage = () => {
                             <textarea
                                 value={excerpt}
                                 onChange={(e) => setExcerpt(e.target.value)}
-                                placeholder="Write a short summary..."
+                                placeholder={t("common.admin.writeSummary")}
                                 className="w-full text-center text-xl text-muted-foreground bg-transparent border-none outline-none resize-none h-24 placeholder:text-muted-foreground/30"
                             />
                         )}
@@ -425,7 +427,7 @@ const BlogPostPage = () => {
                                 </div>
                                 {post?.type === 'vlog' && post.link && (
                                     <a href={post.link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-[#FF0000] text-white rounded-full hover:bg-[#FF0000]/90 transition-all shadow-lg hover:scale-105">
-                                        <span>Watch on YouTube</span>
+                                        <span>{t("common.admin.watchYoutube")}</span>
                                         <ExternalLink className="w-4 h-4" />
                                     </a>
                                 )}
@@ -448,7 +450,7 @@ const BlogPostPage = () => {
                                     className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 text-white font-medium gap-2"
                                 >
                                     <div className="bg-background/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 hover:bg-background/40 transition-colors">
-                                        {isUploading ? "Uploading..." : (thumbnail || post?.thumbnail ? "Change Cover Image" : "Add Cover Image")}
+                                        {isUploading ? t("common.admin.saving") : (thumbnail || post?.thumbnail ? t("common.admin.changeCover") : t("common.admin.addCoverUrl"))}
                                     </div>
                                 </button>
                             )}
@@ -456,7 +458,7 @@ const BlogPostPage = () => {
                             {(thumbnail || post?.thumbnail) ? (
                                 <img src={thumbnail || post?.thumbnail} alt={title} className="w-full object-cover min-h-[300px] bg-muted" />
                             ) : (
-                                isEditing && <span className="text-muted-foreground">Add a Cover Photo</span>
+                                isEditing && <span className="text-muted-foreground">{t("common.admin.addCover")}</span>
                             )}
                         </div>
                     )}
@@ -474,7 +476,7 @@ const BlogPostPage = () => {
 
                     {!isEditing && (
                         <div className="mt-12 pt-8 border-t border-border flex justify-between items-center">
-                            <span className="font-serif italic">Thanks for reading!</span>
+                            <span className="font-serif italic">{t("common.admin.thanksReading")}</span>
                             <button
                                 onClick={handleShare}
                                 className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"

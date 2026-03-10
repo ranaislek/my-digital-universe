@@ -170,7 +170,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
                 : "bg-primary/10 text-primary"
                 }`}
             >
-              {post.type === "vlog" ? `📹 ${t('thoughts.vlogs')}` : `📝 ${t('thoughts.blog')}`}
+              {post.type === "vlog" ? `📹 ${t('thoughts.vlogs')}` : `📝 ${t('thoughts.blogs')}`}
             </span>
           </div>
 
@@ -194,19 +194,19 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
   return (
     <section id="thoughts" className={`relative ${isTeaser ? "min-h-screen flex flex-col justify-center py-20 md:py-24" : "pb-12"}`}>
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
-        <div className={`flex flex-col md:flex-row md:items-end md:justify-between gap-4 ${isTeaser ? "mb-8" : "mb-16"}`}>
+        <div className={`flex flex-col md:flex-row md:items-end md:justify-between gap-4 ${isTeaser ? "mb-8" : "mb-8"}`}>
           <div>
-            {!isTeaser && (
-              <span className="text-primary font-medium text-xs tracking-wider uppercase">
-                {t('thoughts.subtitle')}
-              </span>
-            )}
             <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1">
               {t('thoughts.titlePart1')} <span className="gradient-text">{t('thoughts.titlePart2')}</span>
             </h2>
             <p className={`text-muted-foreground mt-2 max-w-lg ${isTeaser ? "text-sm" : ""}`}>
               {t('thoughts.description')}
             </p>
+            {!isTeaser && (
+              <span className="inline-block text-primary font-medium text-xs tracking-wider uppercase mt-4">
+                {t('thoughts.subtitle')}
+              </span>
+            )}
           </div>
           <a
             href="https://www.youtube.com/@ranaislek"
@@ -233,7 +233,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
               onClick={() => setActiveTab("blog")}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === "blog" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
             >
-              {t('thoughts.blog')}
+              {t('thoughts.blogs')}
             </button>
             <button
               onClick={() => setActiveTab("vlog")}
