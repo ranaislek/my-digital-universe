@@ -370,20 +370,20 @@ const ProjectPage = () => {
                                             className="p-2 rounded-md bg-background border border-border"
                                         >
                                             <option value="" disabled>{t("common.admin.selectCategory")}</option>
-                                            <option value="Work">Work</option>
-                                            <option value="Project">Project</option>
-                                            <option value="Startup">Startup</option>
-                                            <option value="Research">Research</option>
-                                            <option value="Extracurricular">Extracurricular</option>
+                                            <option value="Work">{t("portfolio.tabs.work")}</option>
+                                            <option value="Project">{t("portfolio.tabs.project")}</option>
+                                            <option value="Startup">{t("portfolio.tabs.startup")}</option>
+                                            <option value="Research">{t("portfolio.tabs.research")}</option>
+                                            <option value="Extracurricular">{t("portfolio.tabs.extracurricular")}</option>
                                         </select>
                                         <select
                                             value={language}
                                             onChange={(e) => setLanguage(e.target.value as any)}
                                             className="p-2 rounded-md bg-background border border-border"
                                         >
-                                            <option value="both">All Languages / Both</option>
-                                            <option value="en">English (en)</option>
-                                            <option value="tr">Turkish (tr)</option>
+                                            <option value="both">{t("common.admin.allLanguagesBoth")}</option>
+                                            <option value="en">{t("common.admin.english")}</option>
+                                            <option value="tr">{t("common.admin.turkish")}</option>
                                         </select>
                                         <input
                                             type="text"

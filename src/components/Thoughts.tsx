@@ -6,6 +6,7 @@ import { ContentItem } from "../data/content";
 import PostControls from "./admin/PostControls";
 import { useAuth } from "./AuthProvider";
 import { useTranslation } from "react-i18next";
+import { formatDate } from "@/utils/dateUtils";
 
 const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
   const { t, i18n } = useTranslation();
@@ -36,9 +37,10 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
         readTime: post.read_time
       }));
 
-      // Sort by PINNED (Hero preference), then DATE (Event Date) - Newest First
-      // Sort by DATE only - Newest First
+      // Sort by PINNED first, then DATE - Newest First
       allPosts.sort((a, b) => {
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
         return dateB.getTime() - dateA.getTime();
@@ -75,13 +77,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
   // Homepage (Teaser): Show only FEATURED posts. 1 Hero + Grid (2 cols)
   // Blog Page: Show ALL posts. Grid (3 cols)
   const displayedContent = isTeaser
-    ? filteredContent
-      .filter(p => p.featured || p.pinned)
-      .sort((a, b) => {
-        if (a.pinned && !b.pinned) return -1;
-        if (!a.pinned && b.pinned) return 1;
-        return 0; // Already sorted by date in fetchPosts
-      })
+    ? filteredContent.filter(p => p.featured || p.pinned)
     : filteredContent;
 
   if (isLoading) {
@@ -157,7 +153,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
           <div className="flex items-center gap-3 text-[10px] text-muted-foreground mb-2">
             <span className="flex items-center gap-1">
               <Calendar className="w-3 h-3" />
-              {post.date}
+              {formatDate(post.date, i18n.language)}
             </span>
             {(post.readTime || post.duration) && (
               <span className="flex items-center gap-1">
@@ -259,7 +255,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
                 }}
                 className="px-4 py-2 rounded-full text-sm font-medium bg-green-500/10 text-green-500 hover:bg-green-500/20 transition-colors flex items-center gap-2 ml-auto"
               >
-                <PlusCircle className="w-4 h-4" /> New Post
+                <PlusCircle className="w-4 h-4" /> {t('common.admin.newPost')}
               </button>
             )}
           </div>

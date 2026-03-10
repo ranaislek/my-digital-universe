@@ -13,13 +13,14 @@ import BackgroundElements from "@/components/BackgroundElements";
 import { useRef, useMemo } from "react";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 import { UnsavedChangesDialog } from "@/components/admin/UnsavedChangesDialog";
+import { formatDate } from "@/utils/dateUtils";
 
 const BlogPostPage = () => {
     const { slug } = useParams();
     const id = slug; // Alias for compatibility
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const isEditing = searchParams.get("edit") === "true";
     const isNew = searchParams.get("new") === "true";
     const { isAdmin } = useAuth(); // Check for admin status
@@ -36,15 +37,17 @@ const BlogPostPage = () => {
     const [content, setContent] = useState("");
     const [thumbnail, setThumbnail] = useState("");
     const [readTime, setReadTime] = useState("");
+    const [date, setDate] = useState("");
 
-    const [initialState, setInitialState] = useState({ title: "", excerpt: "", content: "", thumbnail: "", link: "", readTime: "" });
+    const [initialState, setInitialState] = useState({ title: "", excerpt: "", content: "", thumbnail: "", link: "", readTime: "", date: "" });
     const isDirty = isEditing && (
         title !== initialState.title ||
         excerpt !== initialState.excerpt ||
         content !== initialState.content ||
         thumbnail !== initialState.thumbnail ||
         (post?.link || "") !== initialState.link ||
-        readTime !== initialState.readTime
+        readTime !== initialState.readTime ||
+        date !== initialState.date
     );
 
     useEffect(() => {
@@ -81,7 +84,8 @@ const BlogPostPage = () => {
             setContent("");
             setThumbnail("");
             setReadTime("");
-            setInitialState({ title: "", excerpt: "", content: "", thumbnail: "", link: "", readTime: "" });
+            setDate(newPost.date);
+            setInitialState({ title: "", excerpt: "", content: "", thumbnail: "", link: "", readTime: "", date: newPost.date });
             setIsLoading(false);
         } else {
             fetchPost(id);
@@ -110,13 +114,15 @@ const BlogPostPage = () => {
                 setContent(mappedPost.content || "");
                 setThumbnail(mappedPost.thumbnail || "");
                 setReadTime(mappedPost.readTime || "");
+                setDate(mappedPost.date || "");
                 setInitialState({
                     title: mappedPost.title,
                     excerpt: mappedPost.excerpt || "",
                     content: mappedPost.content || "",
                     thumbnail: mappedPost.thumbnail || "",
                     link: mappedPost.link || "",
-                    readTime: mappedPost.readTime || ""
+                    readTime: mappedPost.readTime || "",
+                    date: mappedPost.date || ""
                 });
             }
         } catch (error: any) {
@@ -143,7 +149,7 @@ const BlogPostPage = () => {
                 content: content,
                 thumbnail: thumbnail,
                 link: post?.link || null, // VLOG LINK
-                date: post?.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+                date: date.trim() || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
                 status: status,
                 language: post?.language || "both",
                 read_time: readTime.trim() || `${Math.max(1, Math.ceil(content.split(" ").length / 200))} min read`
@@ -175,7 +181,8 @@ const BlogPostPage = () => {
                 content: content,
                 thumbnail: thumbnail,
                 link: post?.link || "",
-                readTime: dbPayload.read_time
+                readTime: dbPayload.read_time,
+                date: dbPayload.date
             });
 
             // Update form display if it was empty (optional, keeping it empty allows further editing without deleting default)
@@ -411,15 +418,24 @@ const BlogPostPage = () => {
                             />
                         )}
 
-                        {/* Custom Duration / Read Time Input */}
+                        {/* Custom Duration / Read Time Input & Date */}
                         {isEditing && (
-                            <input
-                                type="text"
-                                value={readTime}
-                                onChange={(e) => setReadTime(e.target.value)}
-                                placeholder={post?.type === 'vlog' ? "Duration (e.g., 12:45)" : "Read Time Override (e.g., 5 min read)"}
-                                className="w-1/2 mx-auto block text-center text-sm text-muted-foreground bg-muted/50 border-none outline-none rounded-lg p-2 mb-6 placeholder:text-muted-foreground/40"
-                            />
+                            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-6">
+                                <input
+                                    type="text"
+                                    value={readTime}
+                                    onChange={(e) => setReadTime(e.target.value)}
+                                    placeholder={post?.type === 'vlog' ? "Duration (e.g., 12:45)" : "Read Time (e.g., 5)"}
+                                    className="w-full sm:w-1/3 text-center text-sm text-muted-foreground bg-muted/50 border-none outline-none rounded-lg p-2 placeholder:text-muted-foreground/40"
+                                />
+                                <input
+                                    type="text"
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                    placeholder="Date (YYYY-MM-DD or Month DD, YYYY)"
+                                    className="w-full sm:w-1/3 text-center text-sm text-muted-foreground bg-muted/50 border-none outline-none rounded-lg p-2 placeholder:text-muted-foreground/40"
+                                />
+                            </div>
                         )}
 
                         {isEditing && (
@@ -436,7 +452,7 @@ const BlogPostPage = () => {
                                 <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
                                     <span className="flex items-center gap-2">
                                         <Calendar className="w-4 h-4" />
-                                        {post?.date}
+                                        {formatDate(post?.date, i18n.language)}
                                     </span>
                                     {(post?.readTime || post?.duration) && (
                                         <span className="flex items-center gap-2">

@@ -7,6 +7,7 @@ import { ContentItem } from "../data/content";
 import PostControls from "./admin/PostControls";
 import { useAuth } from "./AuthProvider";
 import { useTranslation } from "react-i18next";
+import { formatDate } from "@/utils/dateUtils";
 
 const iconMap: Record<string, LucideIcon> = {
   "Briefcase": Briefcase,
@@ -75,23 +76,35 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
       // Sort by DATE only - Newest First
       mappedProjects.sort((a, b) => {
         // Parse date string (e.g., "Oct 2025 – Present" or "Jun 2022")
-        const parseDate = (dateStr: string) => {
-          if (!dateStr) return new Date(0).getTime();
-          // Split by en-dash or hyphen to get end date
-          const parts = dateStr.split(/[–-]/);
-          const endDate = parts[parts.length - 1].trim();
+        const parseDateDetails = (dateStr: string) => {
+          if (!dateStr) return { end: 0, start: 0, isPresent: false };
 
-          if (endDate.toLowerCase().includes('present')) {
-            return new Date().getTime(); // Present is always newest
-          }
-          const parsed = new Date(endDate).getTime();
-          return isNaN(parsed) ? 0 : parsed;
+          const parts = dateStr.split(/[–-]/);
+          const startDateStr = parts[0].trim();
+          const endDateStr = parts[parts.length - 1].trim();
+
+          const isPresent = (endDateStr.toLowerCase().includes('present') || endDateStr.toLowerCase().includes('günümüz'));
+
+          const start = new Date(startDateStr).getTime() || 0;
+          const end = isPresent ? new Date().getTime() : (new Date(endDateStr).getTime() || 0);
+
+          return { start, end, isPresent };
         };
 
-        const timeA = parseDate(a.date);
-        const timeB = parseDate(b.date);
+        const aDetails = parseDateDetails(a.date);
+        const bDetails = parseDateDetails(b.date);
 
-        return timeB - timeA;
+        // If both are present, the one that started LATER (more recently newest) goes first
+        if (aDetails.isPresent && bDetails.isPresent) {
+          return bDetails.start - aDetails.start;
+        }
+
+        // If one is present, it goes first
+        if (aDetails.isPresent && !bDetails.isPresent) return -1;
+        if (!aDetails.isPresent && bDetails.isPresent) return 1;
+
+        // Otherwise sort by end date normally
+        return bDetails.end - aDetails.end;
       });
 
       setProjects(mappedProjects);
@@ -178,7 +191,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
                 }}
                 className="px-4 py-2 rounded-full text-sm font-medium bg-green-500/10 text-green-500 hover:bg-green-500/20 transition-colors flex items-center gap-2 ml-4"
               >
-                <PlusCircle className="w-4 h-4" /> New Experience
+                <PlusCircle className="w-4 h-4" /> {t('common.admin.newExperience')}
               </button>
             )}
           </div>
@@ -247,10 +260,9 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
                       </h3>
                       <p className={`text-muted-foreground mb-3 ${isHero ? 'text-sm line-clamp-2' : 'text-xs line-clamp-2'}`}>{project.excerpt}</p>
 
-                      {/* Date / Time Interval */}
                       <div className="text-xs text-muted-foreground mb-3 flex items-center gap-2">
                         <span className="bg-muted px-2 py-0.5 rounded-sm">
-                          {project.date}
+                          {formatDate(project.date, i18n.language)}
                         </span>
                       </div>
 

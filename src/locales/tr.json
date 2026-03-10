@@ -56,10 +56,10 @@
     },
     "contact": {
         "subtitle": "İletişime Geçelim",
-        "title1": "Merhaba",
-        "title2": "De!",
+        "title1": "Merhaba,",
+        "title2": "n'aber!",
         "description": "İster veri, ister Erasmus tavsiyesi, ister dans hakkında olsun; ya da sadece sohbet etmek için — senden haber almayı çok isterim!",
-        "location": "Şu an İstanbul, Türkiye'deyim",
+        "location": "İstanbul, Türkiye",
         "getInTouch": "Bana Ulaşın",
         "directContact": "Doğrudan İletişim",
         "form": {
@@ -190,6 +190,9 @@
             "vlog": "📹 Vlog",
             "language": "Dil",
             "both": "İkisi de",
+            "allLanguagesBoth": "Tüm Diller / İkisi de",
+            "english": "İngilizce (en)",
+            "turkish": "Türkçe (tr)",
             "untitledStory": "Başlıksız Hikaye",
             "youtubeUrl": "YouTube Video URL'si (örn. https://youtu.be/...)",
             "writeSummary": "Kısa bir özet yazın...",
