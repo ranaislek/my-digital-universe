@@ -347,7 +347,7 @@ const ProjectPage = () => {
                     </div>
                 )}
 
-                <div className="container mx-auto px-6 py-12 md:py-20">
+                <div className="container mx-auto px-6 py-12 md:py-20 max-w-6xl">
                     {!isEditing && (
                         <Link
                             to="/portfolio"
@@ -358,8 +358,8 @@ const ProjectPage = () => {
                         </Link>
                     )}
 
-                    <div className="grid lg:grid-cols-3 gap-12 items-start">
-                        <div className="lg:col-span-2">
+                    <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
+                        <div className="flex-1 lg:max-w-3xl">
                             {/* Category & Company */}
                             <div className="flex flex-wrap items-center gap-4 mb-6">
                                 {isEditing ? (
@@ -374,6 +374,7 @@ const ProjectPage = () => {
                                             <option value="Project">Project</option>
                                             <option value="Startup">Startup</option>
                                             <option value="Research">Research</option>
+                                            <option value="Extracurricular">Extracurricular</option>
                                         </select>
                                         <select
                                             value={language}
@@ -501,7 +502,7 @@ const ProjectPage = () => {
                         </div>
 
                         {/* Sidebar Info */}
-                        <div className="bg-card border border-border rounded-3xl p-6 lg:p-8 space-y-8">
+                        <div className="bg-card border border-border rounded-3xl p-6 lg:p-8 space-y-8 w-full lg:w-[350px] xl:w-[400px] flex-shrink-0">
                             {/* Date / Time Interval */}
                             <div>
                                 <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
@@ -566,9 +567,9 @@ const ProjectPage = () => {
             </div>
 
             {/* Main Content */}
-            <div className="container mx-auto px-6 py-12 md:py-20">
-                <div className="grid lg:grid-cols-3 gap-12">
-                    <div className="lg:col-span-2 space-y-12">
+            <div className="container mx-auto px-6 py-12 md:py-20 max-w-6xl">
+                <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
+                    <div className="flex-1 lg:max-w-3xl space-y-12">
                         {/* Overview */}
                         <section>
                             <h2 className="font-serif text-2xl mb-6">{t("common.admin.overview")}</h2>

@@ -156,7 +156,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
         {/* Filters & Admin Actions */}
         {!isTeaser && (
           <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
-            {["All", "Work", "Project", "Startup", "Research"].map((tab) => (
+            {["All", "Work", "Project", "Startup", "Research", "Extracurricular"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab as any)}
