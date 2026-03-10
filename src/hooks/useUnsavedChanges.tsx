@@ -15,7 +15,7 @@ export function useUnsavedChanges(isDirty: boolean, message = "You have unsaved 
     // useBlocker intercepts navigation events within the SPA.
     const blocker = useBlocker(
         ({ currentLocation, nextLocation }) =>
-            isDirty && currentLocation.pathname !== nextLocation.pathname
+            isDirty && (currentLocation.pathname !== nextLocation.pathname || currentLocation.search !== nextLocation.search)
     );
 
     // 2. Block Native Browser Navigation (Reloads, Tab Closes)

@@ -90,7 +90,8 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
 
   // Helper to render a post card
   const PostCard = ({ post, isDraft = false, isHero = false }: { post: ContentItem, isDraft?: boolean, isHero?: boolean }) => {
-    const isExternal = post.type === "vlog";
+    const hasContent = post.content && post.content.trim().length > 0;
+    const isExternal = post.type === "vlog" && !hasContent;
     const href = (isExternal && !isDraft) ? post.link : `/blog/${post.id}`;
     const Component = (isExternal && !isDraft) ? "a" : Link;
     const props = (isExternal && !isDraft)
@@ -158,10 +159,10 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
               <Calendar className="w-3 h-3" />
               {post.date}
             </span>
-            {(post.duration || post.readTime) && (
+            {(post.readTime || post.duration) && (
               <span className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />
-                {post.type === "vlog" ? post.duration : post.readTime?.replace('min read', t('thoughts.minRead', { count: parseInt(post.readTime) || 0 }).replace('{{count}} ', '')) || post.readTime}
+                {post.type === "vlog" ? (post.readTime || post.duration) : post.readTime?.replace('min read', t('thoughts.minRead', { count: parseInt(post.readTime) || 0 }).replace('{{count}} ', '')) || post.readTime}
               </span>
             )}
             <span

@@ -35,16 +35,21 @@ const BlogPostPage = () => {
     const [excerpt, setExcerpt] = useState("");
     const [content, setContent] = useState("");
     const [thumbnail, setThumbnail] = useState("");
+    const [readTime, setReadTime] = useState("");
 
-    // Check if the form is dirty
-    const [initialState, setInitialState] = useState({ title: "", excerpt: "", content: "", thumbnail: "", link: "" });
+    const [initialState, setInitialState] = useState({ title: "", excerpt: "", content: "", thumbnail: "", link: "", readTime: "" });
     const isDirty = isEditing && (
         title !== initialState.title ||
         excerpt !== initialState.excerpt ||
         content !== initialState.content ||
         thumbnail !== initialState.thumbnail ||
-        (post?.link || "") !== initialState.link
+        (post?.link || "") !== initialState.link ||
+        readTime !== initialState.readTime
     );
+
+    useEffect(() => {
+        console.log("isDirty:", isDirty, "isEditing:", isEditing, { title, init: initialState.title, readTime, initReadTime: initialState.readTime });
+    }, [isDirty, isEditing, title, initialState, readTime]);
 
     const { showDialog, proceed, cancel } = useUnsavedChanges(isDirty);
 
@@ -75,7 +80,8 @@ const BlogPostPage = () => {
             setExcerpt("");
             setContent("");
             setThumbnail("");
-            setInitialState({ title: "", excerpt: "", content: "", thumbnail: "", link: "" });
+            setReadTime("");
+            setInitialState({ title: "", excerpt: "", content: "", thumbnail: "", link: "", readTime: "" });
             setIsLoading(false);
         } else {
             fetchPost(id);
@@ -103,12 +109,14 @@ const BlogPostPage = () => {
                 setExcerpt(mappedPost.excerpt || "");
                 setContent(mappedPost.content || "");
                 setThumbnail(mappedPost.thumbnail || "");
+                setReadTime(mappedPost.readTime || "");
                 setInitialState({
                     title: mappedPost.title,
                     excerpt: mappedPost.excerpt || "",
                     content: mappedPost.content || "",
                     thumbnail: mappedPost.thumbnail || "",
-                    link: mappedPost.link || ""
+                    link: mappedPost.link || "",
+                    readTime: mappedPost.readTime || ""
                 });
             }
         } catch (error: any) {
@@ -138,7 +146,7 @@ const BlogPostPage = () => {
                 date: post?.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
                 status: status,
                 language: post?.language || "both",
-                read_time: `${Math.max(1, Math.ceil(content.split(" ").length / 200))} min read`
+                read_time: readTime.trim() || `${Math.max(1, Math.ceil(content.split(" ").length / 200))} min read`
             };
 
             const { error } = await supabase
@@ -166,7 +174,8 @@ const BlogPostPage = () => {
                 excerpt: finalExcerpt,
                 content: content,
                 thumbnail: thumbnail,
-                link: post?.link || ""
+                link: post?.link || "",
+                readTime: dbPayload.read_time
             });
 
             // Update form display if it was empty (optional, keeping it empty allows further editing without deleting default)
@@ -398,7 +407,18 @@ const BlogPostPage = () => {
                                 value={post.link || ''}
                                 onChange={(e) => setPost(p => ({ ...p!, link: e.target.value }))}
                                 placeholder={t("common.admin.youtubeUrl")}
-                                className="w-full text-center text-red-400 bg-red-500/10 border-none outline-none rounded-lg p-2 mb-6 placeholder:text-red-300/50"
+                                className="w-full text-center text-red-400 bg-red-500/10 border-none outline-none rounded-lg p-2 mb-4 placeholder:text-red-300/50"
+                            />
+                        )}
+
+                        {/* Custom Duration / Read Time Input */}
+                        {isEditing && (
+                            <input
+                                type="text"
+                                value={readTime}
+                                onChange={(e) => setReadTime(e.target.value)}
+                                placeholder={post?.type === 'vlog' ? "Duration (e.g., 12:45)" : "Read Time Override (e.g., 5 min read)"}
+                                className="w-1/2 mx-auto block text-center text-sm text-muted-foreground bg-muted/50 border-none outline-none rounded-lg p-2 mb-6 placeholder:text-muted-foreground/40"
                             />
                         )}
 
