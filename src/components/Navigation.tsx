@@ -54,7 +54,7 @@ const Navigation = () => {
             className="flex items-center gap-2 group"
             onClick={handleScrollTop}
           >
-            <img src="/rana-frog-logo.png" alt="Rana" className="h-14 md:h-16 w-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert" />
+            <img src="/rana-frog-logo.png" alt="Rana" className="h-14 md:h-16 w-auto object-contain mix-blend-multiply" />
           </Link>
 
           <div className="flex items-center gap-4 md:gap-8">
