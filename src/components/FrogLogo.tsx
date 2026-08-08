@@ -17,11 +17,11 @@ export const FrogLogo: React.FC<FrogLogoProps> = ({
       <img
         src={logoSrc}
         alt="Rana Frog"
-        className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3 drop-shadow-sm"
+        className="h-13 md:h-16 max-h-[58px] w-auto object-contain transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3 drop-shadow-md"
       />
 
       {/* Elegant Typography: "rana." */}
-      <span className="font-serif font-bold tracking-tight text-foreground text-2xl md:text-3xl transition-colors group-hover:text-primary">
+      <span className="font-serif font-bold tracking-tight text-foreground text-2xl md:text-3.5xl transition-colors group-hover:text-primary">
         rana<span className="text-primary font-sans font-bold">.</span>
       </span>
     </div>
