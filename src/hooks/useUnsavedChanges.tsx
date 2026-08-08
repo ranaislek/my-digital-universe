@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { useBlocker } from 'react-router-dom';
 
 /**
@@ -6,39 +6,57 @@ import { useBlocker } from 'react-router-dom';
  * It intercepts both React Router navigation and native browser navigation/tab closing.
  *
  * @param isDirty boolean indicating if the form has unsaved changes
- * @param message Alternative message to show (note: modern browsers ignore custom messages for window.onbeforeunload)
- * @returns Object containing the blocker state and functions to proceed or cancel
+ * @param message Alternative message to show
+ * @returns Object containing the blocker state, proceed, cancel, and bypass functions
  */
 export function useUnsavedChanges(isDirty: boolean, message = "You have unsaved changes. Are you sure you want to leave?") {
+    const isDirtyRef = useRef(isDirty);
+    const isBypassedRef = useRef(false);
+
+    useEffect(() => {
+        isDirtyRef.current = isDirty;
+        if (!isDirty) {
+            isBypassedRef.current = false;
+        }
+    }, [isDirty]);
 
     // 1. Block React Router Navigation (Client-Side Routing)
-    // useBlocker intercepts navigation events within the SPA.
     const blocker = useBlocker(
-        ({ currentLocation, nextLocation }) =>
-            isDirty && (currentLocation.pathname !== nextLocation.pathname || currentLocation.search !== nextLocation.search)
+        useCallback(({ currentLocation, nextLocation }) => {
+            if (isBypassedRef.current) {
+                return false;
+            }
+            return isDirtyRef.current && (currentLocation.pathname !== nextLocation.pathname || currentLocation.search !== nextLocation.search);
+        }, [])
     );
 
     // 2. Block Native Browser Navigation (Reloads, Tab Closes)
-    // The browser automatically handles showing the native generic prompt if event.returnValue is set.
     useEffect(() => {
         const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-            if (isDirty) {
-                event.preventDefault(); // Standard
-                event.returnValue = message; // Chrome/Firefox/Safari requirement
+            if (isDirtyRef.current && !isBypassedRef.current) {
+                event.preventDefault();
+                event.returnValue = message;
                 return message;
             }
         };
 
         window.addEventListener('beforeunload', handleBeforeUnload);
-
         return () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
-    }, [isDirty, message]);
+    }, [message]);
+
+    const bypass = useCallback(() => {
+        isBypassedRef.current = true;
+        if (blocker.state === 'blocked') {
+            blocker.proceed();
+        }
+    }, [blocker]);
 
     return {
-        showDialog: blocker.state === 'blocked',
+        showDialog: blocker.state === 'blocked' && !isBypassedRef.current,
         proceed: blocker.proceed,
-        cancel: blocker.reset
+        cancel: blocker.reset,
+        bypass
     };
 }

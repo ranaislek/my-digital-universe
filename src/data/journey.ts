@@ -100,7 +100,7 @@ export const journeyEvents: JourneyEvent[] = [
         year: "Mar 2026 - Present",
         title: "CRM Data Analyst, Growth at Trendyol",
         location: "Istanbul, Turkey 🇹🇷",
-        description: "Owning CRM segmentation, lifecycle campaigns (push, in-app, email, coupons), A/B testing, and growth analytics at Trendyol Group.",
+        description: "Joined Trendyol Group as a CRM Data Analyst in Growth, leading customer segmentation, multi-channel lifecycle marketing, and data-driven experimentation.",
         type: "work",
         image: "/trendyol-start.jpg"
     },

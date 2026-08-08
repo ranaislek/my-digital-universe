@@ -31,7 +31,7 @@ const BlogPostPage = () => {
     const [isSaving, setIsSaving] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [showPublishConfirm, setShowPublishConfirm] = useState(false);
-    const [isNavigatingAway, setIsNavigatingAway] = useState(false);
+    const isNavigatingAwayRef = useRef(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Form state for editing
@@ -43,7 +43,7 @@ const BlogPostPage = () => {
     const [date, setDate] = useState("");
 
     const [initialState, setInitialState] = useState({ title: "", excerpt: "", content: "", thumbnail: "", link: "", readTime: "", date: "" });
-    const isDirty = isEditing && !isNavigatingAway && (
+    const isDirty = isEditing && (
         title !== initialState.title ||
         excerpt !== initialState.excerpt ||
         content !== initialState.content ||
@@ -57,7 +57,7 @@ const BlogPostPage = () => {
         console.log("isDirty:", isDirty, "isEditing:", isEditing, { title, init: initialState.title, readTime, initReadTime: initialState.readTime });
     }, [isDirty, isEditing, title, initialState, readTime]);
 
-    const { showDialog, proceed, cancel } = useUnsavedChanges(isDirty);
+    const { showDialog, proceed, cancel, bypass } = useUnsavedChanges(isDirty);
 
     useEffect(() => {
         if (!id) {
@@ -189,7 +189,8 @@ const BlogPostPage = () => {
             });
 
             if (status === 'published') {
-                setIsNavigatingAway(true);
+                isNavigatingAwayRef.current = true;
+                bypass();
                 toast.success("Post published successfully! 🚀");
                 navigate(`/blog/${id}`); // Exit edit mode
             } else {
@@ -290,6 +291,7 @@ const BlogPostPage = () => {
                 onClose={() => setShowPublishConfirm(false)}
                 onConfirm={async () => {
                     setShowPublishConfirm(false);
+                    bypass();
                     await handleSave("published");
                 }}
                 isPublishing={isSaving}

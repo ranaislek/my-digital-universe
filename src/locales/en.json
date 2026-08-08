@@ -83,67 +83,78 @@
         "title": "High School Graduation",
         "location": "Izmir, Turkey 🇹🇷",
         "description": "Graduated from Private Çakabey Schools, where my educational journey began.",
-        "type": "education"
+        "type": "education",
+        "year": "'07 - '19"
       },
       "sabanci-start": {
         "title": "Started Sabanci University",
         "location": "Istanbul, Turkey 🇹🇷",
         "description": "Began my undergraduate studies in Computer Science & Engineering.",
-        "type": "education"
+        "type": "education",
+        "year": "'19"
       },
       "budapest-erasmus": {
         "title": "Erasmus in Budapest",
         "location": "Budapest, Hungary 🇭🇺",
         "description": "A semester of exploration, new cultures, and academic growth in the heart of Europe.",
-        "type": "travel"
+        "type": "travel",
+        "year": "'22"
       },
       "sabanci-grad": {
         "title": "Graduated from Sabanci",
         "location": "Istanbul, Turkey 🇹🇷",
         "description": "Completed my Bachelor's degree with a focus on Software Engineering.",
-        "type": "education"
+        "type": "education",
+        "year": "'23"
       },
       "erasmus-mundus-brussels": {
         "title": "Erasmus Mundus Master's",
         "location": "Brussels, Belgium 🇧🇪",
         "description": "Started my Joint Master Degree. First semester adventure in the capital of Europe.",
-        "type": "education"
+        "type": "education",
+        "year": "Late '23"
       },
       "barcelona": {
         "title": "Semester in Barcelona",
         "location": "Barcelona, Spain 🇪🇸",
         "description": "Living and studying in the vibrant city of Barcelona.",
-        "type": "travel"
+        "type": "travel",
+        "year": "'24"
       },
       "padova": {
         "title": "Specialization in AI",
         "location": "Padova, Italy 🇮🇹",
         "description": "Specializing in Deep Learning & AI at the University of Padua while writing my Master's Thesis.",
-        "type": "education"
+        "type": "education",
+        "year": "'25"
       },
       "ngn-work": {
         "title": "Data & Analytics Specialist at NGN",
         "location": "Istanbul, Turkey 🇹🇷",
         "description": "Worked as a Data & Analytics Specialist at NGN (Oct 2025 - Mar 2026).",
-        "type": "work"
+        "type": "work",
+        "year": "Oct '25 - Mar '26"
       },
       "masters-grad": {
         "title": "Master's Graduation",
         "location": "Europe 🇪🇺",
         "description": "Officially graduating from the Erasmus Mundus Joint Master Program.",
-        "type": "milestone"
+        "type": "milestone",
+        "year": "Dec '25"
       },
       "trendyol-work": {
         "title": "CRM Data Analyst, Growth at Trendyol",
         "location": "Istanbul, Turkey 🇹🇷",
-        "description": "Owning segmentation & targeting strategy for personalized CRM campaigns, lifecycle marketing (push, in-app, email, coupons), A/B testing, and growth analytics at Trendyol Group.",
-        "type": "work"
+        "description": "Joined Trendyol Group as a CRM Data Analyst in Growth, leading customer segmentation, multi-channel lifecycle marketing, and data-driven experimentation.",
+        "type": "work",
+        "year": "Mar '26 - Present"
       },
       "now": {
         "title": "The Journey Continues...",
         "location": "Digital Universe 🌐",
         "description": "Currently building, learning, and sharing my experiences with the world.",
-        "type": "milestone"
+        "type": "milestone",
+        "year": "Present"
       },
       "Present": "Present"
     }
@@ -180,10 +191,13 @@
       "returnToWebsite": "← Return to Website",
       "unauthorized": "Redirecting...",
       "welcomeBack": "Welcome back! 🚀",
+      "unsavedTitle": "Unsaved Changes",
+      "unsavedDesc": "You have unsaved changes that will be lost if you leave this page. What would you like to do?",
+      "discardChanges": "Discard Changes",
       "publishConfirmTitle": "Publish Content?",
       "publishConfirmDesc": "You are about to make this content live on your website. Are you sure you want to proceed?",
       "keepEditing": "Keep Editing",
-      "publishNow": "🚀 Yes, Publish Now",
+      "publishNow": "Yes, Publish",
       "newStory": "New Story",
       "editing": "Editing",
       "saveDraft": "Save Draft",

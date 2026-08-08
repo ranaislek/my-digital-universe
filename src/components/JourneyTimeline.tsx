@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 const JourneyTimeline = () => {
     const { t } = useTranslation();
     return (
-        <div className="relative py-20 px-4 md:px-0 max-w-5xl mx-auto">
+        <div className="relative py-20 px-4 md:px-6 max-w-6xl mx-auto">
             {/* Center Line (Hidden on mobile, visible on md+) */}
             <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/50 to-transparent" />
 
@@ -30,23 +30,23 @@ const JourneyTimeline = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className={`relative flex flex-col md:flex-row gap-8 mb-12 ${isEven ? 'md:flex-row-reverse' : ''}`}
+                        className={`relative flex flex-col md:flex-row gap-8 mb-14 ${isEven ? 'md:flex-row-reverse' : ''}`}
                     >
-                        {/* Date Bubble (Mobile: Top Left, Desktop: Center) */}
-                        <div className="absolute left-0 md:left-1/2 -translate-x-1/2 md:-translate-x-1/2 flex items-center justify-center w-12 h-12 rounded-full bg-background border-4 border-muted z-10 shadow-xl">
-                            <span className="text-[10px] font-bold text-center leading-tight px-1">
-                                {event.year === "Present" ? t('journey.events.Present') : event.year}
+                        {/* Date Bubble (Mobile: Left, Desktop: Center) */}
+                        <div className="absolute left-0 md:left-1/2 -translate-x-1/2 md:-translate-x-1/2 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-background border-4 border-muted z-10 shadow-xl">
+                            <span className="text-[11px] sm:text-xs font-bold text-center leading-tight px-1 tracking-tight">
+                                {t(`journey.events.${event.id}.year`, { defaultValue: event.year })}
                             </span>
                         </div>
 
                         {/* Content Card */}
-                        <div className={`w-full md:w-[calc(50%-40px)] pl-16 md:pl-0 ${isEven ? 'md:pr-8' : 'md:pl-8'}`}>
-                            <div className="group relative bg-card/50 hover:bg-card border border-border/50 hover:border-border p-5 md:p-6 rounded-2xl transition-all hover:shadow-lg hover:-translate-y-1">
+                        <div className={`w-full md:w-[calc(50%-44px)] pl-16 md:pl-0 ${isEven ? 'md:pr-6' : 'md:pl-6'}`}>
+                            <div className="group relative bg-card/50 hover:bg-card border border-border/50 hover:border-border p-6 md:p-7 rounded-2xl transition-all hover:shadow-lg hover:-translate-y-1">
 
-                                <div className={`flex flex-col sm:flex-row gap-4 items-center ${isEven ? '' : 'sm:flex-row-reverse'}`}>
+                                <div className={`flex flex-col sm:flex-row gap-5 items-center ${isEven ? '' : 'sm:flex-row-reverse'}`}>
                                     {/* Image (Optional) */}
                                     {event.image && (
-                                        <div className="w-28 h-28 sm:w-36 sm:h-36 flex-shrink-0 overflow-hidden rounded-xl">
+                                        <div className="w-32 h-32 sm:w-40 sm:h-40 flex-shrink-0 overflow-hidden rounded-xl">
                                             <img
                                                 src={event.image}
                                                 alt={event.title}
@@ -58,7 +58,7 @@ const JourneyTimeline = () => {
                                         </div>
                                     )}
 
-                                    <div className={`flex flex-col gap-1 flex-grow ${isEven ? 'text-left' : 'text-left sm:text-right'}`}>
+                                    <div className={`flex flex-col gap-1.5 flex-grow ${isEven ? 'text-left' : 'text-left sm:text-right'}`}>
                                         <div className={`flex items-center gap-2 text-primary text-xs font-medium uppercase tracking-wider ${isEven ? '' : 'sm:flex-row-reverse'}`}>
                                             {getIcon()}
                                             <span>{t(`journey.events.${event.id}.type`, { defaultValue: event.type })}</span>
@@ -69,11 +69,11 @@ const JourneyTimeline = () => {
                                         </h3>
 
                                         <div className={`flex items-center gap-1 text-muted-foreground text-xs ${isEven ? '' : 'sm:flex-row-reverse'}`}>
-                                            <MapPin className="w-3 h-3" />
+                                            <MapPin className="w-3.5 h-3.5" />
                                             {t(`journey.events.${event.id}.location`, { defaultValue: event.location })}
                                         </div>
 
-                                        <p className="text-muted-foreground mt-3 text-sm md:text-base leading-relaxed line-clamp-4">
+                                        <p className="text-muted-foreground mt-2 text-sm md:text-base leading-relaxed">
                                             {t(`journey.events.${event.id}.description`, { defaultValue: event.description })}
                                         </p>
                                     </div>
@@ -82,7 +82,7 @@ const JourneyTimeline = () => {
                         </div>
 
                         {/* Spacer for desktop layout balance */}
-                        <div className="hidden md:block w-[calc(50%-40px)]" />
+                        <div className="hidden md:block w-[calc(50%-44px)]" />
                     </motion.div>
                 );
             })}

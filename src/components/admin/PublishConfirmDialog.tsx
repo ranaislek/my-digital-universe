@@ -49,7 +49,7 @@ export function PublishConfirmDialog({
                         ) : (
                             <>
                                 <Send className="w-4 h-4" />
-                                <span>{t('common.admin.publishNow', { defaultValue: '🚀 Evet, Yayınla' })}</span>
+                                <span>{t('common.admin.publishNow', { defaultValue: 'Evet, Yayınla' })}</span>
                             </>
                         )}
                     </Button>

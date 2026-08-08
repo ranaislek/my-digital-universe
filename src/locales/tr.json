@@ -83,67 +83,78 @@
                 "title": "Lise Mezuniyeti",
                 "location": "İzmir, Türkiye 🇹🇷",
                 "description": "Eğitim serüvenimin başladığı Özel Çakabey Okulları'ndan mezun oldum.",
-                "type": "eğitim"
+                "type": "eğitim",
+                "year": "'07 - '19"
             },
             "sabanci-start": {
                 "title": "Sabancı Üniversitesi'ne Başladım",
                 "location": "İstanbul, Türkiye 🇹🇷",
                 "description": "Bilgisayar Bilimi ve Mühendisliği lisans eğitimime başladım.",
-                "type": "eğitim"
+                "type": "eğitim",
+                "year": "'19"
             },
             "budapest-erasmus": {
                 "title": "Budapeşte'de Erasmus",
                 "location": "Budapeşte, Macaristan 🇭🇺",
                 "description": "Avrupa'nın kalbinde keşif, yeni kültürler ve akademik gelişimle dolu bir dönem.",
-                "type": "seyahat"
+                "type": "seyahat",
+                "year": "'22"
             },
             "sabanci-grad": {
                 "title": "Sabancı'dan Mezun Oldum",
                 "location": "İstanbul, Türkiye 🇹🇷",
                 "description": "Yazılım Mühendisliği ağırlıklı olmak üzere lisans eğitimimi tamamladım.",
-                "type": "eğitim"
+                "type": "eğitim",
+                "year": "'23"
             },
             "erasmus-mundus-brussels": {
                 "title": "Erasmus Mundus Yüksek Lisans",
                 "location": "Brüksel, Belçika 🇧🇪",
                 "description": "Ortak Yüksek Lisans eğitimime başladım. İlk dönem macerası Avrupa'nın başkentindeydi.",
-                "type": "eğitim"
+                "type": "eğitim",
+                "year": "'23 Sonu"
             },
             "barcelona": {
                 "title": "Barselona'da Bir Dönem",
                 "location": "Barselona, İspanya 🇪🇸",
                 "description": "Hayat dolu Barselona şehrinde yaşamak ve eğitim görmek.",
-                "type": "seyahat"
+                "type": "seyahat",
+                "year": "'24"
             },
             "padova": {
                 "title": "Yapay Zeka Uzmanlığı",
                 "location": "Padova, İtalya 🇮🇹",
                 "description": "Yüksek Lisans tezimi yazarken Padua Üniversitesi'nde Derin Öğrenme ve Yapay Zeka alanında uzmanlaşıyorum.",
-                "type": "eğitim"
+                "type": "eğitim",
+                "year": "'25"
             },
             "ngn-work": {
                 "title": "NGN'de Veri & Analitik Uzmanı",
                 "location": "İstanbul, Türkiye 🇹🇷",
                 "description": "NGN'de Veri ve Analitik Uzmanı olarak tam zamanlı çalıştım (Ekim 2025 - Mart 2026).",
-                "type": "iş"
+                "type": "iş",
+                "year": "Eki '25 - Mar '26"
             },
             "masters-grad": {
                 "title": "Yüksek Lisans Mezuniyeti",
                 "location": "Avrupa 🇪🇺",
                 "description": "Erasmus Mundus Ortak Yüksek Lisans Programından resmen mezun oluyorum.",
-                "type": "kilometre taşı"
+                "type": "kilometre taşı",
+                "year": "Ara '25"
             },
             "trendyol-work": {
                 "title": "Trendyol Group'ta CRM Data Analyst, Growth",
                 "location": "İstanbul, Türkiye 🇹🇷",
-                "description": "Kişiselleştirilmiş CRM kampanyaları için segmentasyon ve hedefleme stratejilerine liderlik etmek; push, in-app, e-posta ve kupon kanallarında müşteri yaşam döngüsü kampanyalarını A/B testleri, SQL/Python veri analizi ve büyüme stratejileriyle optimize etmek.",
-                "type": "iş"
+                "description": "Trendyol Group'a CRM Data Analyst (Growth) olarak katılarak segmentasyon, yaşam döngüsü kampanyaları ve büyüme analitiği süreçlerine yön veriyorum.",
+                "type": "iş",
+                "year": "Mar '26 - Günümüz"
             },
             "now": {
                 "title": "Yolculuk Devam Ediyor...",
                 "location": "Dijital Evren 🌐",
                 "description": "Şu an deneyimlerimi geliştiriyor, öğreniyor ve dünyayla paylaşıyorum.",
-                "type": "kilometre taşı"
+                "type": "kilometre taşı",
+                "year": "Günümüz"
             },
             "Present": "Günümüz"
         }
@@ -182,10 +193,13 @@
             "returnToWebsite": "← Web Sitesine Dön",
             "unauthorized": "Yönlendiriliyor...",
             "welcomeBack": "Tekrar hoş geldin! 🚀",
+            "unsavedTitle": "Kaydedilmemiş Değişiklikler",
+            "unsavedDesc": "Bu sayfadan ayrılırsanız kaydedilmemiş değişiklikleriniz kaybolacaktır. Ne yapmak istersiniz?",
+            "discardChanges": "Değişiklikleri Sil",
             "publishConfirmTitle": "Yayınlamak İstediğinizden Emin Misiniz?",
             "publishConfirmDesc": "Bu içeriği yayınlayarak web sitenizde canlı ve görünür kılmak üzeresiniz.",
             "keepEditing": "Çalışmaya Devam Et",
-            "publishNow": "🚀 Evet, Yayınla",
+            "publishNow": "Evet, Yayınla",
             "newStory": "Yeni Hikaye",
             "editing": "Düzenleniyor",
             "saveDraft": "Taslağı Kaydet",

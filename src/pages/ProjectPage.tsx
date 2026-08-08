@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslation } from 'react-i18next';
 import { useParams, Link, useSearchParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, ExternalLink, Github, LayoutGrid, Award, CheckCircle2, Layers, Calendar, Building, Briefcase, Play, Plus, Trash, Save } from "lucide-react";
@@ -31,7 +31,7 @@ const ProjectPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [showPublishConfirm, setShowPublishConfirm] = useState(false);
-    const [isNavigatingAway, setIsNavigatingAway] = useState(false);
+    const isNavigatingAwayRef = useRef(false);
 
     // Form Fields
     const [title, setTitle] = useState("");
@@ -55,7 +55,7 @@ const ProjectPage = () => {
         challengesInput: "", featuresInput: "", tagsInput: "", screenshotsLength: 0, language: "both"
     });
 
-    const isDirty = isEditing && !isNavigatingAway && (
+    const isDirty = isEditing && (
         title !== initialState.title ||
         category !== initialState.category ||
         company !== initialState.company ||
@@ -72,7 +72,7 @@ const ProjectPage = () => {
         (project?.screenshots?.length || 0) !== initialState.screenshotsLength
     );
 
-    const { showDialog, proceed, cancel } = useUnsavedChanges(isDirty);
+    const { showDialog, proceed, cancel, bypass } = useUnsavedChanges(isDirty);
 
     useEffect(() => {
         if (!id) return;
@@ -268,7 +268,8 @@ const ProjectPage = () => {
             });
 
             if (status === 'published') {
-                setIsNavigatingAway(true);
+                isNavigatingAwayRef.current = true;
+                bypass();
                 navigate(`/project/${id}`); // Exit edit mode
             }
 
@@ -308,6 +309,7 @@ const ProjectPage = () => {
                 onClose={() => setShowPublishConfirm(false)}
                 onConfirm={async () => {
                     setShowPublishConfirm(false);
+                    bypass();
                     await handleSave("published");
                 }}
                 isPublishing={isSaving}
