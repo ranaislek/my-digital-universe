@@ -34,7 +34,7 @@ interface AboutProps {
 const About = ({ isTeaser = false }: AboutProps) => {
   const { t } = useTranslation();
   return (
-    <section id="about" className={`relative ${isTeaser ? "min-h-screen flex items-center justify-center py-20 md:py-24" : "pb-12"}`}>
+    <section id="about" className={`relative flex-grow flex flex-col justify-center ${isTeaser ? "min-h-screen py-20 md:py-24" : "py-8 md:py-12"}`}>
       {/* Decorative elements only on teaser or modified for full page */}
       {isTeaser && (
         <>
