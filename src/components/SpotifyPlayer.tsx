@@ -79,7 +79,7 @@ export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
         {/* Popup Header Controls */}
         <div className="flex items-center justify-between px-3 py-1.5 border-b border-border/40 dark:border-zinc-800/60 mb-2">
           <div className="flex items-center gap-2">
-            <Disc3 className="w-4 h-4 text-[#1DB954] animate-spin-slow" />
+            <Disc3 className="w-4 h-4 text-primary animate-spin-slow" />
             <span className="text-xs font-semibold text-foreground/90 tracking-wide">
               {t("spotify.title", "Rana'nın Playlisti")}
             </span>
@@ -125,22 +125,22 @@ export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         className={`group flex items-center gap-2.5 px-4 py-2.5 rounded-full shadow-xl border backdrop-blur-xl transition-all duration-300 ${
           isOpen
-            ? "bg-[#1DB954] text-white border-[#1DB954]/50 shadow-[#1DB954]/25 ring-2 ring-[#1DB954]/30"
-            : "bg-card/90 text-foreground border-border/80 hover:border-[#1DB954]/60 hover:bg-[#1DB954]/10 dark:bg-zinc-900/90 dark:border-zinc-800"
+            ? "bg-primary text-primary-foreground border-primary/50 shadow-primary/25 ring-2 ring-primary/30"
+            : "bg-card/90 text-foreground border-border/80 hover:border-primary/60 hover:bg-primary/10 dark:bg-zinc-900/90 dark:border-zinc-800"
         }`}
         title={isOpen ? t("spotify.hideButton", "Gizle") : t("spotify.openButton", "Rana'nın Playlisti 🎧")}
       >
         <div className="relative flex items-center justify-center">
           {isOpen ? (
-            <X className="w-4 h-4 text-white transition-transform duration-200" />
+            <X className="w-4 h-4 text-primary-foreground transition-transform duration-200" />
           ) : (
-            <Music className="w-4 h-4 text-[#1DB954] group-hover:scale-110 transition-transform duration-200" />
+            <Music className="w-4 h-4 text-primary group-hover:scale-110 transition-transform duration-200" />
           )}
 
           {!isOpen && (
             <span className="absolute -top-1 -right-1 flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1DB954] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#1DB954]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
             </span>
           )}
         </div>
