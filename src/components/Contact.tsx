@@ -145,9 +145,6 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
           <div className="space-y-6">
             {!isTeaser && (
               <div className="space-y-4 text-left">
-                <span className="inline-block text-primary font-medium text-xs tracking-wider uppercase">
-                  {t('contact.subtitle')}
-                </span>
                 <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-medium leading-tight">
                   {t('contact.title1')} <span className="gradient-text">{t('contact.title2')}</span>
                   <span className="inline-block ml-2">👋</span>
@@ -159,6 +156,9 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
                   <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
                   <span>{t('contact.location')}</span>
                 </div>
+                <span className="inline-block text-primary font-medium text-xs tracking-wider uppercase pt-2">
+                  {t('contact.subtitle')}
+                </span>
               </div>
             )}
 
