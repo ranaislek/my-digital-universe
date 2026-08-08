@@ -4,11 +4,11 @@ import BackgroundElements from "@/components/BackgroundElements";
 
 const ContactPage = () => {
     return (
-        <>
+        <div className="flex-grow flex flex-col justify-center">
             <BackgroundElements />
             <PageTitle title="Contact" />
             <Contact />
-        </>
+        </div>
     );
 };
 

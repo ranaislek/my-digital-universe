@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Linkedin, Github, Youtube, MapPin, Heart, Send, Instagram } from "lucide-react";
+import { Mail, Linkedin, Github, Youtube, MapPin, Send, Instagram } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabase";
 import { useTranslation } from "react-i18next";
@@ -50,15 +50,10 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
     },
   ];
 
-
-
-  // ... inside component ...
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Basic validation
     if (!formData.name || !formData.email || !formData.message) {
       toast.error("Please fill in all fields");
       setIsSubmitting(false);
@@ -66,7 +61,6 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
     }
 
     try {
-      // 1. Save to Database (Supabase)
       const { error: dbError } = await supabase
         .from('messages')
         .insert([
@@ -75,14 +69,11 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
 
       if (dbError) throw dbError;
 
-      // 2. Send Email Notification (Level 99)
       try {
-        // Create a timeout promise (5 seconds)
         const timeoutPromise = new Promise((_, reject) =>
           setTimeout(() => reject(new Error('Email request timed out')), 5000)
         );
 
-        // Race the fetch against the timeout
         const response: any = await Promise.race([
           fetch('/api/send-email', {
             method: 'POST',
@@ -104,13 +95,11 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
           throw new Error(errorMessage);
         }
 
-        // Only show full success if email also succeeded
-        toast.success("Message sent and email verification dispatched! 🚀");
+        toast.success("Message sent successfully! 🚀");
         setFormData({ name: "", email: "", message: "" });
 
       } catch (emailError: any) {
         console.error('Email notification failed:', emailError);
-        // Distinct warning for DB-only success
         toast.warning(`Saved to database, but email delivery skipped: ${emailError.message}`);
         setFormData({ name: "", email: "", message: "" });
       }
@@ -124,10 +113,10 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
   };
 
   return (
-    <section id="contact" className={`relative ${isTeaser ? "min-h-screen flex flex-col justify-center py-10 md:py-12" : "py-12 md:py-16"}`}>
+    <section id="contact" className={`relative flex-grow flex flex-col justify-center ${isTeaser ? "min-h-screen py-10 md:py-12" : "py-6 md:py-8"}`}>
       {/* Decorative blobs */}
-      <div className="absolute top-1/4 left-0 w-72 h-72 bg-primary/10 blob-shape opacity-50" />
-      <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-accent/10 blob-shape-2 opacity-50" />
+      <div className="absolute top-1/4 left-0 w-72 h-72 bg-primary/10 blob-shape opacity-50 pointer-events-none" />
+      <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-accent/10 blob-shape-2 opacity-50 pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Top Header for Teaser Mode */}

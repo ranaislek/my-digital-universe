@@ -3,17 +3,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 
 const GlobalScrollIndicator = () => {
-    const [isVisible, setIsVisible] = useState(true);
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => {
-            // Calculate how close we are to the bottom
-            const scrolledTo = window.scrollY + window.innerHeight;
-            const threshold = document.documentElement.scrollHeight - 100; // 100px before bottom
+        const checkScroll = () => {
+            // Check if page actually has scrollable content
+            const scrollableHeight = document.documentElement.scrollHeight;
+            const viewportHeight = window.innerHeight;
+            const hasScrollableContent = scrollableHeight > viewportHeight + 40;
 
-            // If we are near the bottom, hide it. Otherwise show it.
-            // Also hide if we haven't scrolled at all? No, user wants it to prompt scrolling.
-            // Maybe hide if we are at the very top? No, usually that's when you need it.
+            if (!hasScrollableContent) {
+                setIsVisible(false);
+                return;
+            }
+
+            const scrolledTo = window.scrollY + viewportHeight;
+            const threshold = scrollableHeight - 100;
 
             if (scrolledTo >= threshold) {
                 setIsVisible(false);
@@ -22,8 +27,13 @@ const GlobalScrollIndicator = () => {
             }
         };
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        checkScroll();
+        window.addEventListener("scroll", checkScroll);
+        window.addEventListener("resize", checkScroll);
+        return () => {
+            window.removeEventListener("scroll", checkScroll);
+            window.removeEventListener("resize", checkScroll);
+        };
     }, []);
 
     return (
