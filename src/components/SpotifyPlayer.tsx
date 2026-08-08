@@ -13,33 +13,42 @@ export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false); // Default false for compact 152px view
-  const [isNearBottom, setIsNearBottom] = useState(false);
+  const [bottomOffset, setBottomOffset] = useState(24);
   const playerRef = useRef<HTMLDivElement>(null);
 
   const embedUrl = `https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`;
 
-  // Detect when scrolled near bottom of page (near footer) to shift widget up
+  // Dynamically calculate exact footer overlap so the widget NEVER touches or overlaps the footer top border
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const clientHeight = window.innerHeight;
-      const isPageScrollable = scrollHeight > clientHeight + 100;
+    const updatePosition = () => {
+      const footerEl = document.querySelector("footer");
+      const viewportHeight = window.innerHeight;
+      const baseBottom = window.innerWidth < 640 ? 20 : 24;
 
-      // Shift up ONLY if page is long & scrollable AND user is near the bottom
-      if (isPageScrollable && scrollHeight - (scrollTop + clientHeight) < 120) {
-        setIsNearBottom(true);
-      } else {
-        setIsNearBottom(false);
+      if (footerEl) {
+        const footerRect = footerEl.getBoundingClientRect();
+        // Distance from bottom of viewport to top border of footer
+        const footerOverlap = viewportHeight - footerRect.top;
+        if (footerOverlap > 0) {
+          // Keep widget exactly baseBottom pixels (24px) ABOVE the footer top border line
+          setBottomOffset(footerOverlap + baseBottom);
+          return;
+        }
       }
+      setBottomOffset(baseBottom);
     };
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleScroll);
+    updatePosition();
+    window.addEventListener("scroll", updatePosition, { passive: true });
+    window.addEventListener("resize", updatePosition, { passive: true });
+    
+    // Also re-check after page transitions / DOM changes
+    const interval = setInterval(updatePosition, 500);
+
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
+      window.removeEventListener("scroll", updatePosition);
+      window.removeEventListener("resize", updatePosition);
+      clearInterval(interval);
     };
   }, []);
 
@@ -61,9 +70,8 @@ export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
   return (
     <div
       ref={playerRef}
-      className={`fixed right-5 sm:right-7 z-40 flex flex-col items-end font-sans transition-all duration-300 ${
-        isNearBottom ? "bottom-20 sm:bottom-24" : "bottom-6 sm:bottom-8"
-      }`}
+      style={{ bottom: `${bottomOffset}px` }}
+      className="fixed right-5 sm:right-7 z-40 flex flex-col items-end font-sans transition-[bottom] duration-150 ease-out"
     >
       {/* 
         Persistent Popup Container:
