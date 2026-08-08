@@ -1,5 +1,6 @@
 import { Heart, Sparkles, Linkedin, Github, Youtube, Instagram, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
+import { FrogLogo } from "./FrogLogo";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
