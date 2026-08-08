@@ -6,7 +6,7 @@ import { ContentItem } from "../data/content";
 import PostControls from "./admin/PostControls";
 import { useAuth } from "./AuthProvider";
 import { useTranslation } from "react-i18next";
-import { formatDate } from "@/utils/dateUtils";
+import { formatDate, compareContentDates } from "@/utils/dateUtils";
 
 const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
   const { t, i18n } = useTranslation();
@@ -37,14 +37,8 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
         readTime: post.read_time
       }));
 
-      // Sort by PINNED first, then DATE - Newest First
-      allPosts.sort((a, b) => {
-        if (a.pinned && !b.pinned) return -1;
-        if (!a.pinned && b.pinned) return 1;
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return dateB.getTime() - dateA.getTime();
-      });
+      // Sort by DATE only - Newest First (using robust compareContentDates)
+      allPosts.sort((a, b) => compareContentDates(a.date, b.date));
 
       // Separate drafts and published
       const publishedPosts = allPosts.filter(p => p.status === 'published');
@@ -74,10 +68,16 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
   );
 
   // Layout Logic
-  // Homepage (Teaser): Show only FEATURED posts. 1 Hero + Grid (2 cols)
-  // Blog Page: Show ALL posts. Grid (3 cols)
+  // Homepage (Teaser): Show FEATURED/PINNED posts with pinned first.
+  // Blog Page: Show ALL posts strictly sorted by DATE (newest first).
   const displayedContent = isTeaser
-    ? filteredContent.filter(p => p.featured || p.pinned)
+    ? [...filteredContent]
+      .filter(p => p.featured || p.pinned)
+      .sort((a, b) => {
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+        return compareContentDates(a.date, b.date);
+      })
     : filteredContent;
 
   if (isLoading) {

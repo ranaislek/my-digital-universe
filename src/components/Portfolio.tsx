@@ -7,7 +7,7 @@ import { ContentItem } from "../data/content";
 import PostControls from "./admin/PostControls";
 import { useAuth } from "./AuthProvider";
 import { useTranslation } from "react-i18next";
-import { formatDate } from "@/utils/dateUtils";
+import { formatDate, compareContentDates } from "@/utils/dateUtils";
 
 const iconMap: Record<string, LucideIcon> = {
   "Briefcase": Briefcase,
@@ -73,39 +73,8 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
         type: "project" // Hardcode type for frontend consistency
       }));
 
-      // Sort by DATE only - Newest First
-      mappedProjects.sort((a, b) => {
-        // Parse date string (e.g., "Oct 2025 – Present" or "Jun 2022")
-        const parseDateDetails = (dateStr: string) => {
-          if (!dateStr) return { end: 0, start: 0, isPresent: false };
-
-          const parts = dateStr.split(/[–-]/);
-          const startDateStr = parts[0].trim();
-          const endDateStr = parts[parts.length - 1].trim();
-
-          const isPresent = (endDateStr.toLowerCase().includes('present') || endDateStr.toLowerCase().includes('günümüz'));
-
-          const start = new Date(startDateStr).getTime() || 0;
-          const end = isPresent ? new Date().getTime() : (new Date(endDateStr).getTime() || 0);
-
-          return { start, end, isPresent };
-        };
-
-        const aDetails = parseDateDetails(a.date);
-        const bDetails = parseDateDetails(b.date);
-
-        // If both are present, the one that started LATER (more recently newest) goes first
-        if (aDetails.isPresent && bDetails.isPresent) {
-          return bDetails.start - aDetails.start;
-        }
-
-        // If one is present, it goes first
-        if (aDetails.isPresent && !bDetails.isPresent) return -1;
-        if (!aDetails.isPresent && bDetails.isPresent) return 1;
-
-        // Otherwise sort by end date normally
-        return bDetails.end - aDetails.end;
-      });
+      // Sort by DATE only - Newest First (using robust compareContentDates)
+      mappedProjects.sort((a, b) => compareContentDates(a.date, b.date));
 
       setProjects(mappedProjects);
     } catch (error) {

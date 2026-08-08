@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { useParams, Link, useSearchParams, useNavigate } from "react-router-dom";
 import RichTextEditor from "@/components/admin/RichTextEditor";
-import { ArrowLeft, Calendar, Clock, Share2, ExternalLink, Edit } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Share2, ExternalLink, Edit, Upload, Image as ImageIcon, Trash2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "../lib/supabase";
 import { ContentItem } from "../data/content";
@@ -477,24 +477,69 @@ const BlogPostPage = () => {
             <div className="container mx-auto px-6">
                 <div className="max-w-3xl mx-auto">
                     {/* Cover Photo - Available for both Blog and Vlog */}
-                    {(post?.thumbnail || isEditing) && (
-                        <div className={`rounded-3xl overflow-hidden mb-12 shadow-lg group relative ${!post?.thumbnail && isEditing ? 'bg-muted h-64 flex items-center justify-center border-2 border-dashed border-muted-foreground/20' : ''}`}>
-                            {isEditing && (
-                                <button
-                                    onClick={() => fileInputRef.current?.click()}
-                                    disabled={isUploading}
-                                    className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 text-white font-medium gap-2"
-                                >
-                                    <div className="bg-background/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 hover:bg-background/40 transition-colors">
-                                        {isUploading ? t("common.admin.saving") : (thumbnail || post?.thumbnail ? t("common.admin.changeCover") : t("common.admin.addCoverUrl"))}
+                    {(post?.thumbnail || thumbnail || isEditing) && (
+                        <div className="mb-12">
+                            <div className={`rounded-3xl overflow-hidden shadow-lg group relative ${!(thumbnail || post?.thumbnail) && isEditing ? 'bg-muted/50 h-64 flex flex-col items-center justify-center border-2 border-dashed border-muted-foreground/30' : ''}`}>
+                                {isEditing && (
+                                    <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 text-white font-medium gap-3">
+                                        <button
+                                            onClick={() => fileInputRef.current?.click()}
+                                            disabled={isUploading}
+                                            className="bg-primary/90 hover:bg-primary text-primary-foreground backdrop-blur-md px-5 py-2.5 rounded-full font-medium transition-all shadow-lg flex items-center gap-2"
+                                        >
+                                            {isUploading ? (
+                                                <>
+                                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                                    <span>{t("common.admin.saving", { defaultValue: "Uploading..." })}</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Upload className="w-4 h-4" />
+                                                    <span>{thumbnail || post?.thumbnail ? t("common.admin.changeCover", { defaultValue: "Change Cover Image" }) : t("common.admin.addCoverUrl", { defaultValue: "Upload Cover Image" })}</span>
+                                                </>
+                                            )}
+                                        </button>
+                                        {(thumbnail || post?.thumbnail) && (
+                                            <button
+                                                onClick={() => {
+                                                    setThumbnail("");
+                                                    if (post) setPost(p => ({ ...p!, thumbnail: "" }));
+                                                }}
+                                                className="bg-destructive/80 hover:bg-destructive text-white backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5"
+                                            >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                                <span>Remove Cover</span>
+                                            </button>
+                                        )}
                                     </div>
-                                </button>
-                            )}
+                                )}
 
-                            {(thumbnail || post?.thumbnail) ? (
-                                <img src={thumbnail || post?.thumbnail} alt={title} className="w-full object-cover min-h-[300px] bg-muted" />
-                            ) : (
-                                isEditing && <span className="text-muted-foreground">{t("common.admin.addCover")}</span>
+                                {(thumbnail || post?.thumbnail) ? (
+                                    <img src={thumbnail || post?.thumbnail} alt={title} className="w-full object-cover min-h-[300px] max-h-[500px] bg-muted" />
+                                ) : (
+                                    isEditing && (
+                                        <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                                            <ImageIcon className="w-8 h-8 opacity-50" />
+                                            <span className="text-sm font-medium">{t("common.admin.addCover", { defaultValue: "Click to upload a cover photo" })}</span>
+                                        </div>
+                                    )
+                                )}
+                            </div>
+
+                            {/* Direct URL Input fallback when editing */}
+                            {isEditing && (
+                                <div className="mt-3 flex items-center gap-2">
+                                    <input
+                                        type="text"
+                                        value={thumbnail}
+                                        onChange={(e) => {
+                                            setThumbnail(e.target.value);
+                                            if (post) setPost(p => ({ ...p!, thumbnail: e.target.value }));
+                                        }}
+                                        placeholder="Or paste cover image URL here (e.g. https://...)"
+                                        className="w-full text-xs text-muted-foreground bg-muted/40 border border-border/50 rounded-xl px-3 py-2 outline-none focus:border-primary/50 transition-colors"
+                                    />
+                                </div>
                             )}
                         </div>
                     )}
