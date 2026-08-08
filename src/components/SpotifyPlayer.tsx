@@ -18,20 +18,20 @@ export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
 
   const embedUrl = `https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`;
 
-  // Dynamically calculate exact footer overlap so the widget NEVER touches or overlaps the footer top border
+  // Dynamically calculate exact footer overlap so the widget sits neatly right above the footer line
   useEffect(() => {
     const updatePosition = () => {
       const footerEl = document.querySelector("footer");
       const viewportHeight = window.innerHeight;
-      const baseBottom = window.innerWidth < 640 ? 20 : 24;
+      const baseBottom = window.innerWidth < 640 ? 16 : 20;
 
       if (footerEl) {
         const footerRect = footerEl.getBoundingClientRect();
         // Distance from bottom of viewport to top border of footer
         const footerOverlap = viewportHeight - footerRect.top;
         if (footerOverlap > 0) {
-          // Keep widget exactly baseBottom pixels (24px) ABOVE the footer top border line
-          setBottomOffset(footerOverlap + baseBottom);
+          // Sit neatly 10px right above the top border of footer
+          setBottomOffset(footerOverlap + 10);
           return;
         }
       }
@@ -43,7 +43,7 @@ export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
     window.addEventListener("resize", updatePosition, { passive: true });
     
     // Also re-check after page transitions / DOM changes
-    const interval = setInterval(updatePosition, 500);
+    const interval = setInterval(updatePosition, 300);
 
     return () => {
       window.removeEventListener("scroll", updatePosition);
