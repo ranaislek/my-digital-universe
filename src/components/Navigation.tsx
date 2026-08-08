@@ -3,6 +3,7 @@ import { Menu, X, Sparkles, Home } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { PullStringSwitch } from "./PullStringSwitch";
 
 const Navigation = () => {
   const { t } = useTranslation();
@@ -74,8 +75,9 @@ const Navigation = () => {
               ))}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <LanguageSwitcher />
+              <PullStringSwitch />
 
               {/* Mobile Menu Toggle */}
               <button
