@@ -141,8 +141,8 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
             </div>
           )}
           {post.location && (
-            <div className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 bg-card/80 backdrop-blur-sm rounded-full text-[10px] z-10">
-              <MapPin className="w-3 h-3 text-primary" />
+            <div className="absolute bottom-2 left-2 flex items-center gap-1 px-2.5 py-1 bg-card/80 backdrop-blur-sm rounded-full text-xs z-10">
+              <MapPin className="w-3.5 h-3.5 text-primary" />
               {post.location}
             </div>
           )}
@@ -150,19 +150,19 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
 
         {/* Content */}
         <div className={isHero ? "mt-4 md:mt-0" : ""}>
-          <div className="flex items-center gap-3 text-[10px] text-muted-foreground mb-2">
+          <div className="flex items-center gap-3 text-xs text-muted-foreground mb-2">
             <span className="flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
+              <Calendar className="w-3.5 h-3.5" />
               {formatDate(post.date, i18n.language)}
             </span>
             {(post.readTime || post.duration) && (
               <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3" />
+                <Clock className="w-3.5 h-3.5" />
                 {post.type === "vlog" ? (post.readTime || post.duration) : t('thoughts.minRead', { count: parseInt(post.readTime || '0', 10) || 0 })}
               </span>
             )}
             <span
-              className={`px-2 py-0.5 text-[10px] rounded-full font-medium ${post.type === "vlog"
+              className={`px-2.5 py-0.5 text-xs rounded-full font-medium ${post.type === "vlog"
                 ? "bg-[#FF0000]/10 text-[#FF0000]"
                 : "bg-primary/10 text-primary"
                 }`}

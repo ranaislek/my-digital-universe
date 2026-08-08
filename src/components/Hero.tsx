@@ -99,9 +99,9 @@ const Hero = () => {
           <Heart className="inline-block w-8 h-8 md:w-12 md:h-12 text-primary ml-3 wiggle-animation" fill="currentColor" />
         </h1>
 
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
-          {t('home.description')} <br />
-          <span className="text-primary">{t('home.journeySummary')}</span>
+        <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed">
+          <span>{t('home.description')}</span>
+          <span className="block mt-4 text-primary font-medium">{t('home.journeySummary')}</span>
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
