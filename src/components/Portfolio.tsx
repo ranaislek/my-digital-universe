@@ -116,7 +116,7 @@ const Portfolio = ({ isTeaser = false }: PortfolioProps) => {
 
 
   return (
-    <section id="portfolio" className={`relative ${isTeaser ? "min-h-screen flex flex-col justify-center py-20 md:py-24" : "pb-12"}`}>
+    <section id="portfolio" className={`relative flex-grow flex flex-col justify-start ${isTeaser ? "min-h-screen py-20 md:py-24" : "py-6 md:py-8"}`}>
       {/* Background decoration */}
       <div className="absolute inset-0 pop-gradient opacity-50" />
 

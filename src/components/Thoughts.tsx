@@ -189,7 +189,7 @@ const Thoughts = ({ isTeaser = false }: { isTeaser?: boolean }) => {
   };
 
   return (
-    <section id="thoughts" className={`relative ${isTeaser ? "min-h-screen flex flex-col justify-center py-20 md:py-24" : "pb-12"}`}>
+    <section id="thoughts" className={`relative flex-grow flex flex-col justify-start ${isTeaser ? "min-h-screen py-20 md:py-24" : "py-6 md:py-8"}`}>
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
         <div className={`flex flex-col md:flex-row md:items-end md:justify-between gap-4 ${isTeaser ? "mb-8" : "mb-8"}`}>
           <div>
