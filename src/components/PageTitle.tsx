@@ -11,12 +11,8 @@ const PageTitle = ({ title }: PageTitleProps) => {
     const { t } = useTranslation();
 
     useEffect(() => {
-        if (title.toLowerCase() === "home" || location.pathname === "/") {
-            document.title = "Rana İşlek — Personal Website & Portfolio";
-        } else {
-            const localizedTitle = t(`pages.${title.toLowerCase()}`, { defaultValue: title });
-            document.title = `${localizedTitle} | Rana İşlek`;
-        }
+        const localizedTitle = t(`pages.${title.toLowerCase()}`, { defaultValue: title });
+        document.title = `${localizedTitle} | Rana İşlek`;
     }, [location, title, t]);
 
     return null; // This component doesn't render anything
