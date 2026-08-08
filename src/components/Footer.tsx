@@ -21,7 +21,7 @@ const Footer = () => {
               }
             }}
           >
-            <img src="/rana-frog-logo.png" alt="Rana" className="h-12 md:h-14 w-auto object-contain opacity-80 group-hover:opacity-100 transition-opacity mix-blend-multiply" />
+            <FrogLogo />
           </Link>
 
           <p className="text-sm font-medium text-muted-foreground">
