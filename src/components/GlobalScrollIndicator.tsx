@@ -44,12 +44,12 @@ const GlobalScrollIndicator = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}
                     transition={{ duration: 0.5 }}
-                    className="fixed bottom-8 left-8 z-50 flex flex-col items-center gap-2 pointer-events-none mix-blend-difference text-white"
+                    className="fixed bottom-8 left-8 z-50 flex flex-col items-center gap-1.5 pointer-events-none mix-blend-difference text-white font-sans"
                 >
-                    <span className="text-[10px] uppercase tracking-widest font-medium opacity-80">
-                        Scroll
+                    <span className="font-sans text-xs lowercase tracking-wider font-normal opacity-90">
+                        scroll
                     </span>
-                    <ArrowDown className="w-5 h-5 animate-bounce" />
+                    <ArrowDown className="w-4 h-4 animate-bounce opacity-90" />
                 </motion.div>
             )}
         </AnimatePresence>
