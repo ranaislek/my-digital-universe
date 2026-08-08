@@ -24,9 +24,10 @@ export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
       const scrollHeight = document.documentElement.scrollHeight;
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const clientHeight = window.innerHeight;
+      const isPageScrollable = scrollHeight > clientHeight + 100;
 
-      // If within 140px of bottom of page
-      if (scrollHeight - (scrollTop + clientHeight) < 140) {
+      // Shift up ONLY if page is long & scrollable AND user is near the bottom
+      if (isPageScrollable && scrollHeight - (scrollTop + clientHeight) < 120) {
         setIsNearBottom(true);
       } else {
         setIsNearBottom(false);
