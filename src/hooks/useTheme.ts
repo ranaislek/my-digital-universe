@@ -4,10 +4,12 @@ export type Theme = "light" | "dark";
 
 export function useTheme() {
   const [theme, setThemeState] = useState<Theme>(() => {
+    // Clean up old localStorage persistence so fresh sessions always start in light mode
     if (typeof window !== "undefined") {
-      const savedTheme = localStorage.getItem("theme") as Theme | null;
-      if (savedTheme === "light" || savedTheme === "dark") {
-        return savedTheme;
+      localStorage.removeItem("theme");
+      const sessionTheme = sessionStorage.getItem("theme") as Theme | null;
+      if (sessionTheme === "light" || sessionTheme === "dark") {
+        return sessionTheme;
       }
     }
     return "light";
@@ -20,7 +22,7 @@ export function useTheme() {
     } else {
       root.classList.remove("dark");
     }
-    localStorage.setItem("theme", theme);
+    sessionStorage.setItem("theme", theme);
   }, [theme]);
 
   const toggleTheme = () => {
