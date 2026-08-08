@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/components/AuthProvider";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 import { UnsavedChangesDialog } from "@/components/admin/UnsavedChangesDialog";
+import { PublishConfirmDialog } from "@/components/admin/PublishConfirmDialog";
 
 const ProjectPage = () => {
     const { slug } = useParams();
@@ -29,6 +30,8 @@ const ProjectPage = () => {
     const [project, setProject] = useState<ContentItem | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
+    const [showPublishConfirm, setShowPublishConfirm] = useState(false);
+    const [isNavigatingAway, setIsNavigatingAway] = useState(false);
 
     // Form Fields
     const [title, setTitle] = useState("");
@@ -52,7 +55,7 @@ const ProjectPage = () => {
         challengesInput: "", featuresInput: "", tagsInput: "", screenshotsLength: 0, language: "both"
     });
 
-    const isDirty = isEditing && (
+    const isDirty = isEditing && !isNavigatingAway && (
         title !== initialState.title ||
         category !== initialState.category ||
         company !== initialState.company ||
@@ -265,6 +268,7 @@ const ProjectPage = () => {
             });
 
             if (status === 'published') {
+                setIsNavigatingAway(true);
                 navigate(`/project/${id}`); // Exit edit mode
             }
 
@@ -285,7 +289,7 @@ const ProjectPage = () => {
 
     return (
         <div className="min-h-screen bg-background pb-20">
-            {/* Unsaved Changes Prompt */}
+            {/* Unsaved Changes Prompt (When navigating away without saving) */}
             <UnsavedChangesDialog
                 isOpen={showDialog}
                 onProceed={proceed}
@@ -296,6 +300,17 @@ const ProjectPage = () => {
                         proceed();
                     }
                 }}
+            />
+
+            {/* Publish Confirmation Modal */}
+            <PublishConfirmDialog
+                isOpen={showPublishConfirm}
+                onClose={() => setShowPublishConfirm(false)}
+                onConfirm={async () => {
+                    setShowPublishConfirm(false);
+                    await handleSave("published");
+                }}
+                isPublishing={isSaving}
             />
 
             <BackgroundElements />
@@ -320,7 +335,7 @@ const ProjectPage = () => {
                             {t('common.admin.saveDraft')}
                         </Button>
                         <Button
-                            onClick={() => handleSave("published")}
+                            onClick={() => setShowPublishConfirm(true)}
                             disabled={isSaving}
                         >
                             {isSaving ? t('common.admin.saving') : t('common.admin.publishChange')}

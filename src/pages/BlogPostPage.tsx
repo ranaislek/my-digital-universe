@@ -13,6 +13,7 @@ import BackgroundElements from "@/components/BackgroundElements";
 import { useRef, useMemo } from "react";
 import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
 import { UnsavedChangesDialog } from "@/components/admin/UnsavedChangesDialog";
+import { PublishConfirmDialog } from "@/components/admin/PublishConfirmDialog";
 import { formatDate } from "@/utils/dateUtils";
 
 const BlogPostPage = () => {
@@ -29,6 +30,8 @@ const BlogPostPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [showPublishConfirm, setShowPublishConfirm] = useState(false);
+    const [isNavigatingAway, setIsNavigatingAway] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Form state for editing
@@ -40,7 +43,7 @@ const BlogPostPage = () => {
     const [date, setDate] = useState("");
 
     const [initialState, setInitialState] = useState({ title: "", excerpt: "", content: "", thumbnail: "", link: "", readTime: "", date: "" });
-    const isDirty = isEditing && (
+    const isDirty = isEditing && !isNavigatingAway && (
         title !== initialState.title ||
         excerpt !== initialState.excerpt ||
         content !== initialState.content ||
@@ -185,12 +188,14 @@ const BlogPostPage = () => {
                 date: dbPayload.date
             });
 
-            // Update form display if it was empty (optional, keeping it empty allows further editing without deleting default)
-            // But if we saved "Untitled Story", maybe we should show it? 
-            // Let's keep it bound to state. If they didn't type anything, state is empty. 
-            // dbPayload used defaults. 
+            if (status === 'published') {
+                setIsNavigatingAway(true);
+                toast.success("Post published successfully! 🚀");
+                navigate(`/blog/${id}`); // Exit edit mode
+            } else {
+                toast.success("Post saved as draft! 💾");
+            }
 
-            // local state update omitted for brevity (handled above)
             return true;
         } catch (error: any) {
             console.error("Save failed:", error);
@@ -266,7 +271,7 @@ const BlogPostPage = () => {
 
     return (
         <article className="min-h-screen bg-background pb-20">
-            {/* Unsaved Changes Prompt */}
+            {/* Unsaved Changes Prompt (When navigating away without saving) */}
             <UnsavedChangesDialog
                 isOpen={showDialog}
                 onProceed={proceed}
@@ -277,6 +282,17 @@ const BlogPostPage = () => {
                         proceed();
                     }
                 }}
+            />
+
+            {/* Publish Confirmation Modal */}
+            <PublishConfirmDialog
+                isOpen={showPublishConfirm}
+                onClose={() => setShowPublishConfirm(false)}
+                onConfirm={async () => {
+                    setShowPublishConfirm(false);
+                    await handleSave("published");
+                }}
+                isPublishing={isSaving}
             />
 
             <BackgroundElements />
@@ -302,7 +318,7 @@ const BlogPostPage = () => {
                             Save Draft
                         </button>
                         <button
-                            onClick={() => handleSave("published")}
+                            onClick={() => setShowPublishConfirm(true)}
                             disabled={isSaving || isUploading}
                             className="px-6 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-all shadow-lg shadow-primary/20"
                         >
