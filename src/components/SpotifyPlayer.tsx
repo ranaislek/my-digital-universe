@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Music, X, Maximize2, Minimize2, Disc3 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface SpotifyPlayerProps {
   playlistId?: string;
@@ -9,6 +10,7 @@ interface SpotifyPlayerProps {
 export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
   playlistId = "19Shr7Wino0uEccZhXJ6qY",
 }) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false); // Default false for compact 152px view
   const playerRef = useRef<HTMLDivElement>(null);
@@ -49,7 +51,7 @@ export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
           <div className="flex items-center gap-2">
             <Disc3 className="w-4 h-4 text-[#1DB954] animate-spin-slow" />
             <span className="text-xs font-semibold text-foreground/90 tracking-wide">
-              Spotify Playlist
+              {t("spotify.title", "Rana'nın Playlisti")}
             </span>
           </div>
 
@@ -96,7 +98,7 @@ export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
             ? "bg-[#1DB954] text-white border-[#1DB954]/50 shadow-[#1DB954]/25 ring-2 ring-[#1DB954]/30"
             : "bg-card/90 text-foreground border-border/80 hover:border-[#1DB954]/60 hover:bg-[#1DB954]/10 dark:bg-zinc-900/90 dark:border-zinc-800"
         }`}
-        title={isOpen ? "Müzik Penceresini Gizle" : "Müziği Aç / Gizle"}
+        title={isOpen ? t("spotify.hideButton", "Gizle") : t("spotify.openButton", "Rana'nın Playlisti 🎧")}
       >
         <div className="relative flex items-center justify-center">
           {isOpen ? (
@@ -114,7 +116,7 @@ export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
         </div>
 
         <span className="text-xs font-semibold tracking-wide">
-          {isOpen ? "Gizle" : "Spotify 🎵"}
+          {isOpen ? t("spotify.hideButton", "Gizle") : t("spotify.openButton", "Rana'nın Playlisti 🎧")}
         </span>
       </motion.button>
     </div>

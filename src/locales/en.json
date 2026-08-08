@@ -7,6 +7,11 @@
     "journey": "Journey",
     "contact": "Say Hi"
   },
+  "spotify": {
+    "title": "Rana's Playlist",
+    "openButton": "Rana's Playlist 🎧",
+    "hideButton": "Hide"
+  },
   "pages": {
     "home": "Home",
     "about": "About",

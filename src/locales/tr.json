@@ -7,6 +7,11 @@
         "journey": "Yolculuk",
         "contact": "İletişim"
     },
+    "spotify": {
+        "title": "Rana'nın Playlisti",
+        "openButton": "Rana'nın Playlisti 🎧",
+        "hideButton": "Gizle"
+    },
     "pages": {
         "home": "Ana Sayfa",
         "about": "Hakkımda",
