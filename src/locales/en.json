@@ -122,9 +122,9 @@
         "type": "education"
       },
       "ngn-work": {
-        "title": "Full-time at NGN",
-        "location": "Turkey 🇹🇷",
-        "description": "Returned to Turkey and started my professional career working full-time at NGN.",
+        "title": "Data & Analytics Specialist at NGN",
+        "location": "Istanbul, Turkey 🇹🇷",
+        "description": "Worked as a Data & Analytics Specialist at NGN (Oct 2025 - Mar 2026).",
         "type": "work"
       },
       "masters-grad": {
@@ -132,6 +132,12 @@
         "location": "Europe 🇪🇺",
         "description": "Officially graduating from the Erasmus Mundus Joint Master Program.",
         "type": "milestone"
+      },
+      "trendyol-work": {
+        "title": "CRM Data Analyst, Growth at Trendyol",
+        "location": "Istanbul, Turkey 🇹🇷",
+        "description": "Owning segmentation & targeting strategy for personalized CRM campaigns, lifecycle marketing (push, in-app, email, coupons), A/B testing, and growth analytics at Trendyol Group.",
+        "type": "work"
       },
       "now": {
         "title": "The Journey Continues...",

@@ -122,9 +122,9 @@
                 "type": "eğitim"
             },
             "ngn-work": {
-                "title": "NGN'de Tam Zamanlı",
-                "location": "Türkiye 🇹🇷",
-                "description": "Türkiye'ye döndüm ve NGN'de tam zamanlı çalışarak profesyonel kariyerime başladım.",
+                "title": "NGN'de Veri & Analitik Uzmanı",
+                "location": "İstanbul, Türkiye 🇹🇷",
+                "description": "NGN'de Veri ve Analitik Uzmanı olarak tam zamanlı çalıştım (Ekim 2025 - Mart 2026).",
                 "type": "iş"
             },
             "masters-grad": {
@@ -132,6 +132,12 @@
                 "location": "Avrupa 🇪🇺",
                 "description": "Erasmus Mundus Ortak Yüksek Lisans Programından resmen mezun oluyorum.",
                 "type": "kilometre taşı"
+            },
+            "trendyol-work": {
+                "title": "Trendyol Group'ta CRM Data Analyst, Growth",
+                "location": "İstanbul, Türkiye 🇹🇷",
+                "description": "Kişiselleştirilmiş CRM kampanyaları için segmentasyon ve hedefleme stratejilerine liderlik etmek; push, in-app, e-posta ve kupon kanallarında müşteri yaşam döngüsü kampanyalarını A/B testleri, SQL/Python veri analizi ve büyüme stratejileriyle optimize etmek.",
+                "type": "iş"
             },
             "now": {
                 "title": "Yolculuk Devam Ediyor...",

@@ -78,8 +78,8 @@ export const journeyEvents: JourneyEvent[] = [
     },
     {
         id: "ngn-work",
-        year: "Oct 2025",
-        title: "Full-time at NGN",
+        year: "Oct 2025 - Mar 2026",
+        title: "Data & Analytics Specialist at NGN",
         location: "Turkey 🇹🇷",
         description: "Returned to Turkey and started my professional career working full-time at NGN.",
         type: "work",
@@ -94,6 +94,15 @@ export const journeyEvents: JourneyEvent[] = [
         type: "milestone",
         image: "/masters-grad.jpg",
         imagePosition: "top"
+    },
+    {
+        id: "trendyol-work",
+        year: "Mar 2026 - Present",
+        title: "CRM Data Analyst, Growth at Trendyol",
+        location: "Istanbul, Turkey 🇹🇷",
+        description: "Owning CRM segmentation, lifecycle campaigns (push, in-app, email, coupons), A/B testing, and growth analytics at Trendyol Group.",
+        type: "work",
+        image: "/trendyol-start.jpg"
     },
     {
         id: "now",
