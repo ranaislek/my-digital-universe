@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 const JourneyTimeline = () => {
     const { t } = useTranslation();
     return (
-        <div className="relative py-20 px-4 md:px-6 max-w-6xl mx-auto">
+        <div className="relative py-4 md:py-6 px-4 md:px-6 max-w-6xl mx-auto">
             {/* Center Line (Hidden on mobile, visible on md+) */}
             <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/50 to-transparent" />
 
@@ -30,7 +30,7 @@ const JourneyTimeline = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className={`relative flex flex-col md:flex-row gap-8 mb-14 ${isEven ? 'md:flex-row-reverse' : ''}`}
+                        className={`relative flex flex-col md:flex-row gap-8 mb-10 ${isEven ? 'md:flex-row-reverse' : ''}`}
                     >
                         {/* Date Bubble (Mobile: Left, Desktop: Center) */}
                         <div className="absolute left-0 md:left-1/2 -translate-x-1/2 md:-translate-x-1/2 flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-background border-4 border-muted z-10 shadow-xl">
@@ -88,7 +88,7 @@ const JourneyTimeline = () => {
             })}
 
             {/* End Node */}
-            <div className="relative flex justify-center mt-[-50px]">
+            <div className="relative flex justify-center mt-2 mb-2">
                 <div className="w-4 h-4 bg-primary rounded-full animate-pulse" />
             </div>
         </div>
