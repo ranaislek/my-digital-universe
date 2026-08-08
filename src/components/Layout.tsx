@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import GlobalScrollIndicator from "./GlobalScrollIndicator";
+import SpotifyPlayer from "./SpotifyPlayer";
 
 const Layout = () => {
   const location = useLocation();
@@ -15,6 +16,7 @@ const Layout = () => {
         </div>
       </main>
       <GlobalScrollIndicator />
+      <SpotifyPlayer />
     </div>
   );
 };
