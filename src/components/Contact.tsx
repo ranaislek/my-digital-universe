@@ -113,58 +113,32 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
   };
 
   return (
-    <section id="contact" className={`relative flex-grow flex flex-col justify-center ${isTeaser ? "min-h-screen py-10 md:py-12" : "py-6 md:py-8"}`}>
+    <section id="contact" className={`relative flex flex-col justify-center ${isTeaser ? "min-h-screen py-10 md:py-16" : "py-6 md:py-8"}`}>
       {/* Decorative blobs */}
       <div className="absolute top-1/4 left-0 w-72 h-72 bg-primary/10 blob-shape opacity-50 pointer-events-none" />
       <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-accent/10 blob-shape-2 opacity-50 pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* Top Header for Teaser Mode */}
-        {isTeaser && (
-          <div className="max-w-2xl mx-auto flex flex-col items-center text-center mb-8 lg:mb-12">
-            <span className="inline-block text-primary font-medium text-xs tracking-wider uppercase mb-2">
-              {t('contact.subtitle')}
-            </span>
-            <h2 className="font-serif text-3xl md:text-4xl font-medium mt-1 mb-3">
-              {t('contact.title1')} <span className="gradient-text">{t('contact.title2')}</span>
-              <span className="inline-block ml-2">👋</span>
-            </h2>
-            <p className="text-muted-foreground text-sm md:text-base mb-2 max-w-[500px] text-center text-balance mx-auto">
-              {t('contact.description')}
-            </p>
-            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-              <MapPin className="w-3.5 h-3.5 text-primary" />
-              <span>{t('contact.location')}</span>
-            </div>
-          </div>
-        )}
-
-        {/* 2 Column Layout */}
+        {/* Symmetrical 2 Column Layout for both homepage & contact page */}
         <div className="grid md:grid-cols-2 gap-10 md:gap-14 max-w-5xl mx-auto items-center">
-          {/* Left Column: Header text & socials for standalone page / Socials for teaser */}
+          {/* Left Column */}
           <div className="space-y-6">
-            {!isTeaser && (
-              <div className="space-y-4 text-left">
-                <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-medium leading-tight">
-                  {t('contact.title1')} <span className="gradient-text">{t('contact.title2')}</span>
-                  <span className="inline-block ml-2">👋</span>
-                </h2>
-                <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
-                  {t('contact.description')}
-                </p>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground pt-1">
-                  <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                  <span>{t('contact.location')}</span>
-                </div>
-                <span className="inline-block text-primary font-medium text-xs tracking-wider uppercase pt-2">
-                  {t('contact.subtitle')}
-                </span>
+            <div className="space-y-4 text-left">
+              <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-medium leading-tight">
+                {t('contact.title1')} <span className="gradient-text">{t('contact.title2')}</span>
+                <span className="inline-block ml-2">👋</span>
+              </h2>
+              <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
+                {t('contact.description')}
+              </p>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground pt-1">
+                <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                <span>{t('contact.location')}</span>
               </div>
-            )}
-
-            {isTeaser && (
-              <h3 className="font-serif text-xl font-medium mb-4">{t('contact.getInTouch')}</h3>
-            )}
+              <span className="inline-block text-primary font-medium text-xs tracking-wider uppercase pt-2">
+                {t('contact.subtitle')}
+              </span>
+            </div>
 
             {/* Social Links */}
             <div className="flex flex-wrap gap-3 pt-2">
@@ -228,7 +202,7 @@ const Contact = ({ isTeaser = false }: ContactProps) => {
                   id="message"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className={`w-full px-4 py-2.5 rounded-xl bg-background border border-input focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm ${isTeaser ? "min-h-[90px]" : "min-h-[130px]"}`}
+                  className="w-full px-4 py-2.5 rounded-xl bg-background border border-input focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm min-h-[130px]"
                   placeholder={t('contact.form.messagePlaceholder')}
                 />
               </div>
