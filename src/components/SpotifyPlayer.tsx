@@ -13,9 +13,34 @@ export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false); // Default false for compact 152px view
+  const [isNearBottom, setIsNearBottom] = useState(false);
   const playerRef = useRef<HTMLDivElement>(null);
 
   const embedUrl = `https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`;
+
+  // Detect when scrolled near bottom of page (near footer) to shift widget up
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const clientHeight = window.innerHeight;
+
+      // If within 140px of bottom of page
+      if (scrollHeight - (scrollTop + clientHeight) < 140) {
+        setIsNearBottom(true);
+      } else {
+        setIsNearBottom(false);
+      }
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, []);
 
   // Close popup when clicking outside the widget
   useEffect(() => {
@@ -33,7 +58,12 @@ export const SpotifyPlayer: React.FC<SpotifyPlayerProps> = ({
   }, [isOpen]);
 
   return (
-    <div ref={playerRef} className="fixed bottom-6 right-6 z-40 flex flex-col items-end font-sans">
+    <div
+      ref={playerRef}
+      className={`fixed right-5 sm:right-7 z-40 flex flex-col items-end font-sans transition-all duration-300 ${
+        isNearBottom ? "bottom-20 sm:bottom-24" : "bottom-6 sm:bottom-8"
+      }`}
+    >
       {/* 
         Persistent Popup Container:
         The iframe is ALWAYS kept mounted in the DOM so hiding the popup 
